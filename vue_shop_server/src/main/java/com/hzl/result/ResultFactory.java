@@ -6,18 +6,18 @@ package com.hzl.result;
 public class ResultFactory {
 
     public static Result buildSuccessResult(Object data) {
-        return buildResult(com.cn.ncvt.result.ResultCode.SUCCESS, false, "请求成功", data);
+        return buildResult(ResultCode.SUCCESS, false, "请求成功", data);
     }
 
     public static Result buildFailResult(String message) {
-        return buildResult(com.cn.ncvt.result.ResultCode.FAIL, true, message, null);
+        return buildResult(ResultCode.FAIL, true, message, null);
     }
 
     public static Result buildPermissionFailResult(String message) {
-        return buildResult(com.cn.ncvt.result.ResultCode.UNAUTHORIZED, true, message, null);
+        return buildResult(ResultCode.UNAUTHORIZED, true, message, null);
     }
 
-    public static Result buildResult(com.cn.ncvt.result.ResultCode resultCode, boolean error, String message, Object data) {
+    public static Result buildResult(ResultCode resultCode, boolean error, String message, Object data) {
         return buildResult(resultCode.code, error, message, data);
     }
 
