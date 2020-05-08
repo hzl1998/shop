@@ -18,7 +18,7 @@ public class AuthAccessDeniedHandler implements AccessDeniedHandler {
 
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
         Map<String, Object> map = new HashMap();
-        map.put("code", "403");
+        map.put("code", 403);
         map.put("message", "无权访问");
         httpServletResponse.setContentType("UTF-8");
 

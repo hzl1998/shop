@@ -18,7 +18,7 @@ public class AuthLogoutSuccessHandler implements LogoutSuccessHandler {
 
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Map<String, Object> map = new HashMap();
-        map.put("code", "200");
+        map.put("code", 200);
         map.put("message", "登出成功");
         httpServletResponse.setContentType("UTF-8");
 

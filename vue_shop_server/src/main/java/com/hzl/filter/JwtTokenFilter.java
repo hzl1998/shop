@@ -22,7 +22,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = httpServletRequest.getHeader("Authorization");
         if (token == null){
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("code", "400");//400
+            map.put("code", 400);//400
             map.put("message", "请先登录获取token");
             httpServletResponse.setContentType("UTF-8");
             try {
@@ -35,7 +35,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         else {
             if (JwtUtils.checkJWT(token) == null){
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put("code", "400");//400
+                map.put("code", 400);//400
                 map.put("msg", "无效token");
                 httpServletResponse.setContentType("application/json");
                 try {

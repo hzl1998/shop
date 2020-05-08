@@ -37,7 +37,7 @@ public class AuthAuthenticationSuccessHandler implements AuthenticationSuccessHa
             map1.put("phone", user.getPhone());
             map1.put("token", token);
             Map<String, Object> map = new HashMap();
-            map.put("code", "200");
+            map.put("code", 200);
             map.put("message", "登录成功");
             map.put("data", map1);
             httpServletResponse.setContentType("application/json");

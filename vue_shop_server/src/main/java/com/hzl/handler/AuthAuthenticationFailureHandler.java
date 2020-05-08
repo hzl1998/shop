@@ -18,7 +18,7 @@ public class AuthAuthenticationFailureHandler implements AuthenticationFailureHa
 
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         Map<String, Object> map = new HashMap();
-        map.put("code", "400");
+        map.put("code", 400);
         map.put("message", "登录失败:" + e.getMessage());
         httpServletResponse.setContentType("UTF-8");
 

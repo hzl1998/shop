@@ -18,7 +18,7 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
 
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException a) throws IOException, ServletException {
         Map<String, Object> map = new HashMap();
-        map.put("code", "401");
+        map.put("code", 401);
         map.put("message", "请先登录");
         httpServletResponse.setContentType("UTF-8");
 
