@@ -6,13 +6,15 @@
     <resultMap id="MenuResultMap" type="com.hzl.entity.Menu">
         <id property="id" column="id"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
         <collection property="children" ofType="com.hzl.entity.Menu">
             <id column="id1" property="id"/>
             <result column="name1" property="name" jdbcType="VARCHAR"/>
+            <result column="icon1" property="icon" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
     <select id="selectMenus" resultMap="MenuResultMap">
-        select m1.id,m1.name,m2.id as id1,m2.name as name1 from sys_menu m1 INNER JOIN sys_menu m2 on m1.id = m2.parentId ORDER BY m1.id
+        select m1.id,m1.name,m1.icon,m2.id as id1,m2.name as name1,m2.icon as icon1 from sys_menu m1 INNER JOIN sys_menu m2 on m1.id = m2.parentId ORDER BY m1.id
     </select>
 
 </mapper>
