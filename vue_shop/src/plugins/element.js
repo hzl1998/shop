@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Button,Form, FormItem,Input,Message,Container,Header,Aside,Main,Avatar } from 'element-ui'
+import { Button,Form, FormItem,Input,Message,Container,Header,Aside,Main,Avatar,Menu,Submenu,MenuItemGroup,MenuItem } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Form)
@@ -10,4 +10,8 @@ Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Avatar)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItemGroup)
+Vue.use(MenuItem)
 Vue.prototype.$message = Message
