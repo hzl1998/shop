@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        <el-avatar src="http://inews.gtimg.com/newsapp_bt/0/11501253550/641.jpg"></el-avatar>
         <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
@@ -11,20 +11,22 @@
     <!-- 页面主体区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isCollapse ? '64px':'200px'">
+        <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏菜单区域 -->
-        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409BFF">
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409BFF" unique-opened :collapse="isCollapse" 
+        :collapse-transition="false" router>
           <!-- 一级菜单 -->
           <el-submenu :index="item.id" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i :class="item.icon"></i>
               <span>{{item.name}}</span>
             </template>
             <!-- 二级菜单 -->
             <el-menu-item :index="subItem.id" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
-                <i class="el-icon-menu"></i>
+                <i :class="subItem.icon"></i>
                 <span>{{subItem.name}}</span>
               </template>
             </el-menu-item>
@@ -32,7 +34,10 @@
         </el-menu>
       </el-aside>
       <!-- 右侧主体内容 -->
-      <el-main>Main</el-main>
+      <el-main>
+        <!-- 路由占位符 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -41,7 +46,9 @@
 export default {
   data() {
     return {
-      menuList: []
+      menuList: [],
+      //是否折叠
+      isCollapse: false
     };
   },
   created() {
@@ -67,6 +74,10 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    //点击按钮，切换菜单的折叠与展开
+    toggleCollapse() {
+      this.isCollapse = ! this.isCollapse
     }
   }
 };
@@ -98,6 +109,18 @@ export default {
   background-color: #eaedf1;
 }
 .el-menu {
-  border-right-width: 0;
+  border-right: none;
+}
+.iconfont {
+  margin-right: 10px;
+}
+.toggle-button {
+  background-color: #4A5064;
+  font-size: 10px;
+  line-height: 24px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 </style>
