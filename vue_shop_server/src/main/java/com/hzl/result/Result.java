@@ -7,13 +7,13 @@ package com.hzl.result;
 public class Result {
     private int code;    //响应状态码
     private boolean error;
-    private String message;    //响应提示信息
+    private String msg;    //响应提示信息
     private Object data;    //响应结果对象
 
-    Result(int code, boolean error, String message, Object data) {
+    Result(int code, boolean error, String msg, Object data) {
         this.code = code;
         this.error = error;
-        this.message = message;
+        this.msg = msg;
         this.data = data;
     }
 
@@ -33,12 +33,12 @@ public class Result {
         this.error = error;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String message) {
+        this.msg = message;
     }
 
     public Object getData() {

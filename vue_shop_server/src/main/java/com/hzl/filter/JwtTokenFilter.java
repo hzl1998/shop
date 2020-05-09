@@ -23,7 +23,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (token == null){
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("code", 400);//400
-            map.put("message", "请先登录获取token");
+            map.put("msg", "请先登录获取token");
             httpServletResponse.setContentType("UTF-8");
             try {
                 ObjectMapper mapper = new ObjectMapper();

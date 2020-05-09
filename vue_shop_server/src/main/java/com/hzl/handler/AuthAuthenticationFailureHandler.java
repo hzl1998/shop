@@ -13,13 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthAuthenticationFailureHandler implements AuthenticationFailureHandler {
-    public AuthAuthenticationFailureHandler() {
-    }
 
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         Map<String, Object> map = new HashMap();
         map.put("code", 400);
-        map.put("message", "登录失败:" + e.getMessage());
+        map.put("msg", "登录失败:" + e.getMessage());
         httpServletResponse.setContentType("UTF-8");
 
         try {

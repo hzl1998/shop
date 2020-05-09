@@ -28,9 +28,6 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
     @Autowired
     private UserMapper userMapper;
 
-    public LoginValidateAuthenticationProvider() {
-    }
-
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String rawPassword = (String)authentication.getCredentials();

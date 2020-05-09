@@ -12,8 +12,8 @@ public class UserDto {
     private String fullname;
     private String email;
     private String phone;
-    private char sex;
-    private char enabled;
+    private String sex;
+    private String enabled;
     private String salt;
     private Timestamp createTime;
     private Timestamp updateTime;

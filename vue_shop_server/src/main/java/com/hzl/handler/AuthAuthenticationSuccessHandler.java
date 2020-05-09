@@ -22,9 +22,6 @@ public class AuthAuthenticationSuccessHandler implements AuthenticationSuccessHa
     @Autowired
     private UserMapper userMapper;
 
-    public AuthAuthenticationSuccessHandler() {
-    }
-
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Object object = authentication.getPrincipal();
         if (object instanceof UserDetails) {
@@ -38,7 +35,7 @@ public class AuthAuthenticationSuccessHandler implements AuthenticationSuccessHa
             map1.put("token", token);
             Map<String, Object> map = new HashMap();
             map.put("code", 200);
-            map.put("message", "登录成功");
+            map.put("msg", "登录成功");
             map.put("data", map1);
             httpServletResponse.setContentType("application/json");
 
