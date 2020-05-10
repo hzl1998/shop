@@ -22,8 +22,18 @@
       </el-row>
 
       <!-- 用户列表区域 -->
-      <el-table :data="userList">
+      <el-table :data="userList" border stripe>
+        <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="姓名" prop="username"></el-table-column>
+        <el-table-column label="电话" prop="phone"></el-table-column>
+        <el-table-column label="角色" prop="role_name"></el-table-column>
+        <el-table-column label="创建时间" prop="create_time"></el-table-column>
+        <el-table-column label="状态" prop="enabled">
+          <template slot-scope="scope">
+            {{scope.row}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作"></el-table-column>
       </el-table>
     </el-card>
   </div>
