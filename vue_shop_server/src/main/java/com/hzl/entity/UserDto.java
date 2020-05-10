@@ -1,10 +1,12 @@
 package com.hzl.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
     private String id;
     private String username;
@@ -15,6 +17,7 @@ public class UserDto {
     private String sex;
     private String enabled;
     private String salt;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private Timestamp create_time;
+    private Timestamp update_time;
+    private String role_name;
 }

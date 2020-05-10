@@ -17,9 +17,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
 
-    public UserService() {
-    }
-
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDto user = this.userMapper.getUserByUserName(username);
         if (user == null) {
@@ -35,5 +32,13 @@ public class UserService implements UserDetailsService {
             UserDetails userDetails = User.withUsername(user.getUsername()).password(user.getPassword()).authorities(permissionArray).build();
             return userDetails;
         }
+    }
+
+    public List<UserDto> getUsers(String username,Integer page,Integer rows){
+        return userMapper.getUsers(username,page,rows);
+    }
+
+    public int getUsersCount(String username){
+        return userMapper.getUsersCount(username);
     }
 }

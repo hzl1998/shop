@@ -13,7 +13,7 @@ public class MenuService {
     @Autowired
     MenuMapper menuMapper;
 
-    public List<Menu> getMenus() {
-        return menuMapper.selectMenus();
+    public List<Menu> getMenusByUserId(String userId) {
+        return menuMapper.selectMenusByUserId(userId);
     }
 }

@@ -16,8 +16,11 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("/menus")
-    public Result menus() {
-        List<Menu> menuList = menuService.getMenus();
+    public Result menus(String userId) {
+        if(userId == null || userId.equals("")){
+            return ResultFactory.buildFailResult("用户id不能为空");
+        }
+        List<Menu> menuList = menuService.getMenusByUserId(userId);
         if (menuList != null && menuList.size() != 0){
             return ResultFactory.buildSuccessResult(menuList,"获取菜单列表成功");
         } else {

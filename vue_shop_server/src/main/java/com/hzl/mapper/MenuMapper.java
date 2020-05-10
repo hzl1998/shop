@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface MenuMapper {
-    List<Menu> selectMenus();
+    List<Menu> selectMenusByUserId(String userId);
 }
