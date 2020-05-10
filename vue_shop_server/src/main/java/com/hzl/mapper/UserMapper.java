@@ -4,14 +4,17 @@ import com.hzl.entity.Permission;
 import com.hzl.entity.UserDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
-    UserDto getUserByUserName(String username);
+    UserDto getUserByUserName(@Param(value="username")String username);
 
-    List<Permission> findPermissionByUserId(String userId);
+    List<Permission> findPermissionByUserId(@Param(value="userId")String userId);
 
-    List<UserDto> getUsers(String username,Integer page,Integer rows);
+    List<UserDto> getUsers(@Param(value="username")String username,
+                           @Param(value="page")Integer page,
+                           @Param(value="rows")Integer rows);
 
-    int getUsersCount(String username);
+    int getUsersCount(@Param(value="username")String username);
 }

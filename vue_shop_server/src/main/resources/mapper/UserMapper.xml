@@ -34,7 +34,7 @@
         select count(1) from sys_user
         <where>
             <if test="username != null and username!=''">
-                trim(replace(u.username,' ','')) LIKE CONCAT('%',trim(replace(#{username},' ','')),'%' )
+                trim(replace(username,' ','')) LIKE CONCAT('%',trim(replace(#{username},' ','')),'%' )
             </if>
         </where>
     </select>
