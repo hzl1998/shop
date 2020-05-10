@@ -4,7 +4,7 @@
     <resultMap id="UsersResultMap" type="com.hzl.entity.UserDto">
         <id property="id" column="id"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
-        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="create_time" jdbcType="BIGINT"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="enabled" property="enabled" jdbcType="VARCHAR"/>
         <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
@@ -19,7 +19,8 @@
     </select>
 
     <select id="getUsers" resultMap="UsersResultMap">
-        select u.id,u.username,u.create_time,u.phone,u.enabled,r.role_name from sys_user u
+        select u.id,u.username,u.create_time,u.phone,u.enabled,u.email,r.role_name
+        from sys_user u
         INNER JOIN sys_role_user ru on u.id = ru.uid
         INNER JOIN sys_role r on ru.rid = r.id
         <where>

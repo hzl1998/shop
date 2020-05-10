@@ -17,7 +17,7 @@ public class UserDto {
     private String sex;
     private String enabled;
     private String salt;
-    private Timestamp create_time;
-    private Timestamp update_time;
+    private long create_time;
+    private long update_time;
     private String role_name;
 }
