@@ -84,6 +84,7 @@ export default {
             }
             this.$message.success('登录成功');
             window.sessionStorage.setItem('token', resp.data.data.token);
+            window.sessionStorage.setItem('userId', resp.data.data.id);
             this.$router.push('/home');
           })
           .catch(error => {
