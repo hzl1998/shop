@@ -25,12 +25,14 @@
       <el-table :data="userList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="姓名" prop="username"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="phone"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
-        <el-table-column label="创建时间" prop="create_time"></el-table-column>
+        <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
         <el-table-column label="状态" prop="enabled">
           <template slot-scope="scope">
             {{scope.row}}
+            <el-switch v-model="scope.row.enabled"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作"></el-table-column>
@@ -40,6 +42,7 @@
 </template>
 
 <script>
+import moment from "moment"; //导入文件
 export default {
   data() {
     return {
@@ -57,7 +60,13 @@ export default {
     getUserList() {
       this.$http({
         method: "GET",
-        url: "users?username=" + this.username + "&page=" + this.page + "&rows=" + this.rows
+        url:
+          "users?username=" +
+          this.username +
+          "&page=" +
+          this.page +
+          "&rows=" +
+          this.rows
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -69,6 +78,10 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    //时间格式化转换
+    dateForma(row, column, data) {
+      return moment.unix(data).format("YYYY-MM-DD HH:mm:ss");
     }
   }
 };
