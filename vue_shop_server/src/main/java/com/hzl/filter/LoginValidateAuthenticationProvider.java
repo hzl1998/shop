@@ -38,7 +38,7 @@ public class LoginValidateAuthenticationProvider implements AuthenticationProvid
                     throw new BadCredentialsException("用户不存在！");
                 } else {
                     UserDto userDto = this.userMapper.getUserByUserName(username);
-                    if (!user.isEnabled()) {
+                    if (!userDto.getEnabled()) {
                         throw new DisabledException("该账户已被禁用，请联系管理员");
                     } else if (!user.isAccountNonLocked()) {
                         throw new LockedException("该账号已被锁定");

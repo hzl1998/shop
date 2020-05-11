@@ -21,4 +21,10 @@ public interface UserMapper {
     int updateUserEnabled(@Param(value="userId")String userId,
                           @Param(value="enabled")String enabled,
                           @Param(value="update_time")long update_time);
+
+    int addUser(UserDto userDto);
+
+    UserDto getUserById(@Param(value="id")String id);
+
+    int updateUserById(UserDto userDto);
 }

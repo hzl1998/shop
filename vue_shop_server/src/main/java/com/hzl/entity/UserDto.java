@@ -15,7 +15,7 @@ public class UserDto {
     private String email;
     private String phone;
     private String sex;
-    private boolean enabled;
+    private Boolean enabled;
     private String salt;
     private long create_time;
     private long update_time;

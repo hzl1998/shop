@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzl.mapper.UserMapper">
-    <resultMap id="UsersResultMap" type="com.hzl.entity.UserDto">
-        <id property="id" column="id"/>
-        <result column="username" property="username" jdbcType="VARCHAR"/>
-        <result column="create_time" property="create_time" jdbcType="BIGINT"/>
-        <result column="phone" property="phone" jdbcType="VARCHAR"/>
-        <result column="enabled" property="enabled" jdbcType="BOOLEAN"/>
-        <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
-    </resultMap>
 
     <select id="getUserByUserName" resultType="com.hzl.entity.UserDto">
         select * from sys_user where username = #{username}
@@ -18,7 +10,7 @@
         SELECT * FROM `sys_permission` where id in(select pid from sys_role_permission where rid in(select rid from sys_role_user where uid = #{userId}))
     </select>
 
-    <select id="getUsers" resultMap="UsersResultMap">
+    <select id="getUsers" resultType="com.hzl.entity.UserDto">
         select u.id,u.username,u.create_time,u.phone,u.enabled,u.email,r.role_name
         from sys_user u
         INNER JOIN sys_role_user ru on u.id = ru.uid
@@ -42,5 +34,18 @@
 
     <update id="updateUserEnabled">
         update sys_user set enabled = #{enabled},update_time = #{update_time} where id = #{userId}
+    </update>
+
+    <insert id="addUser" parameterType="com.hzl.entity.UserDto">
+        insert into sys_user(id,username,password,email,phone,create_time,enabled,salt) value
+        (#{id},#{username},#{password},#{email},#{phone},#{create_time},"true",#{salt})
+    </insert>
+
+    <select id="getUserById" resultType="com.hzl.entity.UserDto">
+        select username,email,phone,create_time from sys_user where id = #{id}
+    </select>
+
+    <update id="updateUserById">
+        update sys_user set email = #{email},phone = #{phone},update_time = #{update_time} where id = #{id}
     </update>
 </mapper>

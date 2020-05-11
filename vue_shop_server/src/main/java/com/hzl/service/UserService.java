@@ -45,4 +45,16 @@ public class UserService implements UserDetailsService {
     public int updateUserEnabled(String userId,String enabled,long update_time){
         return userMapper.updateUserEnabled(userId,enabled,update_time);
     }
+
+    public int addUser(UserDto userDto){
+        return userMapper.addUser(userDto);
+    }
+
+    public UserDto getUserById(String id){
+        return userMapper.getUserById(id);
+    }
+
+    public int updateUserById(UserDto userDto){
+        return userMapper.updateUserById(userDto);
+    }
 }
