@@ -222,10 +222,10 @@ export default {
             userinfo.enabled = !userinfo.enabled;
             return this.$message.error("添加用户失败！");
           }
-          return this.$message.success("添加用户成功！");
           //隐藏添加用户的对话框
           this.addDialogVisible = false;
           this.getUserList();
+          return this.$message.success("添加用户成功！");
         })
         .catch(error => {
           console.log(error);
