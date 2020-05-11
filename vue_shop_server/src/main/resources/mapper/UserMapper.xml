@@ -6,7 +6,7 @@
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="create_time" property="create_time" jdbcType="BIGINT"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
-        <result column="enabled" property="enabled" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="BOOLEAN"/>
         <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
     </resultMap>
 
