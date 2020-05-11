@@ -205,7 +205,8 @@ export default {
     },
     addUser() {
       this.$refs.addFormRef.validate(valid => {
-        console.log(valid)
+        if(!valid) return;
+        
       })
     }
   }
