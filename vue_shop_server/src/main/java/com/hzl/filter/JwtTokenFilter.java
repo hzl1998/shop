@@ -17,6 +17,10 @@ import java.util.Map;
 public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+        if("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())){
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
         if (!httpServletRequest.getRequestURI().equals("/shop/login")){
 
         String token = httpServletRequest.getHeader("Authorization");
