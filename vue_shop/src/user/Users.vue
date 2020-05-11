@@ -165,7 +165,7 @@ export default {
     },
     //时间格式化转换
     dateForma(row, column, data) {
-      return moment.unix(data).format("YYYY-MM-DD HH:mm:ss");
+      return moment(data).format("YYYY-MM-DD HH:mm:ss");
     },
     //监听pagesize改变的事件
     handleSizeChange(nowSize) {
@@ -206,7 +206,30 @@ export default {
     addUser() {
       this.$refs.addFormRef.validate(valid => {
         if(!valid) return;
-        
+        this.$http({
+        method: "POST",
+        url: "users/addUser",
+        data: {
+            username: this.addForm.username,
+            password: this.addForm.password,
+            email: this.addForm.email,
+            phone: this.addForm.phone
+        },
+        dataType: "json"
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            userinfo.enabled = !userinfo.enabled;
+            return this.$message.error("添加用户失败！");
+          }
+          return this.$message.success("添加用户成功！");
+          //隐藏添加用户的对话框
+          this.addDialogVisible = false;
+          this.getUserList();
+        })
+        .catch(error => {
+          console.log(error);
+        });
       })
     }
   }
