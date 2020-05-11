@@ -17,4 +17,8 @@ public interface UserMapper {
                            @Param(value="rows")Integer rows);
 
     int getUsersCount(@Param(value="username")String username);
+
+    int updateUserEnabled(@Param(value="userId")String userId,
+                          @Param(value="enabled")String enabled,
+                          @Param(value="update_time")long update_time);
 }

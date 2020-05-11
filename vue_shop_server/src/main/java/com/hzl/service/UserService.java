@@ -41,4 +41,8 @@ public class UserService implements UserDetailsService {
     public int getUsersCount(String username){
         return userMapper.getUsersCount(username);
     }
+
+    public int updateUserEnabled(String userId,String enabled,long update_time){
+        return userMapper.updateUserEnabled(userId,enabled,update_time);
+    }
 }

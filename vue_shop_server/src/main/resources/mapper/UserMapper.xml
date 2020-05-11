@@ -39,4 +39,8 @@
             </if>
         </where>
     </select>
+
+    <update id="updateUserEnabled">
+        update sys_user set enabled = #{enabled},update_time = #{update_time} where id = #{userId}
+    </update>
 </mapper>
