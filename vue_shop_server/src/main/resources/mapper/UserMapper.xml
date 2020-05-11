@@ -13,8 +13,8 @@
     <select id="getUsers" resultType="com.hzl.entity.UserDto">
         select u.id,u.username,u.create_time,u.phone,u.enabled,u.email,r.role_name
         from sys_user u
-        INNER JOIN sys_role_user ru on u.id = ru.uid
-        INNER JOIN sys_role r on ru.rid = r.id
+        LEFT JOIN sys_role_user ru on u.id = ru.uid
+        LEFT JOIN sys_role r on ru.rid = r.id
         <where>
             <if test="username != null and username!=''">
                 trim(replace(u.username,' ','')) LIKE CONCAT('%',trim(replace(#{username},' ','')),'%' )
