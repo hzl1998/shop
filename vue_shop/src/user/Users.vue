@@ -28,15 +28,34 @@
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="phone"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
-        <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
-        <el-table-column label="状态" prop="enabled">
+         <el-table-column label="状态" prop="enabled">
           <template slot-scope="scope">
-            {{scope.row}}
             <el-switch v-model="scope.row.enabled"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+              
+               <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+      <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+    </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="page"
+      :page-sizes="[2, 4, 6, 10]"
+      :page-size="rows"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
     </el-card>
   </div>
 </template>
@@ -48,7 +67,7 @@ export default {
     return {
       username: "",
       page: 1,
-      rows: 4,
+      rows: 2,
       userList: [],
       total: 0
     };
@@ -73,7 +92,7 @@ export default {
             return this.$message.error("获取用户列表失败！");
           }
           this.userList = resp.data.data.resultList;
-          this.total = resp.data.data.total;
+          this.total = resp.data.data.totalResult;
         })
         .catch(error => {
           console.log(error);
@@ -82,6 +101,16 @@ export default {
     //时间格式化转换
     dateForma(row, column, data) {
       return moment.unix(data).format("YYYY-MM-DD HH:mm:ss");
+    },
+    //监听pagesize改变的事件
+    handleSizeChange(nowSize) {
+      this.rows = nowSize;
+      this.getUserList();
+    },
+    //监听页码值改变的事件
+    handleCurrentChange(newPage) {
+      this.page = newPage;
+      this.getUserList();
     }
   }
 };
