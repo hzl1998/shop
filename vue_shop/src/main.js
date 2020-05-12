@@ -6,6 +6,7 @@ import './plugins/element.js'
 import './assets/fonts/iconfont.css'
 //导入全局样式表
 import './assets/css/global.css'
+import 'element-ui/lib/theme-chalk/base.css';
 
 
 import axios from 'axios'
