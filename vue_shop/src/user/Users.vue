@@ -36,7 +36,12 @@
         <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="showEditDialog(scope.row.id)"
+            ></el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
 
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
@@ -80,6 +85,27 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 修改用户的对话框 -->
+    <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <!-- 内容主体区域 -->
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
+        <el-form-item label="用户名">
+          <el-input v-model="editForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="phone">
+          <el-input v-model="editForm.phone"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editUserInfo">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -129,6 +155,15 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
         ],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
+        ],
+        phone: [{ required: true, validator: checkPhone, trigger: "blur" }]
+      },
+      editDialogVisible: false,
+      editForm: {},
+      editFormRules: {
         email: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" },
           { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
@@ -201,36 +236,86 @@ export default {
     },
     //监听添加用户对话框的关闭事件
     addDialogClosed() {
-      this.$refs.addFormRef.resetFields()
+      this.$refs.addFormRef.resetFields();
     },
     addUser() {
       this.$refs.addFormRef.validate(valid => {
-        if(!valid) return;
+        if (!valid) return;
         this.$http({
-        method: "POST",
-        url: "users/addUser",
-        data: {
+          method: "POST",
+          url: "users/addUser",
+          data: {
             username: this.addForm.username,
             password: this.addForm.password,
             email: this.addForm.email,
             phone: this.addForm.phone
-        },
-        dataType: "json"
+          },
+          dataType: "json"
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              userinfo.enabled = !userinfo.enabled;
+              return this.$message.error("添加用户失败！");
+            }
+            //隐藏添加用户的对话框
+            this.addDialogVisible = false;
+            this.getUserList();
+            return this.$message.success("添加用户成功！");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
+    },
+    showEditDialog(id) {
+      //console.log(id)
+      this.$http({
+        method: "GET",
+        url: "users/getUserById?id=" + id
       })
         .then(resp => {
           if (resp.data.code !== 200) {
             userinfo.enabled = !userinfo.enabled;
-            return this.$message.error("添加用户失败！");
+            return this.$message.error("查询用户信息失败！");
           }
-          //隐藏添加用户的对话框
-          this.addDialogVisible = false;
-          this.getUserList();
-          return this.$message.success("添加用户成功！");
+          this.editForm = resp.data.data;
+          this.editDialogVisible = true;
         })
         .catch(error => {
           console.log(error);
         });
-      })
+      this.editDialogVisible = true;
+    },
+    editDialogClosed() {
+      this.$refs.editFormRef.resetFields();
+    },
+    editUserInfo() {
+      this.$refs.editFormRef.validate(valid => {
+        if (!valid) return;
+        console.log(this.editForm)
+        this.$http({
+          method: "PUT",
+          url: "users/updateUserById",
+          data: {
+            id: this.editForm.id,
+            email: this.editForm.email,
+            phone: this.editForm.phone
+          },
+          dataType: "json"
+        })
+          .then(resp => {
+            console.log(resp.data)
+            if (resp.data.code !== 200) {
+              return this.$message.error("更新用户信息失败！");
+            }
+            this.editDialogVisible = false;
+            this.getUserList()
+            return this.$message.success("更新用户信息成功！");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
     }
   }
 };
