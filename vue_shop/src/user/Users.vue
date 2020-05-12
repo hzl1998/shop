@@ -30,7 +30,8 @@
         <el-table-column label="角色" prop="role_name"></el-table-column>
         <el-table-column label="状态" prop="enabled">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.enabled" @change="userStateChanged(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.enabled" disabled v-if="scope.row.role_name === '超级管理员'"></el-switch>
+            <el-switch v-model="scope.row.enabled" @change="userStateChanged(scope.row)" v-else></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
@@ -42,7 +43,7 @@
               size="mini"
               @click="showEditDialog(scope.row.id)"
             ></el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeUserById(scope.row.id)"></el-button>
 
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
               <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
@@ -316,6 +317,33 @@ export default {
             console.log(error);
           });
       });
+    },
+    removeUserById(id) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(resp => {
+          this.$http({
+          method: "DELETE",
+          url: "users/delUserById?id=" + id
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              return this.$message.error("删除用户失败！");
+            }
+            this.getUserList()
+            return this.$message.success("删除用户成功！");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }).catch(error => {  
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          }); 
+        });
     }
   }
 };
