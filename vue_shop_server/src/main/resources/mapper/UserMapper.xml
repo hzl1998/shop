@@ -42,10 +42,14 @@
     </insert>
 
     <select id="getUserById" resultType="com.hzl.entity.UserDto">
-        select username,email,phone,create_time from sys_user where id = #{id}
+        select id,username,email,phone,create_time from sys_user where id = #{id}
     </select>
 
     <update id="updateUserById">
         update sys_user set email = #{email},phone = #{phone},update_time = #{update_time} where id = #{id}
     </update>
+
+    <delete id="delUserById">
+        delete from sys_user where id = #{id}
+    </delete>
 </mapper>

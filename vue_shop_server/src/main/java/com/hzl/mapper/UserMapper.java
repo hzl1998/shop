@@ -27,4 +27,6 @@ public interface UserMapper {
     UserDto getUserById(@Param(value="id")String id);
 
     int updateUserById(UserDto userDto);
+
+    int delUserById(@Param(value="id")String id);
 }

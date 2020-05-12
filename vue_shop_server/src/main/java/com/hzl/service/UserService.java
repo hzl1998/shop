@@ -57,4 +57,8 @@ public class UserService implements UserDetailsService {
     public int updateUserById(UserDto userDto){
         return userMapper.updateUserById(userDto);
     }
+
+    public int delUserById(String id){
+        return userMapper.delUserById(id);
+    }
 }

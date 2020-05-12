@@ -140,4 +140,17 @@ public class UserController {
             return ResultFactory.buildFailResult("修改用户信息失败");
         }
     }
+
+    @DeleteMapping("/users/delUserById")
+    public Result delUserById(String id){
+        if(id == null || id.equals("")){
+            return ResultFactory.buildFailResult("用户id不能为空");
+        }
+        int isok = userService.delUserById(id);
+        if(isok > 0){
+            return ResultFactory.buildSuccessResult(null,"删除用户成功");
+        }else {
+            return ResultFactory.buildFailResult("删除用户成功");
+        }
+    }
 }
