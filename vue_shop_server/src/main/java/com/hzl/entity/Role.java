@@ -7,12 +7,11 @@ import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Permission {
+public class Role {
     private String id;
-    private String url;
-    private String name;
-    private Integer level;
-    private String path;
-    private String parentId;
+    private String role_name;
+    private String description;
+    private long create_time;
+    private long update_time;
     private List<Permission> children;
 }
