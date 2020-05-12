@@ -25,7 +25,9 @@ public class UserService implements UserDetailsService {
             List<Permission> permissionList = this.userMapper.findPermissionByUserId(user.getId());
             List<String> permissions = new ArrayList();
             permissionList.forEach((c) -> {
-                permissions.add(c.getUrl());
+                if (c.getUrl() != null && !c.getUrl().equals("")){
+                    permissions.add(c.getUrl());
+                }
             });
             String[] permissionArray = new String[permissions.size()];
             permissions.toArray(permissionArray);
