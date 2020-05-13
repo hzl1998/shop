@@ -7,6 +7,7 @@
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="BIGINT"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
             <id column="id1" property="id" jdbcType="VARCHAR"/>
             <result column="name1" property="name" jdbcType="VARCHAR"/>
@@ -24,7 +25,8 @@
         </collection>
     </resultMap>
     <select id="getRoles" resultMap="RoleResultMap">
-        select r.id,r.role_name,r.description,p.id as id1,
+        select r.id,r.role_name,r.description,r.create_time,
+        p.id as id1,
         p.name as name1,p.path as path1,
         p1.id as id2,
         p1.name as name2,p1.path as path2,
@@ -32,10 +34,10 @@
         p2.name as name3,p2.path as path3
         from sys_role r
         left join sys_role_permission rp on rp.rid = r.id
-        left join sys_permission p on p.id = rp.pid
+        left join sys_permission p on p.id = rp.pid and p.`level` = 0
         left join sys_permission p1 on p1.parentId = p.id
-        left join sys_permission p2 on p2.parentId = p1.id
-        ORDER BY r.id,p2.id
+		left join sys_permission p2 on p2.parentId = p1.id
+		ORDER BY r.create_time,p.id
     </select>
 
     <insert id="addRole" parameterType="com.hzl.entity.Role">
