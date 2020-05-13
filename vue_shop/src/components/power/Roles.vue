@@ -143,6 +143,7 @@ export default {
                 return this.$message.error("删除权限失败！");
               }
               role.children = resp.data.data;
+              console.log(role.children);
               this.$message({
                 type: "success",
                 message: "删除成功!"
