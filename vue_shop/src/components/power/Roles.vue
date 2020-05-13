@@ -33,7 +33,7 @@
                   v-for="(item2, i2) in item1.children"
                   :key="item2.id"
                 >
-                <!-- 二级权限 -->
+                  <!-- 二级权限 -->
                   <el-col :span="6">
                     <el-tag type="success" closable>{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
@@ -45,7 +45,7 @@
                       v-for="(item3, i3) in item2.children"
                       :key="item3.id"
                       closable
-                      @close="removeRightById(item3.id)"
+                      @close="removeRightById(scope.row,item3.id)"
                     >{{item3.name}}</el-tag>
                   </el-col>
                 </el-row>
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       roleList: [],
-      show:true
+      roleList1: []
     };
   },
   created() {
@@ -95,21 +95,36 @@ export default {
           console.log(error);
         });
     },
-    removeRightById() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+    removeRightById(role, rightId) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http({
+            method: "DELETE",
+            url: "rights/delPermission?roleId=" +role.id+ "&rightId="+rightId
+          })
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("删除权限失败！");
+              }
+              this.getRolesList()
+            })
+            .catch(error => {
+              console.log(error);
+            });
           this.$message({
-            type: 'success',
-            message: '删除成功!'
+            type: "success",
+            message: "删除成功!"
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除"
+          });
         });
     }
   }
