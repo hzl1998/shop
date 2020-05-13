@@ -28,14 +28,14 @@
         select r.id,r.role_name,r.description,r.create_time,
         p.id as id1,
         p.name as name1,p.path as path1,
-        p1.id as id2,
+		p1.id as id2,
         p1.name as name2,p1.path as path2,
-        p2.id as id3,
+		p2.id as id3,
         p2.name as name3,p2.path as path3
         from sys_role r
         left join sys_role_permission rp on rp.rid = r.id
-        left join sys_permission p on p.id = rp.pid and p.`level` = 0
-        left join sys_permission p1 on p1.id = p.parentId
+        left join sys_permission p on p.id = rp.pid and p.`level` = 2
+		left join sys_permission p1 on p1.id = p.parentId
 		left join sys_permission p2 on p2.id = p1.parentId
 		ORDER BY r.create_time,p.id
     </select>
