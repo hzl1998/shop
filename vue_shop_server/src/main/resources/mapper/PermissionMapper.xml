@@ -4,17 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzl.mapper.PermissionMapper">
     <resultMap id="PerResultMap" type="com.hzl.entity.Permission">
-        <id column="id3" property="id" jdbcType="VARCHAR"/>
-        <result column="name3" property="name" jdbcType="VARCHAR"/>
-        <result column="path3" property="path" jdbcType="VARCHAR"/>
+        <id column="id1" property="id" jdbcType="VARCHAR"/>
+        <result column="name1" property="name" jdbcType="VARCHAR"/>
+        <result column="path1" property="path" jdbcType="VARCHAR"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
             <id column="id2" property="id" jdbcType="VARCHAR"/>
             <result column="name2" property="name" jdbcType="VARCHAR"/>
             <result column="path2" property="path" jdbcType="VARCHAR"/>
             <collection property="children" ofType="com.hzl.entity.Permission">
-                <id column="id1" property="id" jdbcType="VARCHAR"/>
-                <result column="name1" property="name" jdbcType="VARCHAR"/>
-                <result column="path1" property="path" jdbcType="VARCHAR"/>
+                <id column="id3" property="id" jdbcType="VARCHAR"/>
+                <result column="name3" property="name" jdbcType="VARCHAR"/>
+                <result column="path3" property="path" jdbcType="VARCHAR"/>
             </collection>
         </collection>
     </resultMap>
@@ -40,9 +40,9 @@
         p2.id as id3,
         p2.name as name3,p2.path as path3
         from sys_permission p
-        inner join sys_permission p1 on p1.id = p.parentId
-        inner join sys_permission p2 on p2.id = p1.parentId
-        ORDER BY p2.id,p1.id
+        inner join sys_permission p1 on p1.parentId = p.id
+        inner join sys_permission p2 on p2.parentId = p1.id
+        ORDER BY p1.id,p2.id
     </select>
 
     <insert id="addRp">
@@ -85,11 +85,11 @@
         p2.id as id3,
         p2.name as name3,p2.path as path3
         from sys_permission p
-        inner join sys_permission p1 on p1.id = p.parentId
-        inner join sys_permission p2 on p2.id = p1.parentId
-        inner join sys_role_permission rp on rp.pid = p.id
-        where rp.rid = #{roleId}
-        ORDER BY p2.id,p1.id
+		inner join sys_role_permission rp on rp.pid = p.id
+        inner join sys_permission p1 on p1.parentId = p.id and rp.pid = p1.id
+        inner join sys_permission p2 on p2.parentId = p1.id
+        where rp.rid = "454a9bdf91f111ea9e2580fa5b3e8526"
+        ORDER BY p1.id,p2.id
     </select>
 
     <delete id="delMaxPermission">
