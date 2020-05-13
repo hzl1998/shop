@@ -225,7 +225,7 @@ export default {
             userinfo.enabled = !userinfo.enabled;
             return this.$message.error("更新用户状态失败！");
           }
-          return this.$message.success("更新用户状态成功！");
+          this.$message.success("更新用户状态成功！");
         })
         .catch(error => {
           console.log(error);
@@ -258,10 +258,11 @@ export default {
               userinfo.enabled = !userinfo.enabled;
               return this.$message.error("添加用户失败！");
             }
+            this.$message.success("添加用户成功！");
             //隐藏添加用户的对话框
             this.addDialogVisible = false;
             this.getUserList();
-            return this.$message.success("添加用户成功！");
+            
           })
           .catch(error => {
             console.log(error);
@@ -309,9 +310,9 @@ export default {
             if (resp.data.code !== 200) {
               return this.$message.error("更新用户信息失败！");
             }
+            this.$message.success("更新用户信息成功！");
             this.editDialogVisible = false;
             this.getUserList()
-            return this.$message.success("更新用户信息成功！");
           })
           .catch(error => {
             console.log(error);
@@ -332,8 +333,8 @@ export default {
             if (resp.data.code !== 200) {
               return this.$message.error("删除用户失败！");
             }
+             this.$message.success("删除用户成功！");
             this.getUserList()
-            return this.$message.success("删除用户成功！");
           })
           .catch(error => {
             console.log(error);
