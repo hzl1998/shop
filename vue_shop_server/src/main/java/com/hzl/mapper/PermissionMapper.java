@@ -25,4 +25,6 @@ public interface PermissionMapper {
     List<Permission> getNextRights(String id);
 
     int delListPermission(String roleId, String[] rightsId);
+
+    List<Permission> getRightsByRoleId(String roleId);
 }

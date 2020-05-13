@@ -78,15 +78,17 @@ public class PermissionController {
                 ids[i] = permissionList.get(i).getId();
             }
             int isok1 = permissionService.delListPermission(roleId,ids);
+            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
             if(isok1 > 0){
-                return ResultFactory.buildSuccessResult(null,"删除角色权限成功");
+                return ResultFactory.buildSuccessResult(permissionList1,"删除角色权限成功");
             }else {
                 return ResultFactory.buildFailResult("删除角色权限失败");
             }
         } else {
             int isok = permissionService.delPermission(roleId,rightId);
+            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
             if(isok > 0){
-                return ResultFactory.buildSuccessResult(null,"删除角色权限成功");
+                return ResultFactory.buildSuccessResult(permissionList1,"删除角色权限成功");
             }else {
                 return ResultFactory.buildFailResult("删除角色权限失败");
             }

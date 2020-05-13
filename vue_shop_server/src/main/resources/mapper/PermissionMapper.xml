@@ -76,4 +76,20 @@
             #{rightsId}
         </foreach>
     </delete>
+
+    <select id="getRightsByRoleId" resultMap="PerResultMap">
+        select
+        p.id as id1,
+        p.name as name1,p.path as path1,
+        p1.id as id2,
+        p1.name as name2,p1.path as path2,
+        p2.id as id3,
+        p2.name as name3,p2.path as path3
+        from sys_permission p
+        inner join sys_permission p1 on p1.id = p.parentId
+        inner join sys_permission p2 on p2.id = p1.parentId
+        inner join sys_role_permission rp on rp.pid = p.id
+        where rp.rid = #{roleId}
+        ORDER BY p2.id,p1.id
+    </select>
 </mapper>
