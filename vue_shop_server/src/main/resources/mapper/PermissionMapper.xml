@@ -88,7 +88,7 @@
 		inner join sys_role_permission rp on rp.pid = p.id
         inner join sys_permission p1 on p1.id = p.parentId
         inner join sys_permission p2 on p2.id = p1.parentId
-        where rp.rid = #{roleId} and p.`level` = 1
+        where rp.rid = #{roleId}
         ORDER BY p2.id,p1.id
     </select>
 

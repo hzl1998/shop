@@ -65,37 +65,12 @@ public class PermissionController {
         if (rightId == null || rightId.equals("")) {
             return ResultFactory.buildFailResult("权限id不能为空");
         }
-        Permission permission = permissionService.getRightsById(rightId);
-        if (permission.getLevel() == 0) {
-            int isok = permissionService.delMaxPermission(roleId);
-            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
-            if (isok > 0) {
-                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
-            } else {
-                return ResultFactory.buildFailResult("删除角色权限失败");
-            }
-        } else if (permission.getLevel() == 1) {
-            List<Permission> permissionList = permissionService.getMinRights(rightId);
-            String[] ids = new String[permissionList.size()];
-            for (int i = 0; i < permissionList.size(); i++) {
-                ids[i] = permissionList.get(i).getId();
-            }
-            int isok1 = permissionService.delListPermission(roleId, ids);
-            int isok = permissionService.delPermission(roleId, rightId);
-            List<Permission> permissionList1 = permissionService.getMidRightsByRoleId(roleId);
-            if (isok1 > 0 && isok > 0) {
-                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
-            } else {
-                return ResultFactory.buildFailResult("删除角色权限失败");
-            }
+        int isok = permissionService.delPermission(roleId, rightId);
+        List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
+        if (isok > 0) {
+            return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
         } else {
-            int isok = permissionService.delPermission(roleId, rightId);
-            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
-            if (isok > 0) {
-                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
-            } else {
-                return ResultFactory.buildFailResult("删除角色权限失败");
-            }
+            return ResultFactory.buildFailResult("删除角色权限失败");
         }
     }
 
