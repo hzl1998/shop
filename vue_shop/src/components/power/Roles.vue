@@ -23,26 +23,29 @@
             >
               <!-- 渲染一级权限 -->
               <el-col :span="5">
-                <el-tag :key="item1.id" :disable-transitions="false">{{item1.name}}</el-tag>
+                <el-tag :key="item1.id" closable>{{item1.name}}</el-tag>
                 <i class="el-icon-caret-right"></i>
               </el-col>
               <!-- 渲染二级权限和三级权限 -->
               <el-col :span="19">
-                <!-- 二级权限 -->
                 <el-row
                   :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
                   v-for="(item2, i2) in item1.children"
                   :key="item2.id"
                 >
+                <!-- 二级权限 -->
                   <el-col :span="6">
-                    <el-tag type="success">{{item2.name}}</el-tag>
+                    <el-tag type="success" closable>{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
+                  <!-- 三级权限 -->
                   <el-col :span="18">
                     <el-tag
                       type="warning"
                       v-for="(item3, i3) in item2.children"
                       :key="item3.id"
+                      closable
+                      @close="removeRightById(item3.id)"
                     >{{item3.name}}</el-tag>
                   </el-col>
                 </el-row>
@@ -90,6 +93,23 @@ export default {
         })
         .catch(error => {
           console.log(error);
+        });
+    },
+    removeRightById() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
     }
   }
