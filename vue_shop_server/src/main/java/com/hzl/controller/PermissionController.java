@@ -82,7 +82,7 @@ public class PermissionController {
             }
             int isok1 = permissionService.delListPermission(roleId, ids);
             int isok = permissionService.delPermission(roleId, rightId);
-            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
+            List<Permission> permissionList1 = permissionService.getMidRightsByRoleId(roleId);
             if (isok1 > 0 && isok > 0) {
                 return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
             } else {

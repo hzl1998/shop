@@ -29,4 +29,6 @@ public interface PermissionMapper {
     List<Permission> getRightsByRoleId(String roleId);
 
     int delMaxPermission(String roleId);
+
+    List<Permission> getMidRightsByRoleId(String roleId);
 }

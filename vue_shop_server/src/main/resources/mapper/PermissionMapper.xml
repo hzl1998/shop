@@ -85,14 +85,30 @@
         p2.id as id3,
         p2.name as name3,p2.path as path3
         from sys_permission p
-				inner join sys_role_permission rp on rp.pid = p.id
+		inner join sys_role_permission rp on rp.pid = p.id
         inner join sys_permission p1 on p1.id = p.parentId
         inner join sys_permission p2 on p2.id = p1.parentId
-        where rp.rid = #{roleId}
+        where rp.rid = #{roleId} and p.`level` = 1
         ORDER BY p2.id,p1.id
     </select>
 
     <delete id="delMaxPermission">
         delete from sys_role_permission where rid = #{roleId}
     </delete>
+
+    <select id="getMidRightsByRoleId" resultMap="PerResultMap">
+        select
+        p.id as id1,
+        p.name as name1,p.path as path1,
+        p1.id as id2,
+        p1.name as name2,p1.path as path2,
+        p2.id as id3,
+        p2.name as name3,p2.path as path3
+        from sys_permission p
+		inner join sys_role_permission rp on rp.pid = p.id
+        inner join sys_permission p1 on p1.id = p.parentId
+        inner join sys_permission p2 on p2.id = p1.parentId
+        where rp.rid = #{roleId} and p.`level` = 0
+        ORDER BY p2.id,p1.id
+    </select>
 </mapper>

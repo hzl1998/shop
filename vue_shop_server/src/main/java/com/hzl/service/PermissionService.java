@@ -57,4 +57,8 @@ public class PermissionService {
     public int delMaxPermission(String roleId) {
         return permissionMapper.delMaxPermission(roleId);
     }
+
+    public List<Permission> getMidRightsByRoleId(String roleId) {
+        return permissionMapper.getMidRightsByRoleId(roleId);
+    }
 }
