@@ -34,9 +34,9 @@
         p2.name as name3,p2.path as path3
         from sys_role r
         left join sys_role_permission rp on rp.rid = r.id
-        left join sys_permission p on p.id = rp.pid
-		left join sys_permission p1 on p1.id = p.parentId
-		left join sys_permission p2 on p2.id = p1.parentId
+        left join sys_permission p on p.id = rp.pid and p.`level` = 2
+		left join sys_permission p1 on p1.id = p.parentId and p1.`level` = 1
+		left join sys_permission p2 on p2.id = p1.parentId and p2.`level` = 0
 		ORDER BY r.create_time,p.id
     </select>
 
