@@ -86,6 +86,7 @@
         p2.name as name3,p2.path as path3
         from sys_permission p
         inner join sys_permission p1 on p1.parentId = p.id
+        inner join sys_permission p2 on p2.parentId = p1.id
         inner join sys_role_permission rp on rp.pid = p.id
         where rp.rid = #{roleId}
         ORDER BY p1.id,p2.id
