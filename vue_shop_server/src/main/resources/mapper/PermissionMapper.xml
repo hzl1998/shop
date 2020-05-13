@@ -3,6 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzl.mapper.PermissionMapper">
+    <resultMap id="PerResultMap" type="com.hzl.entity.Permission">
+        <id column="id3" property="id" jdbcType="VARCHAR"/>
+        <result column="name3" property="name" jdbcType="VARCHAR"/>
+        <result column="path3" property="path" jdbcType="VARCHAR"/>
+        <collection property="children" ofType="com.hzl.entity.Permission">
+            <id column="id2" property="id" jdbcType="VARCHAR"/>
+            <result column="name2" property="name" jdbcType="VARCHAR"/>
+            <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <collection property="children" ofType="com.hzl.entity.Permission">
+                <id column="id1" property="id" jdbcType="VARCHAR"/>
+                <result column="name1" property="name" jdbcType="VARCHAR"/>
+                <result column="path1" property="path" jdbcType="VARCHAR"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <select id="getRights" resultType="com.hzl.entity.Permission">
         select id,name,level,path,parentId from sys_permission order by level LIMIT #{page},#{rows}
     </select>
@@ -11,4 +27,53 @@
         select count(1) from sys_permission
     </select>
 
+    <delete id="delPermission">
+        delete from sys_role_permission where rid = #{roleId} and pid = #{rightId}
+    </delete>
+
+    <select id="selectRights" resultMap="PerResultMap">
+        select
+        p.id as id1,
+        p.name as name1,p.path as path1,
+        p1.id as id2,
+        p1.name as name2,p1.path as path2,
+        p2.id as id3,
+        p2.name as name3,p2.path as path3
+        from sys_permission p
+        inner join sys_permission p1 on p1.id = p.parentId
+        inner join sys_permission p2 on p2.id = p1.parentId
+        ORDER BY p2.id,p1.id
+    </select>
+
+    <insert id="addRp">
+        insert into sys_role_permission(pid,rid)
+        values 
+        <foreach collection="rightsId" item="rightsId" separator=",">
+            (#{rightsId},#{roleId})
+        </foreach>
+    </insert>
+
+    <select id="getRightsById" resultType="com.hzl.entity.Permission">
+        select * from sys_permission where id = #{id}
+    </select>
+
+    <select id="getMinRights" resultType="com.hzl.entity.Permission">
+        select p2.* from sys_permission p
+        inner join sys_permission p1 on p1.parentId = p.id
+        inner join sys_permission p2 on p2.parentId = p1.id
+        where p.id = #{id}
+    </select>
+
+    <select id="getNextRights" resultType="com.hzl.entity.Permission">
+        select p1.* from sys_permission p
+        inner join sys_permission p1 on p1.parentId = p.id
+        where p.id = #{id}
+    </select>
+
+    <delete id="delListPermission">
+        delete from sys_role_permission where rid = #{roleId} and pid in
+        <foreach collection="rightsId" item="rightsId" open="(" close=")" separator=",">
+            #{rightsId}
+        </foreach>
+    </delete>
 </mapper>

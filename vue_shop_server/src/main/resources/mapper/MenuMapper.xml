@@ -4,26 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzl.mapper.MenuMapper">
     <resultMap id="MenuResultMap" type="com.hzl.entity.Menu">
-        <id property="id" column="id"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="icon" property="icon" jdbcType="VARCHAR"/>
-        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <id column="id1" property="id"/>
+        <result column="name1" property="name" jdbcType="VARCHAR"/>
+        <result column="icon1" property="icon" jdbcType="VARCHAR"/>
+        <result column="path1" property="path" jdbcType="VARCHAR"/>
         <collection property="children" ofType="com.hzl.entity.Menu">
-            <id column="id1" property="id"/>
-            <result column="name1" property="name" jdbcType="VARCHAR"/>
-            <result column="icon1" property="icon" jdbcType="VARCHAR"/>
-            <result column="path1" property="path" jdbcType="VARCHAR"/>
+            <id column="id" property="id"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="icon" property="icon" jdbcType="VARCHAR"/>
+            <result column="path" property="path" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
     <select id="selectMenusByUserId" resultMap="MenuResultMap">
         select m1.id,m1.name,m1.icon,m1.path,
         m2.id as id1,m2.name as name1,m2.icon as icon1,m2.path as path1
         from sys_menu m1
-        INNER JOIN sys_menu m2 on m1.id = m2.parentId
+        INNER JOIN sys_menu m2 on m1.parentId = m2.id
         INNER JOIN sys_role_menu rm on rm.mid = m1.id
         INNER JOIN sys_role r on r.id = rm.rid
         where r.id = (SELECT rid from sys_role_user where uid = #{userId})
-        ORDER BY m1.id
+        ORDER BY m2.id,m1.id
     </select>
 
 </mapper>

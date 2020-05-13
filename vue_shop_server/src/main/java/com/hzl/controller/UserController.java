@@ -102,7 +102,7 @@ public class UserController {
         userDto.setPassword(pwd);
         int isok = userService.addUser(userDto);
         if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"添加用户成功");
+            return ResultFactory.buildSuccessResult(userDto,"添加用户成功");
         }else {
             return ResultFactory.buildFailResult("添加用户失败");
         }
@@ -150,7 +150,7 @@ public class UserController {
         if(isok > 0){
             return ResultFactory.buildSuccessResult(null,"删除用户成功");
         }else {
-            return ResultFactory.buildFailResult("删除用户成功");
+            return ResultFactory.buildFailResult("删除用户失败");
         }
     }
 }

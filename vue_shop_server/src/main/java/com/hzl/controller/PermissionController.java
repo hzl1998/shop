@@ -1,23 +1,24 @@
 package com.hzl.controller;
 
-import com.hzl.entity.Menu;
-import com.hzl.entity.PageInfo;
-import com.hzl.entity.Permission;
-import com.hzl.entity.UserDto;
+import com.hzl.entity.*;
 import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.MenuService;
 import com.hzl.service.PermissionService;
+import com.hzl.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class PermissionController {
+
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    RoleService roleService;
 
     @GetMapping("/rights")
     public Result rights(Integer page,Integer rows) {
@@ -53,6 +54,69 @@ public class PermissionController {
             return ResultFactory.buildSuccessResult(pageInfo,"获取权限列表成功");
         } else {
             return ResultFactory.buildFailResult("获取权限列表失败");
+        }
+    }
+
+    @DeleteMapping("/rights/delPermission")
+    public Result delPermission(String roleId,String rightId){
+        if(roleId == null || roleId.equals("")){
+            return ResultFactory.buildFailResult("角色id不能为空");
+        }
+        if(rightId == null || rightId.equals("")){
+            return ResultFactory.buildFailResult("权限id不能为空");
+        }
+        Permission permission = permissionService.getRightsById(rightId);
+        List<Permission> permissionList = null;
+        if (permission.getLevel() == 0) {
+            permissionList = permissionService.getMinRights(rightId);
+        } else if (permission.getLevel() == 1) {
+            permissionList = permissionService.getNextRights(rightId);
+        }
+        if(permissionList != null){
+            String[] ids = new String[permissionList.size()];
+            for (int i = 0;i < permissionList.size(); i++){
+                ids[i] = permissionList.get(i).getId();
+            }
+            int isok1 = permissionService.delListPermission(roleId,ids);
+            if(isok1 > 0){
+                return ResultFactory.buildSuccessResult(null,"删除角色权限成功");
+            }else {
+                return ResultFactory.buildFailResult("删除角色权限失败");
+            }
+        } else {
+            int isok = permissionService.delPermission(roleId,rightId);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"删除角色权限成功");
+            }else {
+                return ResultFactory.buildFailResult("删除角色权限失败");
+            }
+        }
+    }
+
+    @GetMapping("/rights/selectRights")
+    public Result selectRights() {
+        List<Permission> permissionList = permissionService.selectRights();
+        if (permissionList != null && permissionList.size() != 0){
+            return ResultFactory.buildSuccessResult(permissionList,"获取权限列表成功");
+        } else {
+            return ResultFactory.buildFailResult("获取权限列表失败");
+        }
+    }
+
+    @PostMapping("/rights/addRp")
+    public Result addRp(@RequestBody Rp rp) {
+        if(rp.getRoleId() == null || rp.getRoleId().equals("")){
+            return ResultFactory.buildFailResult("角色id不能为空");
+        }
+        if(rp.getRightsId() == null || rp.getRightsId().length < 1){
+            return ResultFactory.buildFailResult("权限id数组不能为空");
+        }
+        int isok1 =roleService.delRpById(rp.getRoleId());
+        int isok = permissionService.addRp(rp.getRoleId(),rp.getRightsId());
+        if (isok > 0){
+            return ResultFactory.buildSuccessResult(null,"更新成功");
+        } else {
+            return ResultFactory.buildFailResult("更新失败");
         }
     }
 }

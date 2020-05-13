@@ -21,4 +21,32 @@ public class PermissionService {
     public int getRightsCount() {
         return permissionMapper.getRightsCount();
     }
+
+    public int delPermission(String roleId, String rightId) {
+        return permissionMapper.delPermission(roleId,rightId);
+    }
+
+    public List<Permission> selectRights() {
+        return permissionMapper.selectRights();
+    }
+
+    public int addRp(String roleId, String[] rightsId) {
+        return permissionMapper.addRp(roleId,rightsId);
+    }
+
+    public Permission getRightsById(String id){
+        return permissionMapper.getRightsById(id);
+    }
+
+    public List<Permission> getMinRights(String id){
+        return permissionMapper.getMinRights(id);
+    }
+
+    public List<Permission> getNextRights(String id){
+        return permissionMapper.getNextRights(id);
+    }
+
+    public int delListPermission(String roleId, String[] rightsId) {
+        return permissionMapper.delListPermission(roleId,rightsId);
+    }
 }
