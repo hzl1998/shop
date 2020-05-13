@@ -9,17 +9,17 @@
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="create_time" property="create_time" jdbcType="BIGINT"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
-            <id column="id1" property="id" jdbcType="VARCHAR"/>
-            <result column="name1" property="name" jdbcType="VARCHAR"/>
-            <result column="path1" property="path" jdbcType="VARCHAR"/>
+            <id column="id3" property="id" jdbcType="VARCHAR"/>
+            <result column="name3" property="name" jdbcType="VARCHAR"/>
+            <result column="path3" property="path" jdbcType="VARCHAR"/>
             <collection property="children" ofType="com.hzl.entity.Permission">
                 <id column="id2" property="id" jdbcType="VARCHAR"/>
                 <result column="name2" property="name" jdbcType="VARCHAR"/>
                 <result column="path2" property="path" jdbcType="VARCHAR"/>
                 <collection property="children" ofType="com.hzl.entity.Permission">
-                    <id column="id3" property="id" jdbcType="VARCHAR"/>
-                    <result column="name3" property="name" jdbcType="VARCHAR"/>
-                    <result column="path3" property="path" jdbcType="VARCHAR"/>
+                    <id column="id1" property="id" jdbcType="VARCHAR"/>
+                    <result column="name1" property="name" jdbcType="VARCHAR"/>
+                    <result column="path1" property="path" jdbcType="VARCHAR"/>
                 </collection>
             </collection>
         </collection>
@@ -34,9 +34,9 @@
         p2.name as name3,p2.path as path3
         from sys_role r
         left join sys_role_permission rp on rp.rid = r.id
-        left join sys_permission p on p.id = rp.pid and p.`level` = 0
-		left join sys_permission p1 on p1.parentId = p.id and p1.parentId  = rp.pid and p1.`level` = 1
-		left join sys_permission p2 on p2.parentId = p1.id
+        left join sys_permission p on p.id = rp.pid
+		left join sys_permission p1 on p1.id = p.parentId
+		left join sys_permission p2 on p2.id = p1.parentId
 		ORDER BY r.create_time,p.id
     </select>
 
