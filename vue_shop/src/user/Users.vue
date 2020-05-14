@@ -255,7 +255,6 @@ export default {
         })
           .then(resp => {
             if (resp.data.code !== 200) {
-              userinfo.enabled = !userinfo.enabled;
               return this.$message.error("添加用户失败！");
             }
             this.$message.success("添加用户成功！");
@@ -277,7 +276,6 @@ export default {
       })
         .then(resp => {
           if (resp.data.code !== 200) {
-            userinfo.enabled = !userinfo.enabled;
             return this.$message.error("查询用户信息失败！");
           }
           this.editForm = resp.data.data;
