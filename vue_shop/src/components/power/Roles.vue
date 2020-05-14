@@ -27,7 +27,6 @@
                   :key="item1.id"
                   closable
                   @close="removeRightById(scope.row,item1.id)"
-                  v-if="item1.checked == 1"
                 >{{item1.name}}</el-tag>
                 <i class="el-icon-caret-right"></i>
               </el-col>
@@ -39,24 +38,26 @@
                   :key="item2.id"
                 >
                   <!-- 二级权限 -->
-                  <el-col :span="6">
+                  <el-col :span="7">
                     <el-tag
                       type="success"
                       closable
                       @close="removeRightById(scope.row,item2.id)"
-                      v-if="item1.checked == 1"
                     >{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <!-- 三级权限 -->
-                  <el-col :span="18" v-for="(item3) in item2.children" :key="item3.id">
+                  <el-col :span="17">
+                    <div v-for="(item3) in item2.children" :key="item3.id" style="float: left;">
                     <el-tag
                       type="warning"
                       closable
+                      :key="item3.id"
                       :disable-transitions="false"
+                      v-if="item3.checked == 1"
                       @close="removeRightById(scope.row,item3.id)"
-                      v-if="item1.checked == 1"
                     >{{item3.name}}</el-tag>
+                    </div>
                   </el-col>
                 </el-row>
               </el-col>
