@@ -56,13 +56,14 @@ public class RoleController {
     }
 
     @PutMapping("/roles/updateRoleById")
-    public Result updateRoleById(Role role){
+    public Result updateRoleById(@RequestBody Role role){
         if (role.getId() == null || role.getId().equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
         }
         if (role.getRole_name() == null || role.getRole_name().equals("")){
             return ResultFactory.buildFailResult("角色名称不能为空");
         }
+        role.setUpdate_time(DateUtils.getUTCTime());
         int isok = roleService.updateRole(role);
         if(isok > 0){
             return ResultFactory.buildSuccessResult(null,"角色修改成功");
