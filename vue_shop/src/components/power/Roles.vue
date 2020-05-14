@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
 
-      <el-table :data="roleList" border stripe @expand-change="open">
+      <el-table :data="roleList" border stripe>
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -25,6 +25,9 @@
               <el-col :span="5">
                 <el-tag
                   :key="item1.id"
+                  closable
+                  @close="removeRightById(scope.row,item1.id)"
+                  v-if="item1.checked == 1"
                 >{{item1.name}}</el-tag>
                 <i class="el-icon-caret-right"></i>
               </el-col>
@@ -39,18 +42,20 @@
                   <el-col :span="6">
                     <el-tag
                       type="success"
+                      closable
+                      @close="removeRightById(scope.row,item2.id)"
+                      v-if="item1.checked == 1"
                     >{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <!-- 三级权限 -->
-                  <el-col :span="18">
+                  <el-col :span="18" v-for="(item3) in item2.children" :key="item3.id">
                     <el-tag
                       type="warning"
-                      v-for="(item3) in item2.children"
-                      :key="item3.id"
                       closable
                       :disable-transitions="false"
                       @close="removeRightById(scope.row,item3.id)"
+                      v-if="item1.checked == 1"
                     >{{item3.name}}</el-tag>
                   </el-col>
                 </el-row>
