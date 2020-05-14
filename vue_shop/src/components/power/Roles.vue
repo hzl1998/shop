@@ -25,8 +25,6 @@
               <el-col :span="5">
                 <el-tag
                   :key="item1.id"
-                  closable
-                  @close="removeRightById(scope.row,item1.id)"
                 >{{item1.name}}</el-tag>
                 <i class="el-icon-caret-right"></i>
               </el-col>
@@ -41,8 +39,6 @@
                   <el-col :span="6">
                     <el-tag
                       type="success"
-                      closable
-                      @close="removeRightById(scope.row,item2.id)"
                     >{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
@@ -50,7 +46,7 @@
                   <el-col :span="18">
                     <el-tag
                       type="warning"
-                      v-for="(item3, i3) in item2.children"
+                      v-for="(item3) in item2.children"
                       :key="item3.id"
                       closable
                       @close="removeRightById(scope.row,item3.id)"
