@@ -18,17 +18,5 @@ public interface PermissionMapper {
 
     int addRp(String roleId, String[] rightsId);
 
-    Permission getRightsById(String id);
-
-    List<Permission> getMinRights(String id);
-
-    List<Permission> getNextRights(String id);
-
-    int delListPermission(String roleId, String[] rightsId);
-
     List<Permission> getRightsByRoleId(String roleId);
-
-    int delMaxPermission(String roleId);
-
-    List<Permission> getMidRightsByRoleId(String roleId);
 }
