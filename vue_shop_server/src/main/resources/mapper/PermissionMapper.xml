@@ -7,14 +7,17 @@
         <id column="id1" property="id" jdbcType="VARCHAR"/>
         <result column="name1" property="name" jdbcType="VARCHAR"/>
         <result column="path1" property="path" jdbcType="VARCHAR"/>
+        <result column="checked1" property="checked" jdbcType="INTEGER"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
             <id column="id2" property="id" jdbcType="VARCHAR"/>
             <result column="name2" property="name" jdbcType="VARCHAR"/>
             <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <result column="checked2" property="checked" jdbcType="INTEGER"/>
             <collection property="children" ofType="com.hzl.entity.Permission">
                 <id column="id3" property="id" jdbcType="VARCHAR"/>
                 <result column="name3" property="name" jdbcType="VARCHAR"/>
                 <result column="path3" property="path" jdbcType="VARCHAR"/>
+                <result column="checked3" property="checked" jdbcType="INTEGER"/>
             </collection>
         </collection>
     </resultMap>
