@@ -27,8 +27,9 @@
                   :key="item1.id"
                   closable
                   @close="removeRightById(scope.row,item1.id)"
+                  v-if="item1.checked == 1"
                 >{{item1.name}}</el-tag>
-                <i class="el-icon-caret-right"></i>
+                <i class="el-icon-caret-right" v-if="item1.name != null"></i>
               </el-col>
               <!-- 渲染二级权限和三级权限 -->
               <el-col :span="19">
@@ -43,6 +44,7 @@
                       type="success"
                       closable
                       @close="removeRightById(scope.row,item2.id)"
+                      v-if="item2.checked == 1"
                     >{{item2.name}}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
@@ -184,7 +186,7 @@ export default {
         });
     },
     removeRightById(role, rightId) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该权限, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -200,7 +202,6 @@ export default {
                 return this.$message.error("删除权限失败！");
               }
               role.children = resp.data.data;
-              console.log(role.children);
               this.$message({
                 type: "success",
                 message: "删除成功!"
@@ -232,6 +233,7 @@ export default {
 
               //递归获取三级节点的id
               this.getLeafKeys(role,this.defKeys)
+              console.log(role)
               this.setRightDialogVisible = true
             })
             .catch(error => {
@@ -242,7 +244,9 @@ export default {
     getLeafKeys(node, arr) {
       //如果当前node节点不包含children属性，则是三级节点
       if(!node.children) {
-        return arr.push(node.id)
+        if(node.checked != 0){
+          return arr.push(node.id)
+        }
       }
 
       node.children.forEach(item => {
