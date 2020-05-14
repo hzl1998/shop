@@ -20,7 +20,7 @@ public interface RoleMapper {
 
     int delRpById(@Param(value="id")String id);
 
-    int delRuById(@Param(value="roleId")String roleId, @Param(value="userId")String userId);
+    int delRuById(@Param(value="userId")String userId);
 
     int addRu(@Param(value="roleId")String roleId, @Param(value="userId")String userId);
 

@@ -37,8 +37,8 @@ public class RoleService {
         return roleMapper.delRpById(id);
     }
 
-    public int delRuById(String roleId, String userId) {
-        return roleMapper.delRuById(roleId,userId);
+    public int delRuById(String userId) {
+        return roleMapper.delRuById(userId);
     }
 
     public int addRu(String roleId, String userId) {

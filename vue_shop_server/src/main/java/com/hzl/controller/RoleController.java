@@ -94,7 +94,7 @@ public class RoleController {
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
         }
-        int isok1 = roleService.delRuById(roleId,userId);
+        int isok1 = roleService.delRuById(userId);
         int isok = roleService.addRu(roleId,userId);
         if (isok > 0){
             return ResultFactory.buildSuccessResult(null,"更新成功");

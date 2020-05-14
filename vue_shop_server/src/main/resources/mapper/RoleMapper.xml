@@ -63,7 +63,7 @@
     </delete>
 
     <delete id="delRuById">
-        delete from sys_role_user where uid = #{userId} and rid = #{roleId}
+        delete from sys_role_user where uid = #{userId}
     </delete>
 
     <insert id="addRu">
