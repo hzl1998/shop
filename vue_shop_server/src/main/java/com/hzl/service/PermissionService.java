@@ -37,4 +37,16 @@ public class PermissionService {
     public List<Permission> getRightsByRoleId(String roleId) {
         return permissionMapper.getRightsByRoleId(roleId);
     }
+
+    public List<Permission> getRightsByPid(String pid) {
+        return permissionMapper.getRightsByPid(pid);
+    }
+
+    public Permission getRightById(String id) {
+        return permissionMapper.getRightById(id);
+    }
+
+    public int delListPermission(String roleId, String[] rightsId) {
+        return permissionMapper.delListPermission(roleId,rightsId);
+    }
 }

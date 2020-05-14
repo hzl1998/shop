@@ -19,4 +19,10 @@ public interface PermissionMapper {
     int addRp(String roleId, String[] rightsId);
 
     List<Permission> getRightsByRoleId(String roleId);
+
+    List<Permission> getRightsByPid(String pid);
+
+    Permission getRightById(String id);
+
+    int delListPermission(String roleId, String[] rightsId);
 }

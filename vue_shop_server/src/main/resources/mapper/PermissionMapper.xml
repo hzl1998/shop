@@ -4,17 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzl.mapper.PermissionMapper">
     <resultMap id="PerResultMap" type="com.hzl.entity.Permission">
-        <id column="id3" property="id" jdbcType="VARCHAR"/>
-        <result column="name3" property="name" jdbcType="VARCHAR"/>
-        <result column="path3" property="path" jdbcType="VARCHAR"/>
+        <id column="id1" property="id" jdbcType="VARCHAR"/>
+        <result column="name1" property="name" jdbcType="VARCHAR"/>
+        <result column="path1" property="path" jdbcType="VARCHAR"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
             <id column="id2" property="id" jdbcType="VARCHAR"/>
             <result column="name2" property="name" jdbcType="VARCHAR"/>
             <result column="path2" property="path" jdbcType="VARCHAR"/>
             <collection property="children" ofType="com.hzl.entity.Permission">
-                <id column="id1" property="id" jdbcType="VARCHAR"/>
-                <result column="name1" property="name" jdbcType="VARCHAR"/>
-                <result column="path1" property="path" jdbcType="VARCHAR"/>
+                <id column="id3" property="id" jdbcType="VARCHAR"/>
+                <result column="name3" property="name" jdbcType="VARCHAR"/>
+                <result column="path3" property="path" jdbcType="VARCHAR"/>
             </collection>
         </collection>
     </resultMap>
@@ -33,16 +33,16 @@
 
     <select id="selectRights" resultMap="PerResultMap">
         select
-        p.id as id1,
-        p.name as name1,p.path as path1,
-        p1.id as id2,
-        p1.name as name2,p1.path as path2,
-        p2.id as id3,
-        p2.name as name3,p2.path as path3
-        from sys_permission p
-        inner join sys_permission p1 on p1.id = p.parentId
-        inner join sys_permission p2 on p2.id = p1.parentId
-        ORDER BY p2.id,p1.id
+        p1.id as id1,
+        p1.name as name1,p1.path as path1,
+        p2.id as id2,
+        p2.name as name2,p2.path as path2,
+        p3.id as id3,
+        p3.name as name3,p3.path as path3
+        from sys_permission p1
+        inner join sys_permission p2 on p2.parentId = p1.id
+        inner join sys_permission p3 on p3.parentId = p2.id
+        ORDER BY p1.id,p2.id
     </select>
 
     <insert id="addRp">
@@ -55,18 +55,40 @@
 
     <select id="getRightsByRoleId" resultMap="PerResultMap">
         select
-        p.id as id1,
-        p.name as name1,p.path as path1,
-        p1.id as id2,
-        p1.name as name2,p1.path as path2,
-        p2.id as id3,
-        p2.name as name3,p2.path as path3
-        from sys_permission p
-		inner join sys_role_permission rp on rp.pid = p.id
-        inner join sys_permission p1 on p1.id = p.parentId
-        inner join sys_permission p2 on p2.id = p1.parentId
+        p1.id as id1,
+        p1.name as name1,p1.path as path1,
+		if((SELECT pid from sys_role_permission WHERE rid = #{roleId} and pid=p1.id)=p1.id,true,false) as checked1,
+        p2.id as id2,
+        p2.name as name2,p2.path as path2,
+		if((SELECT pid from sys_role_permission WHERE rid = #{roleId} and pid=p2.id)=p2.id,true,false) as checked2,
+        p3.id as id3,
+        p3.name as name3,p3.path as path3,
+		if((SELECT pid from sys_role_permission WHERE rid = #{roleId} and pid=p3.id)=p3.id,true,false) as checked3
+        from sys_permission p1
+		inner join sys_role_permission rp on rp.pid = p1.id
+        inner join sys_permission p2 on p2.parentId = p1.id
+        inner join sys_permission p3 on p3.parentId = p2.id
         where rp.rid = #{roleId}
-        ORDER BY p2.id,p1.id
+        ORDER BY p1.id,p2.id
     </select>
+
+    <select id="getRightsByPid" resultType="com.hzl.entity.Permission">
+        select
+        p2.id
+        from sys_permission p1
+        left join sys_permission p2 on p2.parentId = p1.id
+        where p1.id = #{pid} ORDER BY p1.id,p2.id
+    </select>
+
+    <select id="getRightById" resultType="com.hzl.entity.Permission">
+        select * from sys_permission where id = #{id}
+    </select>
+
+    <delete id="delListPermission">
+        delete from sys_role_permission where rid = #{roleId} and pid in
+        <foreach collection="rightsId" item="rightsId" open="(" close=")" separator=",">
+            #{rightsId}
+        </foreach>
+    </delete>
 
 </mapper>

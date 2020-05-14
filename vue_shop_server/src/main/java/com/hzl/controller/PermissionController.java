@@ -9,6 +9,7 @@ import com.hzl.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -65,12 +66,48 @@ public class PermissionController {
         if (rightId == null || rightId.equals("")) {
             return ResultFactory.buildFailResult("权限id不能为空");
         }
-        int isok = permissionService.delPermission(roleId, rightId);
-        List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
-        if (isok > 0) {
-            return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
+        Permission permission = permissionService.getRightById(rightId);
+        if (permission.getLevel() == 0) {
+            List<Permission> permissionList = permissionService.getRightsByPid(rightId);
+            List idList = new ArrayList();
+            idList.add(rightId);
+            for (int i = 0;i < permissionList.size();i++){
+                idList.add(permissionList.get(i).getId());
+                idList.addAll(permissionService.getRightsByPid(permissionList.get(i).getId()));
+            }
+            String[] ids = new String[idList.size()];
+            for (int i = 0;i < idList.size();i++){
+                ids[i] = String.valueOf(idList.get(i));
+            }
+            int isok = permissionService.delListPermission(roleId, ids);
+            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
+            if (isok > 0) {
+                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
+            } else {
+                return ResultFactory.buildFailResult("删除角色权限失败");
+            }
+        } else if (permission.getLevel() == 1){
+            List<Permission> permissionList = permissionService.getRightsByPid(rightId);
+            String[] ids = new String[(permissionList.size() + 1)];
+            ids[0] = rightId;
+            for(int i = 0;i <permissionList.size();i++) {
+                ids[i+1] = permissionList.get(i).getId();
+            }
+            int isok = permissionService.delListPermission(roleId, ids);
+            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
+            if (isok > 0) {
+                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
+            } else {
+                return ResultFactory.buildFailResult("删除角色权限失败");
+            }
         } else {
-            return ResultFactory.buildFailResult("删除角色权限失败");
+            int isok = permissionService.delPermission(roleId, rightId);
+            List<Permission> permissionList1 = permissionService.getRightsByRoleId(roleId);
+            if (isok > 0) {
+                return ResultFactory.buildSuccessResult(permissionList1, "删除角色权限成功");
+            } else {
+                return ResultFactory.buildFailResult("删除角色权限失败");
+            }
         }
     }
 

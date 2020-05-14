@@ -14,5 +14,6 @@ public class Permission {
     private Integer level;
     private String path;
     private String parentId;
+    private Integer checked;
     private List<Permission> children;
 }

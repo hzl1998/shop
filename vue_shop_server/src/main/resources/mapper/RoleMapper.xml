@@ -9,35 +9,43 @@
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="create_time" property="create_time" jdbcType="BIGINT"/>
         <collection property="children" ofType="com.hzl.entity.Permission">
-            <id column="id3" property="id" jdbcType="VARCHAR"/>
-            <result column="name3" property="name" jdbcType="VARCHAR"/>
-            <result column="path3" property="path" jdbcType="VARCHAR"/>
+            <id column="id1" property="id" jdbcType="VARCHAR"/>
+            <result column="name1" property="name" jdbcType="VARCHAR"/>
+            <result column="path1" property="path" jdbcType="VARCHAR"/>
+            <result column="checked1" property="checked" jdbcType="INTEGER"/>
             <collection property="children" ofType="com.hzl.entity.Permission">
                 <id column="id2" property="id" jdbcType="VARCHAR"/>
                 <result column="name2" property="name" jdbcType="VARCHAR"/>
                 <result column="path2" property="path" jdbcType="VARCHAR"/>
+                <result column="checked2" property="checked" jdbcType="INTEGER"/>
                 <collection property="children" ofType="com.hzl.entity.Permission">
-                    <id column="id1" property="id" jdbcType="VARCHAR"/>
-                    <result column="name1" property="name" jdbcType="VARCHAR"/>
-                    <result column="path1" property="path" jdbcType="VARCHAR"/>
+                    <id column="id3" property="id" jdbcType="VARCHAR"/>
+                    <result column="name3" property="name" jdbcType="VARCHAR"/>
+                    <result column="path3" property="path" jdbcType="VARCHAR"/>
+                    <result column="checked3" property="checked" jdbcType="INTEGER"/>
                 </collection>
             </collection>
         </collection>
     </resultMap>
     <select id="getRoles" resultMap="RoleResultMap">
         select r.id,r.role_name,r.description,r.create_time,
-        p.id as id1,
-        p.name as name1,p.path as path1,
-		p1.id as id2,
-        p1.name as name2,p1.path as path2,
-		p2.id as id3,
-        p2.name as name3,p2.path as path3
-        from sys_role r
-        left join sys_role_permission rp on rp.rid = r.id
-        left join sys_permission p on p.id = rp.pid and p.`level` = 2
-		left join sys_permission p1 on p1.id = p.parentId and p1.`level` = 1
-		left join sys_permission p2 on p2.id = p1.parentId and p2.`level` = 0
-		ORDER BY r.create_time,p.id
+        p1.id as id1,
+        p1.name as name1,p1.path as path1,if((SELECT pid from sys_role_permission WHERE rid=r.id
+		and pid=p1.id)=p1.id,true,false) as checked1,
+		p2.id as id2,
+        p2.name as name2,p2.path as path2,
+		if((SELECT pid from sys_role_permission WHERE rid=r.id
+		and pid=p2.id)=p2.id,true,false) as checked2,
+		p3.id as id3,
+        p3.name as name3,p3.path as path3 ,
+		if((SELECT pid from sys_role_permission WHERE rid=r.id
+		and pid=p3.id)=p3.id,true,false) as checked3
+		from sys_role r
+		left join sys_role_permission rp on rp.rid = r.id
+        left join sys_permission p1 on p1.id = rp.pid and p1.`level` = 0
+		left join sys_permission p2 on p2.parentId = p1.id and p2.`level` = 1
+		left join sys_permission p3 on p3.parentId = p2.id and p3.`level` = 2
+		ORDER BY r.create_time,p1.id
     </select>
 
     <insert id="addRole" parameterType="com.hzl.entity.Role">
