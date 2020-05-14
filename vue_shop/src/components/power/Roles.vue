@@ -63,7 +63,7 @@
         <el-table-column label="操作" width="300px">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="showEditDialog(scope.row.id)">编辑</el-button>
-            <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeRoleById(scope.row.id)">删除</el-button>
             <el-button
               type="warning"
               size="mini"
@@ -230,7 +230,6 @@ export default {
             .catch(error => {
               console.log(error);
             });
-      this.setRightDialogVisible = true;
     },
     //通过递归的形式，获取角色下所有三级权限的id，并保存到defKeys数组中
     getLeafKeys(node, arr) {
@@ -354,6 +353,33 @@ export default {
             console.log(error);
           });
     })
+    },
+    removeRoleById(id) {
+      this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(resp => {
+          this.$http({
+          method: "DELETE",
+          url: "roles/delRoleById?id=" + id
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              return this.$message.error("删除角色失败！");
+            }
+             this.$message.success("删除角色成功！");
+            this.getRolesList()
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }).catch(error => {  
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          }); 
+        });
     }
   }
 }
