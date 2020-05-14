@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
 
-      <el-table :data="roleList" border stripe>
+      <el-table :data="roleList" border stripe @expand-change="open">
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -49,6 +49,7 @@
                       v-for="(item3) in item2.children"
                       :key="item3.id"
                       closable
+                      :disable-transitions="false"
                       @close="removeRightById(scope.row,item3.id)"
                     >{{item3.name}}</el-tag>
                   </el-col>
