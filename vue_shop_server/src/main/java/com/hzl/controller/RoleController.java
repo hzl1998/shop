@@ -1,12 +1,10 @@
 package com.hzl.controller;
 
-import com.hzl.entity.Menu;
-import com.hzl.entity.Role;
-import com.hzl.entity.Rp;
-import com.hzl.entity.UserDto;
+import com.hzl.entity.*;
 import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.MenuService;
+import com.hzl.service.PermissionService;
 import com.hzl.service.RoleService;
 import com.hzl.utils.DateUtils;
 import com.hzl.utils.UUIDUtil;
@@ -20,9 +18,16 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    PermissionService permissionService;
+
     @GetMapping("/roles")
     public Result roles() {
         List<Role> roleList = roleService.getRoles();
+        for(int i = 0;i < roleList.size();i++){
+            List<Permission> permissionList = permissionService.getRightsByRoleId(roleList.get(i).getId());
+            roleList.get(i).setChildren(permissionList);
+        }
         if (roleList != null && roleList.size() != 0){
             return ResultFactory.buildSuccessResult(roleList,"获取角色列表成功");
         } else {
