@@ -330,11 +330,11 @@ export default {
                 }
               });
             });
-          }
-          //mKeys改变之后没有重新渲染选中的数据，所以用this.$refs.mtreeRef.setCheckedKeys()来改变选中状态，但此时又会有另一个问题,当弹框没有渲染的时候,由于tree控件dom没有加载,setCheckedKeys是不存在的,会报错,所以我们需要使用this.$nextTick(callback)方法,该方法会在dom加载完毕之后,执行回调函数
+            //mKeys改变之后没有重新渲染选中的数据，所以用this.$refs.mtreeRef.setCheckedKeys()来改变选中状态，但此时又会有另一个问题,当弹框没有渲染的时候,由于tree控件dom没有加载,setCheckedKeys是不存在的,会报错,所以我们需要使用this.$nextTick(callback)方法,该方法会在dom加载完毕之后,执行回调函数
           this.$nextTick(() => {
             this.$refs.mtreeRef.setCheckedKeys(this.mKeys);
           });
+          }
           console.log(this.mKeys);
           this.setMenuDialogVisible = true;
         })
@@ -392,7 +392,8 @@ export default {
         data: {
           roleId: this.roleId,
           rightsId: keys
-        }
+        },
+        dataType: "json"
       })
         .then(resp => {
           if (resp.data.code !== 200) {
