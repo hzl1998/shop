@@ -29,7 +29,7 @@
                   @close="removeRightById(scope.row,item1.id)"
                   v-if="item1.checked == 1"
                 >{{item1.name}}</el-tag>
-                <i class="el-icon-caret-right" v-if="item1.name != null"></i>
+                <i class="el-icon-caret-right" v-if="item1.checked == 1"></i>
               </el-col>
               <!-- 渲染二级权限和三级权限 -->
               <el-col :span="19">
@@ -46,19 +46,19 @@
                       @close="removeRightById(scope.row,item2.id)"
                       v-if="item2.checked == 1"
                     >{{item2.name}}</el-tag>
-                    <i class="el-icon-caret-right"></i>
+                    <i class="el-icon-caret-right" v-if="item2.checked == 1"></i>
                   </el-col>
                   <!-- 三级权限 -->
                   <el-col :span="17">
                     <div v-for="(item3) in item2.children" :key="item3.id" style="float: left;">
-                    <el-tag
-                      type="warning"
-                      closable
-                      :key="item3.id"
-                      :disable-transitions="false"
-                      v-if="item3.checked == 1"
-                      @close="removeRightById(scope.row,item3.id)"
-                    >{{item3.name}}</el-tag>
+                      <el-tag
+                        type="warning"
+                        closable
+                        :key="item3.id"
+                        :disable-transitions="false"
+                        v-if="item3.checked == 1"
+                        @close="removeRightById(scope.row,item3.id)"
+                      >{{item3.name}}</el-tag>
                     </div>
                   </el-col>
                 </el-row>
@@ -69,10 +69,26 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="角色名称" prop="role_name"></el-table-column>
         <el-table-column label="角色描述" prop="description"></el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column label="操作" width="400px">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" icon="el-icon-edit" @click="showEditDialog(scope.row.id)">编辑</el-button>
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeRoleById(scope.row.id)">删除</el-button>
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-edit"
+              @click="showEditDialog(scope.row.id)"
+            >编辑</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              icon="el-icon-delete"
+              @click="removeRoleById(scope.row.id)"
+            >删除</el-button>
+            <el-button
+              type="success"
+              size="mini"
+              icon="el-icon-s-operation"
+              @click="showSetRightDialog(scope.row)"
+            >分配菜单</el-button>
             <el-button
               type="warning"
               size="mini"
@@ -84,10 +100,22 @@
       </el-table>
     </el-card>
 
-    <el-dialog title="分配权限" :visible.sync="setRightDialogVisible" width="50%" @close="serRightDialogClosed">
+    <el-dialog
+      title="分配权限"
+      :visible.sync="setRightDialogVisible"
+      width="50%"
+      @close="serRightDialogClosed"
+    >
       <!-- 树形控件 -->
-      <el-tree ref="treeRef" :data="rightsList" :props="treeProps" show-checkbox node-key="id" default-expand-all
-      :default-checked-keys="defKeys"></el-tree>
+      <el-tree
+        ref="treeRef"
+        :data="rightsList"
+        :props="treeProps"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="defKeys"
+      ></el-tree>
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
@@ -95,7 +123,7 @@
       </span>
     </el-dialog>
 
-     <!-- 添加角色的对话框 -->
+    <!-- 添加角色的对话框 -->
     <el-dialog title="添加角色" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
       <!-- 内容主体区域 -->
       <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
@@ -114,9 +142,14 @@
     </el-dialog>
 
     <!-- 修改角色的对话框 -->
-    <el-dialog title="修改角色信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+    <el-dialog
+      title="修改角色信息"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
       <!-- 内容主体区域 -->
-      <el-form :model="editForm" :rules="addFormRules" ref="editFormRef" label-width="70px">
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
         <el-form-item label="角色名" prop="role_name">
           <el-input v-model="editForm.role_name"></el-input>
         </el-form-item>
@@ -141,17 +174,25 @@ export default {
       setRightDialogVisible: false,
       rightsList: [],
       treeProps: {
-          children: 'children',
-          label: 'name'
-        },
-        defKeys:[],
-        roleId: '',
-        addDialogVisible: false,
-        addForm: {
-          role_name: "",
-          description: ""
-        },
-        addFormRules: {
+        children: "children",
+        label: "name"
+      },
+      defKeys: [],
+      roleId: "",
+      addDialogVisible: false,
+      addForm: {
+        role_name: "",
+        description: ""
+      },
+      addFormRules: {
+        role_name: [
+          { required: true, message: "请输入角色名", trigger: "blur" }
+        ],
+        description: [
+          { required: true, message: "请输入描述", trigger: "blur" }
+        ]
+      },
+      editFormRules: {
         role_name: [
           { required: true, message: "请输入角色名", trigger: "blur" }
         ],
@@ -161,9 +202,9 @@ export default {
       },
       editDialogVisible: false,
       editForm: {
-          role_name: "",
-          description: ""
-        }
+        role_name: "",
+        description: ""
+      }
     };
   },
   created() {
@@ -219,76 +260,73 @@ export default {
         });
     },
     showSetRightDialog(role) {
-      this.roleId = role.id
+      this.roleId = role.id;
       this.$http({
-            method: "GET",
-            url:
-              "rights/selectRights"
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("获取权限数据失败！");
-              }
-              this.rightsList = resp.data.data
+        method: "GET",
+        url: "rights/selectRights"
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            return this.$message.error("获取权限数据失败！");
+          }
+          this.rightsList = resp.data.data;
 
-              //递归获取三级节点的id
-              this.getLeafKeys(role,this.defKeys)
-              console.log(role)
-              this.setRightDialogVisible = true
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          //递归获取三级节点的id
+          this.getLeafKeys(role, this.defKeys);
+          console.log(role);
+          this.setRightDialogVisible = true;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     //通过递归的形式，获取角色下所有三级权限的id，并保存到defKeys数组中
     getLeafKeys(node, arr) {
       //如果当前node节点不包含children属性，则是三级节点
-      if(!node.children) {
-        if(node.checked != 0){
-          return arr.push(node.id)
+      if (!node.children) {
+        if (node.checked === 1) {
+          return arr.push(node.id);
+        } else {
+          return;
         }
       }
 
       node.children.forEach(item => {
-        this.getLeafKeys(item,arr)
+        this.getLeafKeys(item, arr);
       });
     },
     serRightDialogClosed() {
-      this.defKeys = []
+      this.defKeys = [];
     },
     allotRights(ParentNode) {
-        const keys = [
-          //获取选中节点的id
-          ...this.$refs.treeRef
-          .getCheckedKeys(),
-          //获取半选中节点的id
-          ...this.$refs.treeRef
-          .getHalfCheckedNodes()
-        ]
+      const keys = [
+        //获取选中节点的id
+        ...this.$refs.treeRef.getCheckedKeys(),
+        //获取半选中节点的id
+        ...this.$refs.treeRef.getHalfCheckedNodes()
+      ];
 
-        this.$http({
-            method: "POST",
-            url:
-              "rights/addRp",
-            data:
-            {
-            roleId: this.roleId,
-            rightsId: keys
+      this.$http({
+        method: "POST",
+        url: "rights/addRp",
+        data: {
+          roleId: this.roleId,
+          rightsId: keys
+        }
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            return this.$message.error("分配权限失败！");
           }
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("分配权限失败！");
-              }
-              this.$message.success('分配权限成功！')
-              this.getRolesList()
-              this.setRightDialogVisible = false
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          this.$message.success("分配权限成功！");
+          this.getRolesList();
+          this.setRightDialogVisible = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    addDialogClosed() {
+    addDialogClosed() {      
       this.$refs.addFormRef.resetFields();
     },
     addRole() {
@@ -335,12 +373,13 @@ export default {
         });
     },
     editDialogClosed() {
+      this.editForm = {}
       this.$refs.editFormRef.resetFields();
     },
     editRole() {
-       this.$refs.editFormRef.validate(valid => {
+      this.$refs.editFormRef.validate(valid => {
         if (!valid) return;
-        console.log(this.editForm.id)
+        console.log(this.editForm.id);
         this.$http({
           method: "PUT",
           url: "roles/updateRoleById",
@@ -352,48 +391,50 @@ export default {
           dataType: "json"
         })
           .then(resp => {
-            console.log(resp.data)
+            console.log(resp.data);
             if (resp.data.code !== 200) {
               return this.$message.error("更新角色信息失败！");
             }
             this.$message.success("更新角色信息成功！");
             this.editDialogVisible = false;
-            this.getRolesList()
+            this.getRolesList();
           })
           .catch(error => {
             console.log(error);
           });
-    })
+      });
     },
     removeRoleById(id) {
-      this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(resp => {
+      this.$confirm("此操作将永久删除该角色, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(resp => {
           this.$http({
-          method: "DELETE",
-          url: "roles/delRoleById?id=" + id
-        })
-          .then(resp => {
-            if (resp.data.code !== 200) {
-              return this.$message.error("删除角色失败！");
-            }
-             this.$message.success("删除角色成功！");
-            this.getRolesList()
+            method: "DELETE",
+            url: "roles/delRoleById?id=" + id
           })
-          .catch(error => {
-            console.log(error);
-          });
-        }).catch(error => {  
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("删除角色失败！");
+              }
+              this.$message.success("删除角色成功！");
+              this.getRolesList();
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          }); 
+            type: "info",
+            message: "已取消删除"
+          });
         });
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

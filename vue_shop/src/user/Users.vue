@@ -63,7 +63,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page"
-        :page-sizes="[2, 4, 6, 10]"
+        :page-sizes="[6, 8, 10, 20]"
         :page-size="rows"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -164,7 +164,7 @@ export default {
     return {
       username: "",
       page: 1,
-      rows: 2,
+      rows: 6,
       userList: [],
       total: 0,
       addDialogVisible: false,
