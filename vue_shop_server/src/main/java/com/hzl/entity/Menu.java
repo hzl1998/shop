@@ -16,5 +16,6 @@ public class Menu {
     private String icon;
     private String parentId;
     private String enabled;
+    private Integer checked;
     private List<Menu> children;
 }

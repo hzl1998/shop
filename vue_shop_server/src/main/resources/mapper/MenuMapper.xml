@@ -13,11 +13,13 @@
             <result column="name1" property="name" jdbcType="VARCHAR"/>
             <result column="icon1" property="icon" jdbcType="VARCHAR"/>
             <result column="path1" property="path" jdbcType="VARCHAR"/>
+            <result column="checked" property="checked" jdbcType="INTEGER"/>
         </collection>
     </resultMap>
     <select id="selectMenusByUserId" resultMap="MenuResultMap">
         select m1.id,m1.name,m1.icon,m1.path,
-        m2.id as id1,m2.name as name1,m2.icon as icon1,m2.path as path1
+        m2.id as id1,m2.name as name1,m2.icon as icon1,m2.path as path1,
+		if((SELECT mid from sys_role_menu WHERE rid = r.id and mid=m2.id)=m2.id,true,false) as checked
         from sys_menu m1
         INNER JOIN sys_menu m2 on m1.id = m2.parentId
         INNER JOIN sys_role_menu rm on rm.mid = m1.id
@@ -25,5 +27,36 @@
         where r.id = (SELECT rid from sys_role_user where uid = #{userId})
         ORDER BY m1.id,m2.id
     </select>
+
+    <select id="selectMenusByRoleId" resultMap="MenuResultMap">
+        select m1.id,m1.name,m1.icon,m1.path,
+        m2.id as id1,m2.name as name1,m2.icon as icon1,m2.path as path1,
+		if((SELECT mid from sys_role_menu WHERE rid = r.id and mid=m2.id)=m2.id,true,false) as checked
+        from sys_menu m1
+        INNER JOIN sys_menu m2 on m1.id = m2.parentId
+        INNER JOIN sys_role_menu rm on rm.mid = m1.id
+        INNER JOIN sys_role r on r.id = rm.rid
+        where r.id = #{roleId}
+        ORDER BY m1.id,m2.id
+    </select>
+
+    <select id="getAllMenus" resultMap="MenuResultMap">
+        select
+        m1.id,m1.name,m1.icon,m1.path,
+        m2.id as id1,m2.name as name1,m2.icon as icon1,m2.path as path1 from sys_menu m1
+        INNER JOIN sys_menu m2 on m1.id = m2.parentId ORDER BY m1.id,m2.id
+    </select>
+
+    <delete id="delRm">
+        delete from sys_role_menu where rid = #{roleId}
+    </delete>
+
+    <insert id="addRm">
+        insert into sys_role_menu(rid,mid)
+        values
+        <foreach collection="mids" item="mids" separator=",">
+            (#{roleId},#{mids})
+        </foreach>
+    </insert>
 
 </mapper>
