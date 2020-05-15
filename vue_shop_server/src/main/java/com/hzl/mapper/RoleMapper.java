@@ -25,4 +25,6 @@ public interface RoleMapper {
     int addRu(@Param(value="roleId")String roleId, @Param(value="userId")String userId);
 
     List<Role> getAllRoleName();
+
+    int delRmById(String id);
 }

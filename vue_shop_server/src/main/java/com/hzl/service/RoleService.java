@@ -48,4 +48,8 @@ public class RoleService {
     public List<Role> getAllRoleName() {
         return roleMapper.getAllRoleName();
     }
+
+    public int delRmById(String id) {
+        return roleMapper.delRmById(id);
+    }
 }

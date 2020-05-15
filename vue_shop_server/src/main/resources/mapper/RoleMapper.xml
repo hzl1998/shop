@@ -66,4 +66,8 @@
     <select id="getAllRoleName" resultType="com.hzl.entity.Role">
         select * from sys_role
     </select>
+
+    <delete id="delRmById">
+        delete from sys_role_menu where rid = #{id}
+    </delete>
 </mapper>

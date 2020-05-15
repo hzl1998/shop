@@ -83,6 +83,7 @@ public class RoleController {
             return ResultFactory.buildFailResult("角色id不能为空");
         }
         int isok1 = roleService.delRpById(id);
+        int isok2 = roleService.delRmById(id);
         int isok = roleService.delRoleById(id);
         if(isok > 0){
             return ResultFactory.buildSuccessResult(null,"删除角色成功");
