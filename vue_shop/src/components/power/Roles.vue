@@ -383,7 +383,7 @@ export default {
         //获取选中节点的id
         ...this.$refs.treeRef.getCheckedKeys(),
         //获取半选中节点的id
-        ...this.$refs.treeRef.getHalfCheckedNodes()
+        ...this.$refs.treeRef.getHalfCheckedKeys()
       ];
 
       this.$http({
