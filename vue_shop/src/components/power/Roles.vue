@@ -81,13 +81,21 @@
               type="danger"
               size="mini"
               icon="el-icon-delete"
+              v-if="scope.row.role_name == '超级管理员'"
+              disabled
+            >删除</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              icon="el-icon-delete"
+              v-else
               @click="removeRoleById(scope.row.id)"
             >删除</el-button>
             <el-button
               type="success"
               size="mini"
               icon="el-icon-s-operation"
-              @click="showSetRightDialog(scope.row)"
+              @click="showSetMenuDialog(scope.row)"
             >分配菜单</el-button>
             <el-button
               type="warning"
@@ -104,7 +112,7 @@
       title="分配权限"
       :visible.sync="setRightDialogVisible"
       width="50%"
-      @close="serRightDialogClosed"
+      @close="setRightDialogClosed"
     >
       <!-- 树形控件 -->
       <el-tree
@@ -120,6 +128,29 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="allotRights(defKeys)">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="分配菜单"
+      :visible.sync="setMenuDialogVisible"
+      width="50%"
+      @close="setMenuDialogClosed"
+    >
+      <!-- 树形控件 -->
+      <el-tree
+        ref="mtreeRef"
+        :data="MenuList"
+        :props="treeProps"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="mKeys"
+      ></el-tree>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setMenuDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="allotMenus(mKeys)">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -172,12 +203,15 @@ export default {
     return {
       roleList: [],
       setRightDialogVisible: false,
+      setMenuDialogVisible: false,
       rightsList: [],
+      MenuList: [],
       treeProps: {
         children: "children",
         label: "name"
       },
       defKeys: [],
+      mKeys: [],
       roleId: "",
       addDialogVisible: false,
       addForm: {
@@ -209,6 +243,7 @@ export default {
   },
   created() {
     this.getRolesList();
+    this.getMenuList();
   },
   methods: {
     getRolesList() {
@@ -280,6 +315,48 @@ export default {
           console.log(error);
         });
     },
+    showSetMenuDialog(role) {
+      this.roleId = role.id;
+      this.$http({
+        method: "GET",
+        url: "getMenusByRoleId?roleId=" + this.roleId
+      })
+        .then(resp => {
+          if (resp.data.data != null) {
+            resp.data.data.forEach(item => {
+              item.children.forEach(item1 => {
+                if (item1.checked == 1) {
+                  this.mKeys.push(item1.id);
+                }
+              });
+            });
+          }
+          //mKeys改变之后没有重新渲染选中的数据，所以用this.$refs.mtreeRef.setCheckedKeys()来改变选中状态，但此时又会有另一个问题,当弹框没有渲染的时候,由于tree控件dom没有加载,setCheckedKeys是不存在的,会报错,所以我们需要使用this.$nextTick(callback)方法,该方法会在dom加载完毕之后,执行回调函数
+          this.$nextTick(() => {
+            this.$refs.mtreeRef.setCheckedKeys(this.mKeys);
+          });
+          console.log(this.mKeys);
+          this.setMenuDialogVisible = true;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getMenuList() {
+      this.$http({
+        method: "GET",
+        url: "allMenus"
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            return this.$message.error("获取全部菜单数据失败！");
+          }
+          this.MenuList = resp.data.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     //通过递归的形式，获取角色下所有三级权限的id，并保存到defKeys数组中
     getLeafKeys(node, arr) {
       //如果当前node节点不包含children属性，则是三级节点
@@ -295,8 +372,11 @@ export default {
         this.getLeafKeys(item, arr);
       });
     },
-    serRightDialogClosed() {
+    setRightDialogClosed() {
       this.defKeys = [];
+    },
+    setMenuDialogClosed() {
+      this.mKeys = [];
     },
     allotRights(ParentNode) {
       const keys = [
@@ -326,7 +406,34 @@ export default {
           console.log(error);
         });
     },
-    addDialogClosed() {      
+    allotMenus(ParentNode) {
+      const keys = [
+        //获取选中节点的id
+        ...this.$refs.mtreeRef.getCheckedKeys(),
+        //获取半选中节点的id
+        ...this.$refs.mtreeRef.getHalfCheckedNodes()
+      ];
+
+      this.$http({
+        method: "POST",
+        url: "addRm",
+        data: {
+          roleId: this.roleId,
+          mids: keys
+        }
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            return this.$message.error("分配菜单失败！");
+          }
+          this.$message.success("分配菜单成功！");
+          this.setMenuDialogVisible = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    addDialogClosed() {
       this.$refs.addFormRef.resetFields();
     },
     addRole() {
@@ -373,7 +480,7 @@ export default {
         });
     },
     editDialogClosed() {
-      this.editForm = {}
+      this.editForm = {};
       this.$refs.editFormRef.resetFields();
     },
     editRole() {

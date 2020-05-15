@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <el-avatar src="http://inews.gtimg.com/newsapp_bt/0/11501253550/641.jpg"></el-avatar>
+        <el-avatar src="http://www.lolitaby.com/upload/photos/2018/12/Bux9jcQuCMfNVGRDJ77L_12_907a269b4d99b96c6f00789763bf27d4_avatar_full.jpg"></el-avatar>
         <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
