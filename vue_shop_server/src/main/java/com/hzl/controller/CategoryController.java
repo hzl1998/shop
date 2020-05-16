@@ -116,7 +116,7 @@ public class CategoryController {
             return ResultFactory.buildFailResult("分类id不能为空");
         }
         List<Category> categoryList = categoryService.getCategoriesById(id);
-        if (categoryList != null){
+        if (categoryList.size() > 0){
             return ResultFactory.buildResult(402,true,"当前分类存在下级分类，删除失败",null);
         } else {
             int isok = categoryService.delCategoryById(id);
