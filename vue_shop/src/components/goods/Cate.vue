@@ -13,7 +13,7 @@
         </el-col>
       </el-row>
 
-      <tree-table :data="cateList" :columns="columns" :selection-type="false"
+      <tree-table :data="cateList" :columns="columns" :selection-type="false" class="treeTable"
       :expand-type="false" show-index index-text="#" border>
         <!-- 是否有效 -->
         <template slot="isok" slot-scope="scope">
@@ -33,6 +33,7 @@
             <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
         </template>
       </tree-table>
+
     </el-card>
     <el-pagination
         background
@@ -118,4 +119,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.treeTable {
+    margin-top: 15px;
+}
 </style>
