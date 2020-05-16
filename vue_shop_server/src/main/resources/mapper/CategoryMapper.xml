@@ -74,8 +74,8 @@
         SELECT
         c2.cat_id
         FROM sp_category c1
-        LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
-        where c1.cat_id = #{id}
+        INNER JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        where c1.cat_id = 1486
     </select>
 
     <update id="delCategoryById">
