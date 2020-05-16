@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzl.mapper.CategoryMapper">
+    <resultMap id="CategoryResultMap" type="com.hzl.entity.Category">
+        <id column="cat_id1" property="cat_id"/>
+        <result column="cat_name1" property="cat_name" jdbcType="VARCHAR"/>
+        <result column="cat_pid1" property="cat_pid" jdbcType="INTEGER"/>
+        <result column="cat_level1" property="cat_level" jdbcType="INTEGER"/>
+        <result column="cat_deleted1" property="cat_deleted" jdbcType="VARCHAR"/>
+        <collection property="children" ofType="com.hzl.entity.Category">
+            <id column="cat_id2" property="cat_id"/>
+            <result column="cat_name2" property="cat_name" jdbcType="VARCHAR"/>
+            <result column="cat_pid2" property="cat_pid" jdbcType="INTEGER"/>
+            <result column="cat_level2" property="cat_level" jdbcType="INTEGER"/>
+            <result column="cat_deleted2" property="cat_deleted" jdbcType="VARCHAR"/>
+            <collection property="children" ofType="com.hzl.entity.Category">
+                <id column="cat_id3" property="cat_id"/>
+                <result column="cat_name3" property="cat_name" jdbcType="VARCHAR"/>
+                <result column="cat_pid3" property="cat_pid" jdbcType="INTEGER"/>
+                <result column="cat_level3" property="cat_level" jdbcType="INTEGER"/>
+                <result column="cat_deleted3" property="cat_deleted" jdbcType="VARCHAR"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getCategoryList" resultMap="CategoryResultMap">
+        SELECT
+        c1.cat_id as cat_id1,c1.cat_name as cat_name1,c1.cat_pid as cat_pid1,c1.cat_level as cat_level1,c1.cat_deleted as cat_deleted1,
+        c2.cat_id as cat_id2,c2.cat_name as cat_name2,c2.cat_pid as cat_pid2,c2.cat_level as cat_level2,c2.cat_deleted as cat_deleted2,
+        c3.cat_id as cat_id3,c3.cat_name as cat_name3,c3.cat_pid as cat_pid3,c3.cat_level as cat_level3,c3.cat_deleted as cat_deleted3
+        FROM (SELECT * from sp_category c where cat_level = 0 LIMIT #{page},#{rows}) c1
+        INNER JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        INNER JOIN `sp_category` c3 ON c2.cat_id = c3.cat_pid
+    </select>
+
+    <select id="getCategoryListCount" resultType="int">
+        select count(1) from sp_category where cat_level = 0
+    </select>
+
+    <select id="getCategoryByid" resultType="com.hzl.entity.Category">
+        select * from sp_category where cat_id = #{id}
+    </select>
+</mapper>
