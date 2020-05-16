@@ -31,8 +31,8 @@
         c2.cat_id as cat_id2,c2.cat_name as cat_name2,c2.cat_pid as cat_pid2,c2.cat_level as cat_level2,c2.cat_deleted as cat_deleted2,
         c3.cat_id as cat_id3,c3.cat_name as cat_name3,c3.cat_pid as cat_pid3,c3.cat_level as cat_level3,c3.cat_deleted as cat_deleted3
         FROM (SELECT * from sp_category c where cat_level = 0 LIMIT #{page},#{rows}) c1
-        INNER JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
-        INNER JOIN `sp_category` c3 ON c2.cat_id = c3.cat_pid
+        LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        LEFT JOIN `sp_category` c3 ON c2.cat_id = c3.cat_pid
     </select>
 
     <select id="getCategoryListCount" resultType="int">
