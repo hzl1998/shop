@@ -42,6 +42,7 @@
             icon="el-icon-delete"
             size="mini"
             @click="delCate(scope.row.cat_id)"
+            v-if="scope.row.cat_deleted === 0"
           >删除</el-button>
         </template>
       </tree-table>
