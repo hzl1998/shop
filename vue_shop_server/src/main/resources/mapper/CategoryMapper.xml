@@ -58,7 +58,7 @@
         c2.cat_id as cat_id2,c2.cat_name as cat_name2
         FROM sp_category c1
         LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
-        ORDER BY c1.cat_id
+        where c1.cat_level = 0 ORDER BY c1.cat_id
     </select>
 
     <insert id="addCategory">
