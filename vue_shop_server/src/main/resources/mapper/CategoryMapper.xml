@@ -24,6 +24,14 @@
             </collection>
         </collection>
     </resultMap>
+    <resultMap id="CateResultMap" type="com.hzl.entity.Category">
+        <id column="cat_id1" property="cat_id"/>
+        <result column="cat_name1" property="cat_name" jdbcType="VARCHAR"/>
+        <collection property="children" ofType="com.hzl.entity.Category">
+            <id column="cat_id2" property="cat_id"/>
+            <result column="cat_name2" property="cat_name" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
 
     <select id="getCategoryList" resultMap="CategoryResultMap">
         SELECT
@@ -33,13 +41,44 @@
         FROM (SELECT * from sp_category c where cat_level = 0 LIMIT #{page},#{rows}) c1
         LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
         LEFT JOIN `sp_category` c3 ON c2.cat_id = c3.cat_pid
+        ORDER BY c1.cat_id
     </select>
 
     <select id="getCategoryListCount" resultType="int">
         select count(1) from sp_category where cat_level = 0
     </select>
 
-    <select id="getCategoryByid" resultType="com.hzl.entity.Category">
+    <select id="getCategoryById" resultType="com.hzl.entity.Category">
         select * from sp_category where cat_id = #{id}
     </select>
+
+    <select id="getCategories" resultMap="CateResultMap">
+        SELECT
+        c1.cat_id as cat_id1,c1.cat_name as cat_name1,
+        c2.cat_id as cat_id2,c2.cat_name as cat_name2
+        FROM sp_category c1
+        LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        ORDER BY c1.cat_id
+    </select>
+
+    <insert id="addCategory">
+        insert into sp_category(cat_name,cat_pid,cat_level,cat_deleted)
+        value (#{cat_name},#{cat_pid},#{cat_level},0)
+    </insert>
+
+    <update id="updateCategoryById">
+        update sp_category set cat_name = #{cat_name} where cat_id = #{id}
+    </update>
+
+    <select id="getCategoriesById" resultType="com.hzl.entity.Category">
+        SELECT
+        c2.cat_id
+        FROM sp_category c1
+        LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        where c1.cat_id = #{id}
+    </select>
+
+    <update id="delCategoryById">
+        update sp_category set cat_deleted = 1 where cat_id = #{id}
+    </update>
 </mapper>

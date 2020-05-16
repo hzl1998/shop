@@ -11,5 +11,15 @@ public interface CategoryMapper {
 
     int getCategoryListCount();
 
-    Category getCategoryByid(Integer id);
+    Category getCategoryById(Integer id);
+
+    List<Category> getCategories();
+
+    int addCategory(Category category);
+
+    int updateCategoryById(Integer id,String cat_name);
+
+    List<Category> getCategoriesById(Integer id);
+
+    int delCategoryById(Integer id);
 }

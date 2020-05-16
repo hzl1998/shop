@@ -20,7 +20,27 @@ public class CategoryService {
         return categoryMapper.getCategoryListCount();
     }
 
-    public Category getCategoryByid(Integer id) {
-        return categoryMapper.getCategoryByid(id);
+    public Category getCategoryById(Integer id) {
+        return categoryMapper.getCategoryById(id);
+    }
+
+    public List<Category> getCategories() {
+        return categoryMapper.getCategories();
+    }
+
+    public int addCategory(Category category) {
+        return categoryMapper.addCategory(category);
+    }
+
+    public int updateCategoryById(Integer id,String cat_name) {
+        return categoryMapper.updateCategoryById(id,cat_name);
+    }
+
+    public List<Category> getCategoriesById(Integer id) {
+        return categoryMapper.getCategoriesById(id);
+    }
+
+    public int delCategoryById(Integer id) {
+        return categoryMapper.delCategoryById(id);
     }
 }
