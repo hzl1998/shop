@@ -36,7 +36,7 @@
         </template>
         <!-- 操作 -->
         <template slot="opt" slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editCategroy(scope.row.cat_id)">编辑</el-button>
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -87,6 +87,28 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addCateDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addCate">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="编辑分类"
+      :visible.sync="editCateDialogVisible"
+      width="50%"
+      @close="editCateDialogClosed"
+    >
+      <el-form
+        :model="editCateForm"
+        :rules="editCateFormRules"
+        ref="editCateFormRef"
+        label-width="100px"
+      >
+        <el-form-item label="分类名称：" prop="cat_name">
+          <el-input v-model="editCateForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editCateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editCate">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -141,7 +163,17 @@ export default {
       },
       parentCateList: [],
       //选中的父级分类的id数组
-      selectedKeys: []
+      selectedKeys: [],
+      editCateDialogVisible: false,
+      editCateForm: {
+        cat_name:"",
+        cat_id:0
+      },
+      editCateFormRules:{
+        cat_name: [
+          { required: true, message: "请输入分类名称", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
@@ -277,6 +309,47 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    editCategroy(id) {
+      this.editCateForm.cat_id = id
+      this.$http({
+            method: "GET",
+            url: "getCategoryById?id=" + id
+          })
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("获取分类失败！");
+              }
+              this.editCateForm = resp.data.data
+              this.editCateDialogVisible = true;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+    },
+    editCate() {
+      this.$refs.editCateFormRef.validate(valid => {
+        if (!valid) return;
+        this.$http({
+            method: "PUT",
+            url: "updateCategoryById?id=" + this.editCateForm.cat_id
+            +"&cat_name="+this.editCateForm.cat_name
+          })
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("修改失败！");
+              }
+              this.$message.success("修改成功！")
+              this.getCateList()
+              this.editCateDialogVisible = false;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+      })
+    },
+    editCateDialogClosed() {
+      this.$refs.editCateFormRef.resetFields();
     }
   }
 };
