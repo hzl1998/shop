@@ -8,7 +8,8 @@
     </select>
 
     <insert id="addAttributes">
-        insert into sp_attribute(attr_name,cat_id,attr_sel) value(#{attr_name},#{cat_id},#{attr_sel})
+        insert into sp_attribute(attr_name,cat_id,attr_sel,attr_write,attr_vals)
+        value(#{attr_name},#{cat_id},#{attr_sel},#{attr_write}," ")
     </insert>
 
     <select id="getAttributesById" resultType="com.hzl.entity.Attribute">

@@ -39,6 +39,11 @@ public class AttributeController {
         if(attribute.getAttr_sel() == null || attribute.getAttr_sel().equals("")){
             return ResultFactory.buildFailResult("sel不能为空");
         }
+        if(attribute.getAttr_sel().equals("many")){
+            attribute.setAttr_write("list");
+        }else {
+            attribute.setAttr_write("manual");
+        }
         int isok = attributeService.addAttributes(attribute);
         if(isok > 0) {
             return ResultFactory.buildSuccessResult(null,"添加成功");
