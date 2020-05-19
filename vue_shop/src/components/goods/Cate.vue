@@ -80,7 +80,6 @@
             :props="{ expandTrigger: 'hover', value:'cat_id', label:'cat_name', children:'children',checkStrictly:true }"
             @change="parentCateChanged"
             clearable
-            change-on-select
           ></el-cascader>
         </el-form-item>
       </el-form>
