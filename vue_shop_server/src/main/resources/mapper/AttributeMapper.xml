@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzl.mapper.AttributeMapper">
+    <select id="getAttributesBySel">
+        SELECT * FROM sp_attribute WHERE cat_id = #{id} and attr_sel = #{sel}
+    </select>
+
+    <insert id="addAttributes">
+        insert into sp_attribute(attr_name,cat_id,attr_sel) value(#{attr_name},#{cat_id},#{attr_sel})
+    </insert>
+
+    <select id="getAttributesById">
+        SELECT * FROM sp_attribute WHERE attr_id = #{id}
+    </select>
+
+    <update id="updateAttribute">
+        update sp_attribute set attr_name = #{attr_name} where attr_id = #{attr_id}
+        and attr_sel = #{attr_sel}
+    </update>
+
+    <delete id="delAttribute">
+        delete from sp_attribute where attr_id = #{attr_id}
+        and cat_id = #{cat_id}
+    </delete>
+
+    <update id="updateVals">
+        update sp_attribute set attr_vals = #{attr_vals} where
+        attr_id = #{attr_id} and attr_name = #{attr_name}
+        and attr_sel = #{attr_sel}
+    </update>
+</mapper>

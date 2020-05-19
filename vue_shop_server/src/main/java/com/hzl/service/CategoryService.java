@@ -43,4 +43,8 @@ public class CategoryService {
     public int delCategoryById(Integer id) {
         return categoryMapper.delCategoryById(id);
     }
+
+    public List<Category> getAllCategories() {
+        return categoryMapper.getAllCategories();
+    }
 }

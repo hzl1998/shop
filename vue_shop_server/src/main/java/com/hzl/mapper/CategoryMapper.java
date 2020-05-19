@@ -22,4 +22,6 @@ public interface CategoryMapper {
     List<Category> getCategoriesById(Integer id);
 
     int delCategoryById(Integer id);
+
+    List<Category> getAllCategories();
 }

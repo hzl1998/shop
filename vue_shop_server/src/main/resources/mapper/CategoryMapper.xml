@@ -81,4 +81,15 @@
     <update id="delCategoryById">
         update sp_category set cat_deleted = 1 where cat_id = #{id}
     </update>
+
+    <select id="getAllCategories" resultMap="CategoryResultMap">
+        SELECT
+        c1.cat_id as cat_id1,c1.cat_name as cat_name1,
+        c2.cat_id as cat_id2,c2.cat_name as cat_name2,
+        c3.cat_id as cat_id3,c3.cat_name as cat_name3
+        FROM sp_category c1
+        LEFT JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
+        LEFT JOIN `sp_category` c3 ON c3.cat_pid = c2.cat_id
+        where c1.cat_level = 0 ORDER BY c1.cat_id
+    </select>
 </mapper>

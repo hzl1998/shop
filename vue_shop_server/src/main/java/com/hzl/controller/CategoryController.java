@@ -127,4 +127,14 @@ public class CategoryController {
             }
         }
     }
+
+    @GetMapping("/getAllCategories")
+    public Result getAllCategories() {
+        List<Category> categoryList = categoryService.getAllCategories();
+        if (categoryList != null && categoryList.size() > 0){
+            return ResultFactory.buildSuccessResult(categoryList,"获取级联分类列表成功");
+        } else {
+            return ResultFactory.buildFailResult("获取级联分类列表失败");
+        }
+    }
 }
