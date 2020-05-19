@@ -30,8 +30,8 @@ public class AttributeController {
 
     @PostMapping("/addAttributes")
     public Result addAttributes(@RequestBody Attribute attribute){
-        if(attribute.getAttr_id() == null || attribute.getAttr_id().equals("")){
-            return ResultFactory.buildFailResult("参数id不能为空");
+        if(attribute.getCat_id() == null || attribute.getCat_id().equals("")){
+            return ResultFactory.buildFailResult("分类id不能为空");
         }
         if(attribute.getAttr_name() == null || attribute.getAttr_name().equals("")){
             return ResultFactory.buildFailResult("参数名称不能为空");
