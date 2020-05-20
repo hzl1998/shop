@@ -5,10 +5,21 @@
 <mapper namespace="com.hzl.mapper.GoodsMapper">
    <select id="getGoodsList" resultType="com.hzl.entity.Goods">
        select goods_id,goods_name,goods_price,goods_number,goods_weight,add_time
-       from sp_goods order by goods_id LIMIT #{page},#{rows}
+       from sp_goods
+       <where>
+           <if test="goods_name != null and goods_name!=''">
+               trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
+           </if>
+       </where>
+    order by goods_id LIMIT #{page},#{rows}
    </select>
 
     <select id="getGoodsListCount" resultType="int">
         select count(1) from sp_goods
+        <where>
+            <if test="goods_name != null and goods_name!=''">
+                trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
+            </if>
+        </where>
     </select>
 </mapper>

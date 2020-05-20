@@ -18,7 +18,7 @@ public class GoodsController {
     GoodsService goodsService;
 
     @GetMapping("/goods")
-    public Result getGoodsList(Integer page,Integer rows){
+    public Result getGoodsList(Integer page,Integer rows,String goods_name){
         if (page == null) {
             page = 1;
         }
@@ -31,8 +31,8 @@ public class GoodsController {
         page = (page - 1) * rows;
         try {
             //总条数
-            int total = goodsService.getGoodsListCount();
-            List<Goods> goodsList = goodsService.getGoodsList(page,rows);
+            int total = goodsService.getGoodsListCount(goods_name);
+            List<Goods> goodsList = goodsService.getGoodsList(page,rows,goods_name);
             // 计算总页数
             int count=0;
             if(total%rows==0){

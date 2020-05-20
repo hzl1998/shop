@@ -12,11 +12,11 @@ public class GoodsService {
     @Autowired
     GoodsMapper goodsMapper;
 
-    public List<Goods> getGoodsList(Integer page,Integer rows){
-        return goodsMapper.getGoodsList(page,rows);
+    public List<Goods> getGoodsList(Integer page,Integer rows,String goods_name){
+        return goodsMapper.getGoodsList(page,rows,goods_name);
     }
 
-    public int getGoodsListCount(){
-        return goodsMapper.getGoodsListCount();
+    public int getGoodsListCount(String goods_name){
+        return goodsMapper.getGoodsListCount(goods_name);
     }
 }
