@@ -14,7 +14,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加商品</el-button>
+          <el-button type="primary" @click="goAddpage">添加商品</el-button>
         </el-col>
       </el-row>
 
@@ -31,7 +31,7 @@
         <el-table-column label="操作" width="130px">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.goods_id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -94,6 +94,38 @@ export default {
     searchGoods(){
       this.page = 1
       this.getGoodsList()
+    },
+    removeById(id){
+      this.$confirm("此操作将永久删除该商品, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(resp => {
+          this.$http({
+            method: "PUT",
+            url: "goods/delGood?goods_id=" + id
+          })
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("删除商品失败！");
+              }
+              this.$message.success("删除商品成功！");
+              this.getGoodsList();
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    goAddpage() {
+      this.$router.push('/goods/add')
     }
   }
 };
