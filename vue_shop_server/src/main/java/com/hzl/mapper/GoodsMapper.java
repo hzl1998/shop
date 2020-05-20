@@ -11,4 +11,6 @@ public interface GoodsMapper {
     List<Goods> getGoodsList(Integer page, Integer rows,@Param(value="goods_name")String goods_name);
 
     int getGoodsListCount(@Param(value="goods_name")String goods_name);
+
+    int delGood(Integer goods_id,Long delete_time);
 }

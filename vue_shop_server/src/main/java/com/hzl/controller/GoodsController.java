@@ -7,7 +7,10 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,5 +54,24 @@ public class GoodsController {
             e.printStackTrace();
             return ResultFactory.buildFailResult("出现异常");
         }
+    }
+
+    @PutMapping("/goods/delGood")
+    public Result delGood(Integer goods_id){
+       if(goods_id == null || goods_id.equals("")){
+           return ResultFactory.buildFailResult("商品id不能为空");
+       }
+       try {
+           Long delete_time = System.currentTimeMillis()/1000;
+           int isok = goodsService.delGood(goods_id,delete_time);
+           if(isok > 0){
+               return ResultFactory.buildSuccessResult(null,"删除成功");
+           }else {
+               return ResultFactory.buildFailResult("删除失败");
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+           return ResultFactory.buildFailResult("出现异常");
+       }
     }
 }

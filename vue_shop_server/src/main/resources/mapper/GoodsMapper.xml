@@ -7,19 +7,26 @@
        select goods_id,goods_name,goods_price,goods_number,goods_weight,add_time
        from sp_goods
        <where>
+           is_del="0"
            <if test="goods_name != null and goods_name!=''">
-               trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
+               and trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
            </if>
        </where>
-    order by goods_id LIMIT #{page},#{rows}
+       order by goods_id LIMIT #{page},#{rows}
    </select>
 
     <select id="getGoodsListCount" resultType="int">
         select count(1) from sp_goods
         <where>
+            is_del="0"
             <if test="goods_name != null and goods_name!=''">
-                trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
+                and trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
             </if>
         </where>
     </select>
+
+    <update id="delGood">
+        update sp_goods set is_del="1",delete_time=#{delete_time} where
+        goods_id=#{goods_id}
+    </update>
 </mapper>
