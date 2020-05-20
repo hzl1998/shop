@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzl.mapper.GoodsMapper">
+   <select id="getGoodsList" resultType="com.hzl.entity.Goods">
+       select goods_id,goods_name,goods_price,goods_number,goods_weight,add_time
+       from sp_goods order by goods_id LIMIT #{page},#{rows}
+   </select>
+
+    <select id="getGoodsListCount" resultType="int">
+        select count(1) from sp_goods
+    </select>
+</mapper>
