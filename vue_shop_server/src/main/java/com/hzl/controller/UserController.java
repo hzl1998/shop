@@ -1,6 +1,7 @@
 package com.hzl.controller;
 
 import com.hzl.entity.PageInfo;
+import com.hzl.entity.Role;
 import com.hzl.entity.UserDto;
 import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
@@ -33,19 +34,18 @@ public class UserController {
         Integer currentPage = page;
 
         page = (page - 1) * rows;
-        //总条数
-        int total = userService.getUsersCount(username);
-        //分页数据
-        List<UserDto> userList = userService.getUsers(username,page,rows);
-        // 计算总页数
-        int count=0;
-        if(total%rows==0){
-            count=total/rows;
-        }else{
-            count=total/rows+1;
-        }
-
-        if(userList != null && userList.size() > 0){
+        try{
+            //总条数
+            int total = userService.getUsersCount(username);
+            //分页数据
+            List<UserDto> userList = userService.getUsers(username,page,rows);
+            // 计算总页数
+            int count=0;
+            if(total%rows==0){
+                count=total/rows;
+            }else{
+                count=total/rows+1;
+            }
             PageInfo pageInfo = new PageInfo();
             pageInfo.setCount(userList.size()); // 本页实际记录数
             pageInfo.setCurrentPage(currentPage); // 第几页
@@ -53,9 +53,11 @@ public class UserController {
             pageInfo.setTotalPage(count); // 总页数
             pageInfo.setTotalResult(total); // 总记录数
             return ResultFactory.buildSuccessResult(pageInfo,"获取用户列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取用户列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @PutMapping("/users/status")
@@ -68,12 +70,18 @@ public class UserController {
         }
         // UTC时间
         long time = DateUtils.getUTCTime();
-        int isok = userService.updateUserEnabled(userId,enabled,time);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"修改状态成功");
-        }else {
-            return ResultFactory.buildFailResult("修改用户状态失败");
+        try{
+            int isok = userService.updateUserEnabled(userId,enabled,time);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"修改状态成功");
+            }else {
+                return ResultFactory.buildFailResult("修改用户状态失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @PostMapping("/users/addUser")
@@ -100,12 +108,18 @@ public class UserController {
         //密码
         String pwd = MD5.getEncryptedPwd(userDto.getPassword(),salt);
         userDto.setPassword(pwd);
-        int isok = userService.addUser(userDto);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(userDto,"添加用户成功");
-        }else {
-            return ResultFactory.buildFailResult("添加用户失败");
+        try{
+            int isok = userService.addUser(userDto);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(userDto,"添加用户成功");
+            }else {
+                return ResultFactory.buildFailResult("添加用户失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @GetMapping("/users/getUserById")
@@ -113,11 +127,16 @@ public class UserController {
         if (id == null || id.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
         }
-        UserDto userDto = userService.getUserById(id);
-        if(userDto != null){
-            return ResultFactory.buildSuccessResult(userDto,"用户查询成功");
-        } else {
-            return ResultFactory.buildFailResult("用户查询失败");
+        try{
+            UserDto userDto = userService.getUserById(id);
+            if(userDto != null){
+                return ResultFactory.buildSuccessResult(userDto,"用户查询成功");
+            } else {
+                return ResultFactory.buildFailResult("用户查询失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
@@ -133,12 +152,18 @@ public class UserController {
             return ResultFactory.buildFailResult("手机号码不能为空");
         }
         userDto.setUpdate_time(DateUtils.getUTCTime());
-        int isok = userService.updateUserById(userDto);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"修改用户信息成功");
-        }else {
-            return ResultFactory.buildFailResult("修改用户信息失败");
+        try{
+            int isok = userService.updateUserById(userDto);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"修改用户信息成功");
+            }else {
+                return ResultFactory.buildFailResult("修改用户信息失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @DeleteMapping("/users/delUserById")
@@ -146,11 +171,16 @@ public class UserController {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
         }
-        int isok = userService.delUserById(id);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"删除用户成功");
-        }else {
-            return ResultFactory.buildFailResult("删除用户失败");
+        try{
+            int isok = userService.delUserById(id);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"删除用户成功");
+            }else {
+                return ResultFactory.buildFailResult("删除用户失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 }

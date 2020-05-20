@@ -23,15 +23,16 @@ public class RoleController {
 
     @GetMapping("/roles")
     public Result roles() {
-        List<Role> roleList = roleService.getRoles();
-        for(int i = 0;i < roleList.size();i++){
-            List<Permission> permissionList = permissionService.getRightsByRoleId(roleList.get(i).getId());
-            roleList.get(i).setChildren(permissionList);
-        }
-        if (roleList != null && roleList.size() != 0){
+        try{
+            List<Role> roleList = roleService.getRoles();
+            for(int i = 0;i < roleList.size();i++){
+                List<Permission> permissionList = permissionService.getRightsByRoleId(roleList.get(i).getId());
+                roleList.get(i).setChildren(permissionList);
+            }
             return ResultFactory.buildSuccessResult(roleList,"获取角色列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取角色列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
@@ -39,12 +40,18 @@ public class RoleController {
     public Result addRole(@RequestBody Role role) {
         role.setId(UUIDUtil.createUUID());
         role.setCreate_time(DateUtils.getUTCTime());
-        int isok = roleService.addRole(role);
-        if (isok > 0){
-            return ResultFactory.buildSuccessResult(role,"添加角色成功");
-        } else {
-            return ResultFactory.buildFailResult("添加角色失败");
+        try{
+            int isok = roleService.addRole(role);
+            if (isok > 0){
+                return ResultFactory.buildSuccessResult(role,"添加角色成功");
+            } else {
+                return ResultFactory.buildFailResult("添加角色失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @GetMapping("/roles/getRoleById")
@@ -52,12 +59,18 @@ public class RoleController {
         if (id == null || id.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
         }
-        Role role = roleService.getRoleById(id);
-        if(role != null){
-            return ResultFactory.buildSuccessResult(role,"角色查询成功");
-        } else {
-            return ResultFactory.buildFailResult("角色查询失败");
+        try{
+            Role role = roleService.getRoleById(id);
+            if(role != null){
+                return ResultFactory.buildSuccessResult(role,"角色查询成功");
+            } else {
+                return ResultFactory.buildFailResult("角色查询失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @PutMapping("/roles/updateRoleById")
@@ -69,12 +82,18 @@ public class RoleController {
             return ResultFactory.buildFailResult("角色名称不能为空");
         }
         role.setUpdate_time(DateUtils.getUTCTime());
-        int isok = roleService.updateRole(role);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"角色修改成功");
-        } else {
-            return ResultFactory.buildFailResult("角色修改失败");
+        try{
+            int isok = roleService.updateRole(role);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"角色修改成功");
+            } else {
+                return ResultFactory.buildFailResult("角色修改失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @DeleteMapping("/roles/delRoleById")
@@ -82,14 +101,20 @@ public class RoleController {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
         }
-        int isok1 = roleService.delRpById(id);
-        int isok2 = roleService.delRmById(id);
-        int isok = roleService.delRoleById(id);
-        if(isok > 0){
-            return ResultFactory.buildSuccessResult(null,"删除角色成功");
-        }else {
-            return ResultFactory.buildFailResult("删除角色失败");
+        try{
+            int isok1 = roleService.delRpById(id);
+            int isok2 = roleService.delRmById(id);
+            int isok = roleService.delRoleById(id);
+            if(isok > 0){
+                return ResultFactory.buildSuccessResult(null,"删除角色成功");
+            }else {
+                return ResultFactory.buildFailResult("删除角色失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
     @PostMapping("/roles/addRu")
@@ -100,22 +125,29 @@ public class RoleController {
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
         }
-        int isok1 = roleService.delRuById(userId);
-        int isok = roleService.addRu(roleId,userId);
-        if (isok > 0){
-            return ResultFactory.buildSuccessResult(null,"更新成功");
-        } else {
-            return ResultFactory.buildFailResult("更新失败");
+        try{
+            int isok1 = roleService.delRuById(userId);
+            int isok = roleService.addRu(roleId,userId);
+            if (isok > 0){
+                return ResultFactory.buildSuccessResult(null,"更新成功");
+            } else {
+                return ResultFactory.buildFailResult("更新失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
     @GetMapping("/roles/getAllRoleName")
     public Result getAllRoleName() {
-        List<Role> roleList = roleService.getAllRoleName();
-        if (roleList != null && roleList.size() > 0){
+        try{
+            List<Role> roleList = roleService.getAllRoleName();
             return ResultFactory.buildSuccessResult(roleList,"查询成功");
-        } else {
-            return ResultFactory.buildFailResult("查询失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 }

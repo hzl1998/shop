@@ -23,21 +23,23 @@ public class MenuController {
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
         }
-        List<Menu> menuList = menuService.getMenusByUserId(userId);
-        if (menuList != null && menuList.size() != 0){
+        try{
+            List<Menu> menuList = menuService.getMenusByUserId(userId);
             return ResultFactory.buildSuccessResult(menuList,"获取菜单列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取菜单列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
     @GetMapping("/allMenus")
     public Result allMenus() {
-        List<Menu> menuList = menuService.getAllMenus();
-        if (menuList != null && menuList.size() != 0){
+        try{
+            List<Menu> menuList = menuService.getAllMenus();
             return ResultFactory.buildSuccessResult(menuList,"获取菜单列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取菜单列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
@@ -46,11 +48,12 @@ public class MenuController {
         if(roleId == null || roleId.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
         }
-        List<Menu> menuList = menuService.selectMenusByRoleId(roleId);
-        if (menuList != null && menuList.size() != 0){
+        try{
+            List<Menu> menuList = menuService.selectMenusByRoleId(roleId);
             return ResultFactory.buildSuccessResult(menuList,"获取菜单列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取菜单列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
@@ -62,12 +65,18 @@ public class MenuController {
         if(rm.getMids() == null || rm.getMids().equals("")){
             return ResultFactory.buildFailResult("菜单id数组不能为空");
         }
-        int isok = menuService.delRm(rm.getRoleId());
-        int isok1 = menuService.addRm(rm);
-        if (isok1 > 0){
-            return ResultFactory.buildSuccessResult(null,"更新成功");
-        } else {
-            return ResultFactory.buildFailResult("更新失败");
+        try{
+            int isok = menuService.delRm(rm.getRoleId());
+            int isok1 = menuService.addRm(rm);
+            if (isok1 > 0){
+                return ResultFactory.buildSuccessResult(null,"更新成功");
+            } else {
+                return ResultFactory.buildFailResult("更新失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 }

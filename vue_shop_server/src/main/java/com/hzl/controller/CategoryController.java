@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/goods")
+@RestController
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
-    @GetMapping("/categories")
+    @GetMapping("/goods/categories")
     public Result categories(Integer page,Integer rows) {
         if (page == null) {
             page = 1;
@@ -28,18 +28,17 @@ public class CategoryController {
         Integer currentPage = page;
 
         page = (page - 1) * rows;
-        //总条数
-        int total = categoryService.getCategoryListCount();
-        List<Category> categoryList = categoryService.getCategoryList(page,rows);
-        // 计算总页数
-        int count=0;
-        if(total%rows==0){
-            count=total/rows;
-        }else{
-            count=total/rows+1;
-        }
-
-        if (categoryList != null && categoryList.size() > 0){
+        try {
+            //总条数
+            int total = categoryService.getCategoryListCount();
+            List<Category> categoryList = categoryService.getCategoryList(page,rows);
+            // 计算总页数
+            int count=0;
+            if(total%rows==0){
+                count=total/rows;
+            }else{
+                count=total/rows+1;
+            }
             PageInfo pageInfo = new PageInfo();
             pageInfo.setCount(categoryList.size()); // 本页实际记录数
             pageInfo.setCurrentPage(currentPage); // 第几页
@@ -47,22 +46,25 @@ public class CategoryController {
             pageInfo.setTotalPage(count); // 总页数
             pageInfo.setTotalResult(total); // 总记录数
             return ResultFactory.buildSuccessResult(pageInfo,"获取分类列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取分类列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
-    @GetMapping("/getCategories")
+    @GetMapping("/goods/getCategories")
     public Result getCategories() {
-        List<Category> categoryList = categoryService.getCategories();
-        if (categoryList != null && categoryList.size() > 0){
+        try {
+            List<Category> categoryList = categoryService.getCategories();
             return ResultFactory.buildSuccessResult(categoryList,"获取级联分类列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取级联分类列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
-    @PostMapping("/addCategory")
+    @PostMapping("/goods/addCategory")
     public Result addCategory(@RequestBody Category category) {
         if(category.getCat_name() == null || category.getCat_name().equals("")){
             return ResultFactory.buildFailResult("分类名称不能为空");
@@ -73,28 +75,35 @@ public class CategoryController {
         if(category.getCat_level() == null || category.getCat_level().equals("")){
             return ResultFactory.buildFailResult("分类层级不能为空");
         }
-        int isok = categoryService.addCategory(category);
-        if (isok > 0){
-            return ResultFactory.buildSuccessResult(null,"添加分类成功");
-        } else {
-            return ResultFactory.buildFailResult("添加分类失败");
+        try {
+            int isok = categoryService.addCategory(category);
+            if (isok > 0){
+                return ResultFactory.buildSuccessResult(null,"添加分类成功");
+            } else {
+                return ResultFactory.buildFailResult("添加分类失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
-    @GetMapping("/getCategoryById")
+    @GetMapping("/goods/getCategoryById")
     public Result getCategoryById(Integer id) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
         }
-        Category category = categoryService.getCategoryById(id);
-        if (category != null){
+        try {
+            Category category = categoryService.getCategoryById(id);
             return ResultFactory.buildSuccessResult(category,"获取分类名称成功");
-        } else {
-            return ResultFactory.buildFailResult("获取分类名称失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
-    @PutMapping("/updateCategoryById")
+    @PutMapping("/goods/updateCategoryById")
     public Result updateCategoryById(Integer id,String cat_name) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
@@ -102,39 +111,51 @@ public class CategoryController {
         if(cat_name == null || cat_name.equals("")){
             return ResultFactory.buildFailResult("分配名称不能为空");
         }
-        int isok = categoryService.updateCategoryById(id,cat_name);
-        if (isok > 0){
-            return ResultFactory.buildSuccessResult(null,"修改成功");
-        } else {
-            return ResultFactory.buildFailResult("修改失败");
+        try {
+            int isok = categoryService.updateCategoryById(id,cat_name);
+            if (isok > 0){
+                return ResultFactory.buildSuccessResult(null,"修改成功");
+            } else {
+                return ResultFactory.buildFailResult("修改失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 
-    @PutMapping("/delCategoryById")
+    @PutMapping("/goods/delCategoryById")
     public Result delCategoryById(Integer id) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
         }
-        List<Category> categoryList = categoryService.getCategoriesById(id);
-        if (categoryList.size() > 0){
-            return ResultFactory.buildResult(402,true,"当前分类存在下级分类，删除失败",null);
-        } else {
-            int isok = categoryService.delCategoryById(id);
-            if (isok > 0){
-                return ResultFactory.buildSuccessResult(null,"删除成功");
+        try {
+            List<Category> categoryList = categoryService.getCategoriesById(id);
+            if (categoryList.size() > 0){
+                return ResultFactory.buildResult(402,true,"当前分类存在下级分类，删除失败",null);
             } else {
-                return ResultFactory.buildFailResult("删除失败");
+                int isok = categoryService.delCategoryById(id);
+                if (isok > 0){
+                    return ResultFactory.buildSuccessResult(null,"删除成功");
+                } else {
+                    return ResultFactory.buildFailResult("删除失败");
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
+
     }
 
-    @GetMapping("/getAllCategories")
+    @GetMapping("/goods/getAllCategories")
     public Result getAllCategories() {
-        List<Category> categoryList = categoryService.getAllCategories();
-        if (categoryList != null && categoryList.size() > 0){
+        try {
+            List<Category> categoryList = categoryService.getAllCategories();
             return ResultFactory.buildSuccessResult(categoryList,"获取级联分类列表成功");
-        } else {
-            return ResultFactory.buildFailResult("获取级联分类列表失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
         }
     }
 }
