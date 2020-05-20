@@ -182,7 +182,7 @@ export default {
     getCateList() {
       this.$http({
         method: "GET",
-        url: "categories" + "?page=" + this.page + "&rows=" + this.rows
+        url: "goods/categories" + "?page=" + this.page + "&rows=" + this.rows
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -212,7 +212,7 @@ export default {
     getParentCateList() {
       this.$http({
         method: "GET",
-        url: "getCategories"
+        url: "goods/getCategories"
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -247,7 +247,7 @@ export default {
         if (!valid) return;
         this.$http({
           method: "POST",
-          url: "addCategory",
+          url: "goods/addCategory",
           data: {
             cat_name: this.addCateForm.cat_name,
             cat_pid: this.addCateForm.cat_pid,
@@ -283,7 +283,7 @@ export default {
         .then(resp => {
           this.$http({
             method: "PUT",
-            url: "delCategoryById?id=" + id
+            url: "goods/delCategoryById?id=" + id
           })
             .then(resp => {
               if (resp.data.code === 402) {
@@ -313,7 +313,7 @@ export default {
       this.editCateForm.cat_id = id
       this.$http({
             method: "GET",
-            url: "getCategoryById?id=" + id
+            url: "goods/getCategoryById?id=" + id
           })
             .then(resp => {
               if (resp.data.code !== 200) {
@@ -331,7 +331,7 @@ export default {
         if (!valid) return;
         this.$http({
             method: "PUT",
-            url: "updateCategoryById?id=" + this.editCateForm.cat_id
+            url: "goods/updateCategoryById?id=" + this.editCateForm.cat_id
             +"&cat_name="+this.editCateForm.cat_name
           })
             .then(resp => {

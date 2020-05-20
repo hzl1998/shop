@@ -191,7 +191,7 @@ export default {
     getCateList() {
       this.$http({
         method: "GET",
-        url: "getAllCategories"
+        url: "goods/getAllCategories"
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -223,7 +223,7 @@ export default {
 
       this.$http({
         method: "GET",
-        url: "attributes?id=" + this.cateId + "&sel=" + this.activeName
+        url: "goods/attributes?id=" + this.cateId + "&sel=" + this.activeName
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -253,7 +253,7 @@ export default {
         if (!valid) return;
         this.$http({
           method: "POST",
-          url: "addAttributes",
+          url: "goods/addAttributes",
           data: {
             cat_id: this.cateId,
             attr_name: this.addForm.attr_name,
@@ -276,7 +276,7 @@ export default {
     showEditDialog(attr_id) {
       this.$http({
         method: "GET",
-        url: "getAttributesById?id=" + attr_id
+        url: "goods/getAttributesById?id=" + attr_id
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -298,7 +298,7 @@ export default {
         if (!valid) return;
         this.$http({
           method: "PUT",
-          url: "updateAttribute",
+          url: "goods/updateAttribute",
           data: {
             cat_id: this.cateId,
             attr_id: this.editForm.attr_id,
@@ -328,7 +328,7 @@ export default {
         .then(resp => {
           this.$http({
             method: "DELETE",
-            url: "delAttribute?attr_id=" + attr_id + "&cat_id=" + this.cateId
+            url: "goods/delAttribute?attr_id=" + attr_id + "&cat_id=" + this.cateId
           })
             .then(resp => {
               if (resp.data.code !== 200) {
@@ -374,7 +374,7 @@ export default {
     saveAttrVals(row) {
         this.$http({
             method: "PUT",
-            url: "updateVals",
+            url: "goods/updateVals",
             data:{
                 cat_id:this.cateId,
                 attr_id:row.attr_id,
