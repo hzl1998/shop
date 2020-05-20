@@ -9,7 +9,9 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search"></el-input>
+          <el-input v-model="goods_name" placeholder="请输入内容" prefix-icon="el-icon-search" clearable @clear="searchGoods">
+            <el-button slot="append" icon="el-icon-search" @click="searchGoods"></el-button>
+          </el-input>
         </el-col>
         <el-col :span="4">
           <el-button type="primary">添加商品</el-button>
@@ -54,7 +56,8 @@ export default {
       page:1,
       rows:10,
       goodList:[],
-      total:0
+      total:0,
+      goods_name:''
     };
   },
   created(){
@@ -64,7 +67,7 @@ export default {
     getGoodsList() {
       this.$http({
         method: "GET",
-        url: "goods" + "?page=" + this.page + "&rows=" + this.rows
+        url: "goods" + "?page=" + this.page + "&rows=" + this.rows + "&goods_name="+this.goods_name
       })
         .then(resp => {
           if (resp.data.code !== 200) {
@@ -88,6 +91,10 @@ export default {
       this.page = newPage;
       this.getGoodsList();
     },
+    searchGoods(){
+      this.page = 1
+      this.getGoodsList()
+    }
   }
 };
 </script>
