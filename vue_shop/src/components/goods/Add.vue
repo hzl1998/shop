@@ -306,7 +306,9 @@ export default {
             goods_number: form.goods_number,
             goods_weight: form.goods_weight,
             cat_id: form.goods_cat,
-            goods_introduce: form.goods_introduce
+            goods_introduce: form.goods_introduce,
+            pics: form.pics,
+            attr: form.attrs
           }
         })
           .then(resp => {
