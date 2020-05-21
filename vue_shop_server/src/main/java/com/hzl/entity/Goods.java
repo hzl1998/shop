@@ -29,5 +29,5 @@ public class Goods {
     private Integer is_promote;
     private Integer goods_state;
     private String[] pics;
-    private String[] attrs;
+    private Object[] attrs;
 }
