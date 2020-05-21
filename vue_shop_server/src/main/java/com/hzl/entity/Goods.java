@@ -28,6 +28,6 @@ public class Goods {
     private Integer hot_mumber;
     private Integer is_promote;
     private Integer goods_state;
-    private String[] pics;
+    private Object[] pics;
     private Object[] attrs;
 }
