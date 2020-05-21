@@ -25,21 +25,14 @@ public class FileController {
 
         // 要上传的目标文件存放路径
         String localPath = "D:/images";
-        // 上传成功或者失败的提示
-        String msg = "";
+        FileUtils fileUtils = new FileUtils();
 
-        if (FileUtils.upload(file, localPath, file.getOriginalFilename())){
-            // 上传成功，给出页面提示
-            msg = "上传成功！";
-            String tmp_path = "images/"+file.getOriginalFilename();
-            String url = "http://localhost:8082/"+file.getOriginalFilename();
+        if (fileUtils.upload(file, localPath, file.getOriginalFilename()) != null){
             Map map = new HashMap();
-            map.put("tmp_path",tmp_path);
-            map.put("url",url);
-            return ResultFactory.buildSuccessResult(map,msg);
+            map = fileUtils.upload(file, localPath, file.getOriginalFilename());
+            return ResultFactory.buildSuccessResult(map,"上传成功");
         }else {
-            msg = "上传失败！";
-            return ResultFactory.buildFailResult(msg);
+            return ResultFactory.buildFailResult("上传失败");
         }
 
     }

@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文件上传工具包
@@ -35,7 +37,7 @@ public class FileUtils {
      * @param fileName 源文件名
      * @return
      */
-    public static boolean upload(MultipartFile file, String path, String fileName){
+    public Map upload(MultipartFile file, String path, String fileName){
 
         // 生成新的文件名
         String realPath = path + "/" + getFileName(fileName);
@@ -53,15 +55,16 @@ public class FileUtils {
         try {
             //保存文件
             file.transferTo(dest);
-            return true;
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
+            String tmp_path = "images/"+realPath;
+            String url = "http://localhost:8082/images/"+realPath;
+            Map map = new HashMap();
+            map.put("tmp_path",tmp_path);
+            map.put("url",url);
+            return map;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return false;
+            return null;
         }
 
     }
