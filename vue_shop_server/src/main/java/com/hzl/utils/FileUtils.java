@@ -45,16 +45,12 @@ public class FileUtils {
         //使用原文件名
         //String realPath = path + "/" + fileName;
 
-        File dest = new File(realPath);
-
-        //判断文件父目录是否存在
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
-        }
+        //在指定路径下创建一个文件
+        File targetFile = new File(path+"/", realPath);
 
         try {
             //保存文件
-            file.transferTo(dest);
+            file.transferTo(targetFile);
             String tmp_path = "images/"+realPath;
             String url = "http://localhost:8082/images/"+realPath;
             Map map = new HashMap();
