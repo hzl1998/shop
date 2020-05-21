@@ -23,7 +23,12 @@
         label-width="100px"
         label-position="top"
       >
-        <el-tabs v-model="activeIndex" :tab-position="'left'" :before-leave="beforeTabLeave">
+        <el-tabs
+          v-model="activeIndex"
+          :tab-position="'left'"
+          :before-leave="beforeTabLeave"
+          @tab-click="tabClicked"
+        >
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
               <el-input v-model="addForm.goods_name"></el-input>
@@ -60,9 +65,29 @@
               ></el-cascader>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品参数" name="1">商品参数</el-tab-pane>
-          <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+          <el-tab-pane label="商品参数" name="1">
+            <el-form-item :label="item.attr_name" v-for="item in manyTableData" :key="item.attr_id">
+              <el-checkbox-group v-model="item.attr_vals">
+                <el-checkbox :label="cb" v-for="(cb, i) in item.attr_vals" :key="i" border></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="商品属性" name="2">
+            <el-form-item :label="item.attr_name" v-for="item in onlyTableData" :key="item.attr_id">
+              <el-input v-model="item.attr_vals"></el-input>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <el-upload
+              :action="uploadURL"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              list-type="picture"
+              :headers="headerObj"
+            >
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -119,7 +144,13 @@ export default {
           }
         ]
       },
-      cateList: []
+      cateList: [],
+      manyTableData: [],
+      onlyTableData: [],
+      uploadURL: "http://localhost:8081/shop/fileUpload",
+      headerObj: {
+        Authorization: window.sessionStorage.getItem("token")
+      }
     };
   },
   created() {
@@ -156,10 +187,64 @@ export default {
         this.$message.error("请先选择商品分类！");
         return false;
       }
+    },
+    tabClicked() {
+      //  console.log(this.activeIndex)
+      //证明访问的是动态参数面板
+      if (this.activeIndex === "1") {
+        this.$http({
+          method: "GET",
+          url: "goods/attributes?id=" + this.cateId + "&sel=many"
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              return this.$message.error("获取动态参数列表失败！");
+            }
+            console.log(resp.data.data);
+            resp.data.data.forEach(item => {
+              item.attr_vals =
+                item.attr_vals.length === 0 ? [] : item.attr_vals.split(" ");
+            });
+            this.manyTableData = resp.data.data;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else if (this.activeIndex === "2") {
+        this.$http({
+          method: "GET",
+          url: "goods/attributes?id=" + this.cateId + "&sel=only"
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              return this.$message.error("获取静态属性失败！");
+            }
+            console.log(resp.data.data);
+            this.onlyTableData = resp.data.data;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    //处理图片预览效果
+    handlePreview() {},
+    //移除图片
+    handleRemove() {}
+  },
+  computed: {
+    cateId() {
+      if (this.addForm.goods_cat.length === 3) {
+        return this.addForm.goods_cat[2];
+      }
+      return null;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.el-checkbox {
+  margin: 0 10px 0 0 !important;
+}
 </style>
