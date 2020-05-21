@@ -12,7 +12,7 @@
                and trim(replace(goods_name,' ','')) LIKE CONCAT('%',trim(replace(#{goods_name},' ','')),'%' )
            </if>
        </where>
-       order by goods_id LIMIT #{page},#{rows}
+       order by add_time LIMIT #{page},#{rows}
    </select>
 
     <select id="getGoodsListCount" resultType="int">
