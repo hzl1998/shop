@@ -12,6 +12,7 @@
     <artifactId>vue_shop_server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>vue_shop_server</name>
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
