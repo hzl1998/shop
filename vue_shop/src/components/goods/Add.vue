@@ -277,7 +277,7 @@ export default {
         }
         //使用JSON对象的parse和stringify来进行深拷贝
         var form =  JSON.parse(JSON.stringify(this.addForm))
-        form.goods_cat = form.goods_cat[2]
+        form.goods_cat = form.goods_cat.join(',')
         //处理动态参数
         this.manyTableData.forEach(item => {
           const newInfo = {
@@ -296,6 +296,29 @@ export default {
         })
         form.attrs = this.addForm.attrs
         console.log(form)
+
+        this.$http({
+          method: "POST",
+          url: "goods/add",
+          data:{
+            goods_name: form.goods_name,
+            goods_price: form.goods_price,
+            goods_number: form.goods_number,
+            goods_weight: form.goods_weight,
+            cat_id: form.goods_cat,
+            goods_introduce: form.goods_introduce
+          }
+        })
+          .then(resp => {
+            if (resp.data.code !== 200) {
+              return this.$message.error("添加商品失败！");
+            }
+            this.$message.success("添加商品成功！")
+            this.$router.push('/goods')
+          })
+          .catch(error => {
+            console.log(error);
+          });
       })
     }
   },
