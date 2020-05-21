@@ -316,7 +316,7 @@ export default {
               return this.$message.error("添加商品失败！");
             }
             this.$message.success("添加商品成功！")
-            this.$router.push('/goods')
+            this.$router.push('/list')
           })
           .catch(error => {
             console.log(error);
