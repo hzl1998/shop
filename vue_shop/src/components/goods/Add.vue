@@ -84,14 +84,26 @@
               :on-remove="handleRemove"
               list-type="picture"
               :headers="headerObj"
+              :on-success="handleSuccess"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+            <!-- 富文本编辑器 -->
+            <quill-editor v-model="addForm.goods_introduce"></quill-editor>
+            <el-button type="primary" class="btnAdd" @click="add">添加商品</el-button>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
+
+    <el-dialog
+  title="图片预览"
+  :visible.sync="previewVisible"
+  width="50%">
+  <img :src="previewPath" alt="" class="previewImg">
+</el-dialog>
   </div>
 </template>
 
@@ -105,7 +117,10 @@ export default {
         goods_price: 0,
         goods_weight: 0,
         goods_number: 0,
-        goods_cat: []
+        goods_cat: [],
+        pics:[],
+        goods_introduce:'',
+        attrs:[]
       },
       addFormRules: {
         goods_name: [
@@ -150,7 +165,9 @@ export default {
       uploadURL: "http://localhost:8081/shop/fileUpload",
       headerObj: {
         Authorization: window.sessionStorage.getItem("token")
-      }
+      },
+      previewPath:'',
+      previewVisible: false
     };
   },
   created() {
@@ -228,9 +245,59 @@ export default {
       }
     },
     //处理图片预览效果
-    handlePreview() {},
+    handlePreview(file) {
+      console.log(file)
+      this.previewPath = file.response.data.url
+      this.previewVisible = true
+    },
     //移除图片
-    handleRemove() {}
+    handleRemove(file) {
+      console.log(file)
+      //获取将要删除的图片的临时路径
+      const filePath = file.response.data.tmp_path
+      //从pics数组中，找到这个图片对应的索引值
+      const i = this.addForm.pics.findIndex(x => 
+      x.pic === filePath)
+      //从数组中移除
+      this.addForm.pics.splice(i,1)
+      console.log(this.addForm)
+    },
+    //监听图片上传成功
+    handleSuccess(response){
+      console.log(response)
+      const picInfo = {pic:response.data.tmp_path}
+      this.addForm.pics.push(picInfo)
+      console.log(this.addForm)
+    },
+    add() {
+      console.log(this.addForm)
+      this.$refs.addFormRef.validate(valid => {
+        if(!valid) {
+          return this.$message.error('请填写必要的表单项！')
+        }
+        //使用JSON对象的parse和stringify来进行深拷贝
+        var form =  JSON.parse(JSON.stringify(this.addForm))
+        form.goods_cat = form.goods_cat[2]
+        //处理动态参数
+        this.manyTableData.forEach(item => {
+          const newInfo = {
+            attr_id:item.attr_id,
+            attr_value:item.attr_vals.join(' ')
+          }
+          this.addForm.attrs.push(newInfo)
+        })
+        //处理静态属性
+        this.onlyTableData.forEach(item => {
+          const newInfo = {
+            attr_id:item.attr_id,
+            attr_value:item.attr_vals
+          }
+          this.addForm.attrs.push(newInfo)
+        })
+        form.attrs = this.addForm.attrs
+        console.log(form)
+      })
+    }
   },
   computed: {
     cateId() {
@@ -246,5 +313,11 @@ export default {
 <style lang="less" scoped>
 .el-checkbox {
   margin: 0 10px 0 0 !important;
+}
+.previewImg{
+  width: 100%;
+}
+.btnAdd{
+  margin-top: 15px;
 }
 </style>
