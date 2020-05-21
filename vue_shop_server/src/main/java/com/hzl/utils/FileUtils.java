@@ -38,10 +38,10 @@ public class FileUtils {
     public static boolean upload(MultipartFile file, String path, String fileName){
 
         // 生成新的文件名
-        //String realPath = path + "/" + getFileName(fileName);
+        String realPath = path + "/" + getFileName(fileName);
 
         //使用原文件名
-        String realPath = path + "/" + fileName;
+        //String realPath = path + "/" + fileName;
 
         File dest = new File(realPath);
 
