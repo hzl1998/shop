@@ -28,7 +28,7 @@ public class GoodsService {
         return goodsMapper.addGood(goods);
     }
 
-    public int addGoodPics(String[] pics, Integer goods_id) {
+    public int addGoodPics(Object[] pics, Integer goods_id) {
         return goodsMapper.addGoodPics(pics,goods_id);
     }
 
