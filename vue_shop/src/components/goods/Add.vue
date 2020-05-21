@@ -257,7 +257,7 @@ export default {
       const filePath = file.response.data.tmp_path
       //从pics数组中，找到这个图片对应的索引值
       const i = this.addForm.pics.findIndex(x => 
-      x === filePath)
+      x.pic === filePath)
       //从数组中移除
       this.addForm.pics.splice(i,1)
       console.log(this.addForm)
@@ -265,7 +265,7 @@ export default {
     //监听图片上传成功
     handleSuccess(response){
       console.log(response)
-      const picInfo = response.data.tmp_path
+      const picInfo = {pic:response.data.tmp_path}
       this.addForm.pics.push(picInfo)
       console.log(this.addForm)
     },
