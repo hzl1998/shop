@@ -40,7 +40,7 @@
     <insert id="addGoodPics">
         insert into sp_goods_pics(goods_id,pics_mid) values
         <foreach collection="pics" item="pics" separator=",">
-            (#{goods_id},#{pics})
+            (#{goods_id},#{pics.pic})
         </foreach>
     </insert>
 
