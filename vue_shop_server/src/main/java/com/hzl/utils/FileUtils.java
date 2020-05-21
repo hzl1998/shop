@@ -40,7 +40,7 @@ public class FileUtils {
     public Map upload(MultipartFile file, String path, String fileName){
 
         // 生成新的文件名
-        String realPath = path + "/" + getFileName(fileName);
+        String realPath = getFileName(fileName);
 
         //使用原文件名
         //String realPath = path + "/" + fileName;
