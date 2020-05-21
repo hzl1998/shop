@@ -13,4 +13,10 @@ public interface GoodsMapper {
     int getGoodsListCount(@Param(value="goods_name")String goods_name);
 
     int delGood(Integer goods_id,Long delete_time);
+
+    int addGood(Goods goods);
+
+    int addGoodPics(String[] pics, Integer goods_id);
+
+    int addGoodAttr(String[] attrs, Integer goods_id);
 }

@@ -23,4 +23,16 @@ public class GoodsService {
     public int delGood(Integer goods_id,Long delete_time) {
         return goodsMapper.delGood(goods_id,delete_time);
     }
+
+    public int addGood(Goods goods) {
+        return goodsMapper.addGood(goods);
+    }
+
+    public int addGoodPics(String[] pics, Integer goods_id) {
+        return goodsMapper.addGoodPics(pics,goods_id);
+    }
+
+    public int addGoodAttr(String[] attrs, Integer goods_id) {
+        return goodsMapper.addGoodAttr(attrs,goods_id);
+    }
 }

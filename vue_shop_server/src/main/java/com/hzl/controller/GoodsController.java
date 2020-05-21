@@ -8,10 +8,7 @@ import com.hzl.result.ResultFactory;
 import com.hzl.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -73,5 +70,49 @@ public class GoodsController {
            e.printStackTrace();
            return ResultFactory.buildFailResult("出现异常");
        }
+    }
+
+    @PostMapping("/goods/add")
+    public Result addGood(@RequestBody Goods goods){
+        if(goods.getGoods_name() == null || goods.getGoods_name().equals("")){
+            return ResultFactory.buildFailResult("商品名称不能为空");
+        }
+        if(goods.getGoods_price() == null || goods.getGoods_price().equals("")){
+            return ResultFactory.buildFailResult("商品价格不能为空");
+        }
+        if(goods.getGoods_number() == null || goods.getGoods_number().equals("")){
+            return ResultFactory.buildFailResult("商品数量不能为空");
+        }
+        if(goods.getGoods_weight() == null || goods.getGoods_weight().equals("")){
+            return ResultFactory.buildFailResult("商品重量不能为空");
+        }
+        if(goods.getCat_id() == null || goods.getCat_id().equals("")){
+            return ResultFactory.buildFailResult("商品分类id不能为空");
+        }
+        String[] cats_id = goods.getCat_id().split(",");
+        goods.setCat_id(cats_id[2]);
+        goods.setCat_one_id(cats_id[0]);
+        goods.setCat_two_id(cats_id[1]);
+        goods.setCat_three_id(cats_id[2]);
+        goods.setAdd_time(System.currentTimeMillis()/1000);
+        try {
+            int isok = goodsService.addGood(goods);
+            if(isok > 0){
+                if(goods.getPics().length > 0){
+                    int isok1 = goodsService.addGoodPics(goods.getPics(),goods.getGoods_id());
+                }
+                if(goods.getAttrs().length > 0){
+                    int isok2 = goodsService.addGoodAttr(goods.getAttrs(),goods.getGoods_id());
+                }
+                return ResultFactory.buildSuccessResult(null,"添加成功");
+            } else {
+                return ResultFactory.buildFailResult("添加失败");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
+        }
+
     }
 }

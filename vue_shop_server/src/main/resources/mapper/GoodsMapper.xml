@@ -29,4 +29,25 @@
         update sp_goods set is_del="1",delete_time=#{delete_time} where
         goods_id=#{goods_id}
     </update>
+
+    <insert id="addGood" parameterType="com.hzl.entity.Goods" useGeneratedKeys="true" keyProperty="goods_id">
+        insert into sp_goods(goods_name,goods_price,goods_number,goods_weight,cat_id
+        ,goods_introduce,add_time,cat_one_id,cat_two_id,cat_three_id) value
+        (#{goods_name},#{goods_price},#{goods_number},#{goods_weight},#{cat_id},
+        #{goods_introduce},#{add_time},#{cat_one_id},#{cat_two_id},#{cat_three_id})
+    </insert>
+
+    <insert id="addGoodPics">
+        insert into sp_goods_pics(goods_id,pics_mid) values
+        <foreach collection="pics" item="pics" separator=",">
+            (#{goods_id},#{pics})
+        </foreach>
+    </insert>
+
+    <insert id="addGoodAttr">
+        insert into sp_goods_attr(goods_id,attr_id,attr_value) values
+        <foreach collection="attrs" item="attrs" separator=",">
+            (#{goods_id},#{attrs.attr_id},#{attrs.attr_value})
+        </foreach>
+    </insert>
 </mapper>
