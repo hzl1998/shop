@@ -8,6 +8,8 @@ import com.hzl.handler.AuthAuthenticationSuccessHandler;
 import com.hzl.handler.AuthExceptionEntryPoint;
 import com.hzl.handler.AuthLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,6 +21,9 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsUtils;
+
+import javax.servlet.MultipartConfigElement;
+import java.io.File;
 
 @Configuration
 @EnableWebSecurity
@@ -69,5 +74,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(this.loginValidateAuthenticationProvider);
+    }
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        String tmpPath = System.getProperty("user.dir") + "/data/tmp";
+        System.out.println(tmpPath);
+        File file = new File(tmpPath);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        factory.setLocation(tmpPath);
+        return factory.createMultipartConfig();
     }
 }
