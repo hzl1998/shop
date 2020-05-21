@@ -98,10 +98,10 @@ public class GoodsController {
         try {
             int isok = goodsService.addGood(goods);
             if(isok > 0){
-                if(goods.getPics().length > 0){
+                if(goods.getPics() != null && !goods.getPics().equals("")){
                     int isok1 = goodsService.addGoodPics(goods.getPics(),goods.getGoods_id());
                 }
-                if(goods.getAttrs().length > 0){
+                if(goods.getAttrs() != null && !goods.getAttrs().equals("")){
                     int isok2 = goodsService.addGoodAttr(goods.getAttrs(),goods.getGoods_id());
                 }
                 return ResultFactory.buildSuccessResult(null,"添加成功");
