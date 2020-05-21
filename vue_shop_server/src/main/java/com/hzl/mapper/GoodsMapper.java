@@ -18,5 +18,5 @@ public interface GoodsMapper {
 
     int addGoodPics(String[] pics, Integer goods_id);
 
-    int addGoodAttr(String[] attrs, Integer goods_id);
+    int addGoodAttr(Object[] attrs, Integer goods_id);
 }

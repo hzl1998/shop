@@ -32,7 +32,7 @@ public class GoodsService {
         return goodsMapper.addGoodPics(pics,goods_id);
     }
 
-    public int addGoodAttr(String[] attrs, Integer goods_id) {
+    public int addGoodAttr(Object[] attrs, Integer goods_id) {
         return goodsMapper.addGoodAttr(attrs,goods_id);
     }
 }

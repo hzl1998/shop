@@ -101,9 +101,6 @@ public class GoodsController {
                 if(goods.getPics() != null && !goods.getPics().equals("")){
                     int isok1 = goodsService.addGoodPics(goods.getPics(),goods.getGoods_id());
                 }
-                for(int i = 0;i < goods.getAttrs().length;i++){
-                    System.out.println(goods.getAttrs()[i]);
-                }
                 if(goods.getAttrs() != null && !goods.getAttrs().equals("")){
                     int isok2 = goodsService.addGoodAttr(goods.getAttrs(),goods.getGoods_id());
                 }
