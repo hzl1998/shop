@@ -32,7 +32,7 @@ public class FileController {
             // 上传成功，给出页面提示
             msg = "上传成功！";
             String tmp_path = "images/"+file.getOriginalFilename();
-            String url = "http://localhost:8081/"+file.getOriginalFilename();
+            String url = "http://localhost:8082/"+file.getOriginalFilename();
             Map map = new HashMap();
             map.put("tmp_path",tmp_path);
             map.put("url",url);
