@@ -27,12 +27,9 @@ public class FileController {
         // 要上传的目标文件存放路径
         String localPath = "D:/images";
         FileUtils fileUtils = new FileUtils();
-        MultipartFile file1 = file;
 
-        if (fileUtils.upload(file1, localPath, file1.getOriginalFilename()) != null){
-            Map map = new HashMap();
-            map = fileUtils.upload(file1, localPath, file1.getOriginalFilename());
-            return ResultFactory.buildSuccessResult(map,"上传成功");
+        if (fileUtils.upload(file, localPath, file.getOriginalFilename()) != null){
+            return ResultFactory.buildSuccessResult(fileUtils.upload(file, localPath, file.getOriginalFilename()),"上传成功");
         }else {
             return ResultFactory.buildFailResult("上传失败");
         }
