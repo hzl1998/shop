@@ -76,16 +76,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(this.loginValidateAuthenticationProvider);
     }
 
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        String tmpPath = System.getProperty("user.dir") + "/data/tmp";
-        System.out.println(tmpPath);
-        File file = new File(tmpPath);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        factory.setLocation(tmpPath);
-        return factory.createMultipartConfig();
-    }
 }
