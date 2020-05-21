@@ -17,16 +17,4 @@ public class ShopApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShopApplication.class, args);
     }
-
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        String tmpPath = "D:/data/apps/temp";
-        File file = new File(tmpPath);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        factory.setLocation(tmpPath);
-        return factory.createMultipartConfig();
-    }
 }

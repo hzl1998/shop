@@ -3,6 +3,7 @@ package com.hzl.utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,12 +46,16 @@ public class FileUtils {
         //使用原文件名
         //String realPath = path + "/" + fileName;
 
-        //在指定路径下创建一个文件
-        File targetFile = new File(path+"/", realPath);
+        File dest = new File(path + "/"+realPath);
+
+        //判断文件父目录是否存在
+        if(!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
 
         try {
             //保存文件
-            file.transferTo(targetFile);
+            file.transferTo(dest);
             String tmp_path = "images/"+realPath;
             String url = "http://localhost:8082/images/"+realPath;
             Map map = new HashMap();
@@ -63,6 +68,19 @@ public class FileUtils {
             return null;
         }
 
+    }
+
+    public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
+        // 生成新的文件名
+        String realPath = getFileName(fileName);
+        File targetFile = new File(realPath);
+        if(!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+        FileOutputStream out = new FileOutputStream(filePath+fileName);
+        out.write(file);
+        out.flush();
+        out.close();
     }
 
 
