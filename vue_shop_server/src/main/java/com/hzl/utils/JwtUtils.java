@@ -27,4 +27,10 @@ public class JwtUtils {
             return null;
         }
     }
+
+    public static void main(String[] args) {
+
+        Claims claims = (Claims)Jwts.parser().setSigningKey("hzl666").parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWIiLCJpZCI6IjQ4NTUwZTIyOTEwMjExZWE5ZTI1ODBmYTViM2U4NTI2IiwidXNlcm5hbWUiOiJhZG1pbiIsImlhdCI6MTU5MDE1NDE2NywiZXhwIjoxNTkwNzU4OTY3fQ.X1LVFxrTfvfhYuH2WKMLo_nuMsOfcFXIki3zWafGKzI").getBody();
+        System.out.println(claims.get("username"));
+    }
 }
