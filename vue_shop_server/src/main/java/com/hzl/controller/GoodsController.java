@@ -2,6 +2,7 @@ package com.hzl.controller;
 
 import com.hzl.entity.Category;
 import com.hzl.entity.Goods;
+import com.hzl.entity.GoodsPics;
 import com.hzl.entity.PageInfo;
 import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
@@ -114,5 +115,23 @@ public class GoodsController {
             return ResultFactory.buildFailResult("出现异常");
         }
 
+    }
+
+    @GetMapping("/goods/getGoodById")
+    public Result getGoodById(Integer goods_id){
+       if(goods_id == null || goods_id.equals("")){
+           return ResultFactory.buildFailResult("商品id不能为空");
+       }
+       try {
+           Goods goods = goodsService.getGoodById(goods_id);
+           List<GoodsPics> goodsPics = goodsService.getGoodPicsById(goods_id);
+           Object[] arr = new Object[goodsPics.size()];
+           goodsPics.toArray(arr);
+           goods.setPics(arr);
+           return ResultFactory.buildSuccessResult(goods,"查询商品信息成功");
+       } catch (Exception e) {
+           e.printStackTrace();
+           return ResultFactory.buildFailResult("出现异常");
+       }
     }
 }

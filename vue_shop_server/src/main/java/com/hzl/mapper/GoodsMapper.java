@@ -1,6 +1,7 @@
 package com.hzl.mapper;
 
 import com.hzl.entity.Goods;
+import com.hzl.entity.GoodsPics;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,8 @@ public interface GoodsMapper {
     int addGoodPics(Object[] pics, Integer goods_id);
 
     int addGoodAttr(Object[] attrs, Integer goods_id);
+
+    Goods getGoodById(Integer goods_id);
+
+    List<GoodsPics> getGoodPicsById(Integer goods_id);
 }

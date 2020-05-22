@@ -50,4 +50,14 @@
             (#{goods_id},#{attrs.attr_id},#{attrs.attr_value})
         </foreach>
     </insert>
+
+    <select id="getGoodById" resultType="com.hzl.entity.Goods">
+        select goods_name,goods_price,goods_number,goods_weight,cat_one_id,
+        cat_two_id,cat_three_id,goods_introduce,add_time,upd_time from sp_goods where
+        goods_id = #{goods_id}
+    </select>
+
+    <select id="getGoodPicsById" resultType="com.hzl.entity.GoodsPics">
+        select pics_mid as pic from sp_goods_pics where goods_id = #{goods_id}
+    </select>
 </mapper>

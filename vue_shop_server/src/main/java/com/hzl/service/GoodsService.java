@@ -1,6 +1,7 @@
 package com.hzl.service;
 
 import com.hzl.entity.Goods;
+import com.hzl.entity.GoodsPics;
 import com.hzl.mapper.GoodsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,13 @@ public class GoodsService {
 
     public int addGoodAttr(Object[] attrs, Integer goods_id) {
         return goodsMapper.addGoodAttr(attrs,goods_id);
+    }
+
+    public Goods getGoodById(Integer goods_id) {
+        return goodsMapper.getGoodById(goods_id);
+    }
+
+    public List<GoodsPics> getGoodPicsById(Integer goods_id) {
+        return goodsMapper.getGoodPicsById(goods_id);
     }
 }
