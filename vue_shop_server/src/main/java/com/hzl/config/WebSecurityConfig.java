@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //安全拦截机制
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
         http.csrf().disable() //屏蔽CSRF控制
                 .httpBasic().authenticationEntryPoint(authExceptionEntryPoint)
                 .and()
@@ -57,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //处理跨域请求中的Preflight请求
                 .requestMatchers( CorsUtils::isPreFlightRequest ).permitAll()
                 .anyRequest().authenticated()//所有的请求必须认证通过
-                .antMatchers("/hello").permitAll()//登录请求不需要认证
+                .antMatchers("/login").permitAll()//登录请求不需要认证
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
@@ -68,7 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().logoutSuccessHandler(logoutSuccessHandler);
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-        http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
     }
 
     @Override
