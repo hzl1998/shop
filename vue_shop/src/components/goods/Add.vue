@@ -3,11 +3,11 @@
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>添加商品</el-breadcrumb-item>
+      <el-breadcrumb-item>{{tit}}</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-card>
-      <el-alert title="添加商品信息" type="info" center show-icon :closable="false"></el-alert>
+      <el-alert :title="title" type="info" center show-icon :closable="false"></el-alert>
       <el-steps :space="200" :active="activeIndex - 0" finish-status="success" align-center>
         <el-step title="基本信息"></el-step>
         <el-step title="商品参数"></el-step>
@@ -93,18 +93,15 @@
           <el-tab-pane label="商品内容" name="4">
             <!-- 富文本编辑器 -->
             <quill-editor v-model="addForm.goods_introduce"></quill-editor>
-            <el-button type="primary" class="btnAdd" @click="add">添加商品</el-button>
+            <el-button type="primary" class="btnAdd" @click="add">{{btn}}</el-button>
           </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
 
-    <el-dialog
-  title="图片预览"
-  :visible.sync="previewVisible"
-  width="50%">
-  <img :src="previewPath" alt="" class="previewImg">
-</el-dialog>
+    <el-dialog title="图片预览" :visible.sync="previewVisible" width="50%">
+      <img :src="previewPath" alt class="previewImg" />
+    </el-dialog>
   </div>
 </template>
 
@@ -119,9 +116,9 @@ export default {
         goods_weight: 0,
         goods_number: 0,
         goods_cat: [],
-        pics:[],
-        goods_introduce:'',
-        attrs:[]
+        pics: [],
+        goods_introduce: "",
+        attrs: []
       },
       addFormRules: {
         goods_name: [
@@ -167,18 +164,26 @@ export default {
       headerObj: {
         Authorization: window.sessionStorage.getItem("token")
       },
-      previewPath:'',
+      previewPath: "",
       previewVisible: false,
-      id:this.$route.params.id,
-      fileList:[
-        {name:'',url:''}
-      ]
+      id: this.$route.params.id,
+      fileList: [],
+      title:'',
+      tit:'',
+      btn:''
     };
   },
   created() {
-    console.log(this.id)
-    if(this.id){
+    console.log(this.id);
+    if (this.id) {
+      this.title = '编辑商品信息'
+      this.tit = '编辑商品'
+      this.btn = '修改商品'
       this.getGood(this.id);
+    } else {
+      this.title = '添加商品信息'
+      this.tit = '添加商品'
+      this.btn = '添加商品'
     }
     this.getCateList();
   },
@@ -199,26 +204,30 @@ export default {
           console.log(error);
         });
     },
-    getGood(id){
+    getGood(id) {
       this.$http({
         method: "GET",
-        url: "/goods/getGoodById?goods_id="+id
+        url: "/goods/getGoodById?goods_id=" + id
       })
         .then(resp => {
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品信息失败！");
           }
-          this.addForm.goods_name = resp.data.data.goods_name
-          this.addForm.goods_number = resp.data.data.goods_number
-          this.addForm.goods_price = resp.data.data.goods_price
-          this.addForm.goods_weight = resp.data.data.goods_weight
-          this.addForm.pics = resp.data.data.pics
-          const picInfo = {name:resp.data.data.pics,url:resp.data.data.pics}
-          console.log(picInfo)
-          this.addForm.goods_cat.push(resp.data.data.cat_one_id)
-          this.addForm.goods_cat.push(resp.data.data.cat_two_id)
-          this.addForm.goods_cat.push(resp.data.data.cat_three_id)
-          console.log(this.addForm.goods_cat)
+          this.addForm.goods_name = resp.data.data.goods_name;
+          this.addForm.goods_number = resp.data.data.goods_number;
+          this.addForm.goods_price = resp.data.data.goods_price;
+          this.addForm.goods_weight = resp.data.data.goods_weight;
+          this.addForm.pics = resp.data.data.pics;
+          this.addForm.goods_introduce = resp.data.data.goods_introduce;
+          resp.data.data.pics.forEach((item,i) => {
+            const picInfo = { name: (i+1), url: item.pic };
+            this.fileList.push(picInfo);
+          });
+          console.log(this.fileList);
+          this.addForm.goods_cat.push(parseInt(resp.data.data.cat_one_id));
+          this.addForm.goods_cat.push(parseInt(resp.data.data.cat_two_id));
+          this.addForm.goods_cat.push(parseInt(resp.data.data.cat_three_id));
+          console.log(this.addForm.goods_cat);
         })
         .catch(error => {
           console.log(error);
@@ -280,61 +289,74 @@ export default {
     },
     //处理图片预览效果
     handlePreview(file) {
-      console.log(file)
-      this.previewPath = file.response.data.url
-      this.previewVisible = true
+      console.log(file);
+      if (this.id) {
+        this.previewPath = file.url;
+      } else {
+        this.previewPath = file.response.data.url;
+      }
+      this.previewVisible = true;
     },
     //移除图片
-    handleRemove(file,fileList) {
-      console.log(file)
-      //获取将要删除的图片的临时路径
-      const filePath = file.response.data.url
+    handleRemove(file, fileList) {
+      console.log(file);
+      if (this.id) {
+         //获取将要删除的图片的临时路径
+      const filePath = file.url;
       //从pics数组中，找到这个图片对应的索引值
-      const i = this.addForm.pics.findIndex(x => 
-      x.pic === filePath)
+      const i = this.addForm.pics.findIndex(x => x.pic === filePath);
       //从数组中移除
-      this.addForm.pics.splice(i,1)
-      console.log(this.addForm)
+      this.addForm.pics.splice(i, 1);
+      console.log(this.addForm);
+      } else {
+        //获取将要删除的图片的临时路径
+      const filePath = file.response.data.url;
+      //从pics数组中，找到这个图片对应的索引值
+      const i = this.addForm.pics.findIndex(x => x.pic === filePath);
+      //从数组中移除
+      this.addForm.pics.splice(i, 1);
+      console.log(this.addForm);
+      }
     },
     //监听图片上传成功
-    handleSuccess(response){
-      console.log(response)
-      const picInfo = {pic:response.data.url}
-      this.addForm.pics.push(picInfo)
-      console.log(this.addForm)
+    handleSuccess(response) {
+      console.log(response);
+      const picInfo = { pic: response.data.url };
+      this.addForm.pics.push(picInfo);
+      console.log(this.addForm);
     },
     add() {
-      console.log(this.addForm)
+      console.log(this.addForm);
       this.$refs.addFormRef.validate(valid => {
-        if(!valid) {
-          return this.$message.error('请填写必要的表单项！')
+        if (!valid) {
+          return this.$message.error("请填写必要的表单项！");
         }
         //使用JSON对象的parse和stringify来进行深拷贝
-        var form =  JSON.parse(JSON.stringify(this.addForm))
-        form.goods_cat = form.goods_cat.join(',')
+        var form = JSON.parse(JSON.stringify(this.addForm));
+        form.goods_cat = form.goods_cat.join(",");
         //处理动态参数
         this.manyTableData.forEach(item => {
           const newInfo = {
-            attr_id:item.attr_id,
-            attr_value:item.attr_vals.join(' ')
-          }
-          this.addForm.attrs.push(newInfo)
-        })
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals.join(" ")
+          };
+          this.addForm.attrs.push(newInfo);
+        });
         //处理静态属性
         this.onlyTableData.forEach(item => {
           const newInfo = {
-            attr_id:item.attr_id,
-            attr_value:item.attr_vals
-          }
-          this.addForm.attrs.push(newInfo)
-        })
-        form.attrs = this.addForm.attrs
-        console.log(form)
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals
+          };
+          this.addForm.attrs.push(newInfo);
+        });
+        form.attrs = this.addForm.attrs;
+        console.log(form);
 
         this.$http({
           method: "POST",
           url: "goods/add",
-          data:{
+          data: {
             goods_name: form.goods_name,
             goods_price: form.goods_price,
             goods_number: form.goods_number,
@@ -349,13 +371,13 @@ export default {
             if (resp.data.code !== 200) {
               return this.$message.error("添加商品失败！");
             }
-            this.$message.success("添加商品成功！")
-            this.$router.push('/list')
+            this.$message.success("添加商品成功！");
+            this.$router.push("/list");
           })
           .catch(error => {
             console.log(error);
           });
-      })
+      });
     }
   },
   computed: {
@@ -373,10 +395,10 @@ export default {
 .el-checkbox {
   margin: 0 10px 0 0 !important;
 }
-.previewImg{
+.previewImg {
   width: 100%;
 }
-.btnAdd{
+.btnAdd {
   margin-top: 15px;
 }
 </style>
