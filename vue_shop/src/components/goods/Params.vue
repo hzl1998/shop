@@ -15,7 +15,7 @@
             v-model="selectedCateKeys"
             :options="cateList"
             @change="handleChange"
-            :props="{ expandTrigger: 'hover', value:'cat_id', label:'cat_name', children:'children',checkStrictly:true}"
+            :props="{ expandTrigger: 'hover', value:'cat_id', label:'cat_name', children:'children'}"
             clearable
           ></el-cascader>
         </el-col>

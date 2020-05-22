@@ -60,7 +60,7 @@
                 v-model="addForm.goods_cat"
                 :options="cateList"
                 @change="handleChange"
-                :props="{ expandTrigger: 'hover', value:'cat_id', label:'cat_name', children:'children',checkStrictly:true}"
+                :props="{ expandTrigger: 'hover', value:'cat_id', label:'cat_name', children:'children'}"
                 clearable
               ></el-cascader>
             </el-form-item>
@@ -84,6 +84,7 @@
               :on-remove="handleRemove"
               list-type="picture"
               :headers="headerObj"
+              :file-list="fileList"
               :on-success="handleSuccess"
             >
               <el-button size="small" type="primary">选取图片</el-button>
@@ -168,11 +169,17 @@ export default {
       },
       previewPath:'',
       previewVisible: false,
-      id:this.$route.params.id
+      id:this.$route.params.id,
+      fileList:[
+        {name:'',url:''}
+      ]
     };
   },
   created() {
     console.log(this.id)
+    if(this.id){
+      this.getGood(this.id);
+    }
     this.getCateList();
   },
   methods: {
@@ -187,6 +194,31 @@ export default {
           }
           this.cateList = resp.data.data;
           console.log(this.cateList);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getGood(id){
+      this.$http({
+        method: "GET",
+        url: "/goods/getGoodById?goods_id="+id
+      })
+        .then(resp => {
+          if (resp.data.code !== 200) {
+            return this.$message.error("获取商品信息失败！");
+          }
+          this.addForm.goods_name = resp.data.data.goods_name
+          this.addForm.goods_number = resp.data.data.goods_number
+          this.addForm.goods_price = resp.data.data.goods_price
+          this.addForm.goods_weight = resp.data.data.goods_weight
+          this.addForm.pics = resp.data.data.pics
+          const picInfo = {name:resp.data.data.pics,url:resp.data.data.pics}
+          console.log(picInfo)
+          this.addForm.goods_cat.push(resp.data.data.cat_one_id)
+          this.addForm.goods_cat.push(resp.data.data.cat_two_id)
+          this.addForm.goods_cat.push(resp.data.data.cat_three_id)
+          console.log(this.addForm.goods_cat)
         })
         .catch(error => {
           console.log(error);
@@ -253,10 +285,10 @@ export default {
       this.previewVisible = true
     },
     //移除图片
-    handleRemove(file) {
+    handleRemove(file,fileList) {
       console.log(file)
       //获取将要删除的图片的临时路径
-      const filePath = file.response.data.tmp_path
+      const filePath = file.response.data.url
       //从pics数组中，找到这个图片对应的索引值
       const i = this.addForm.pics.findIndex(x => 
       x.pic === filePath)
@@ -267,7 +299,7 @@ export default {
     //监听图片上传成功
     handleSuccess(response){
       console.log(response)
-      const picInfo = {pic:response.data.tmp_path}
+      const picInfo = {pic:response.data.url}
       this.addForm.pics.push(picInfo)
       console.log(this.addForm)
     },
