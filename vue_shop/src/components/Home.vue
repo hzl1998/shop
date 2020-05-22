@@ -127,6 +127,7 @@ export default {
   background-color: #333744;
 }
 .el-main {
+  padding: 0;
   background-color: #FFF0F5;
 }
 .el-menu {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>权限管理</el-breadcrumb-item>

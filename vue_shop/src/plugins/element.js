@@ -38,7 +38,8 @@ import {
     Step,
     Checkbox,
     CheckboxGroup,
-    Upload
+    Upload,
+    Loading
 } from 'element-ui'
 
 Vue.use(Button)
@@ -78,5 +79,7 @@ Vue.use(Step)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(Upload)
+Vue.use(Loading.directive)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$loading = Loading.service

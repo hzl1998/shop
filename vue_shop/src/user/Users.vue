@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>

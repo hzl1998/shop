@@ -7,6 +7,7 @@ import './assets/fonts/iconfont.css'
 //导入全局样式表
 import './assets/css/global.css'
 
+import {Loading} from 'element-ui'
 import TreeTable from 'vue-table-with-tree-grid'
 
 //导入富文本编辑器
@@ -17,13 +18,19 @@ import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 
-
 import axios from 'axios'
 //配置请求的根路径
 axios.defaults.baseURL = 'http://localhost:8081/shop/'
 axios.interceptors.request.use(config => {
   //console.log(config)
+  startLoading();
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  //在最后必须return config
+  return config
+})
+axios.interceptors.response.use(config => {
+  //console.log(config)
+  endLoading();
   //在最后必须return config
   return config
 })
@@ -34,6 +41,8 @@ Vue.config.productionTip = false
 Vue.component('tree-table',TreeTable)
 //注册为全局可用组件
 Vue.use(VueQuillEditor)
+
+Vue.use(Loading);
 
 Vue.filter('dateFormat', function(originVal){
   const dt = new Date(originVal * 1000)
@@ -47,6 +56,18 @@ Vue.filter('dateFormat', function(originVal){
 
   return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 })
+
+let loading;
+function startLoading() {    //使用Element loading-start 方法
+  loading = Loading.service({
+    lock: true,
+    text: '拼命加载中...',
+    background:'rgba(255,255,255,0)',
+  })
+}
+function endLoading() {    //使用Element loading-close 方法
+  loading.close()
+}
 
 new Vue({
   router,

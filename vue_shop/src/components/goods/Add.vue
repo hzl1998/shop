@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品管理</el-breadcrumb-item>
@@ -207,7 +207,7 @@ export default {
     getGood(id) {
       this.$http({
         method: "GET",
-        url: "/goods/getGoodById?goods_id=" + id
+        url: "goods/getGoodById?goods_id=" + id
       })
         .then(resp => {
           if (resp.data.code !== 200) {
