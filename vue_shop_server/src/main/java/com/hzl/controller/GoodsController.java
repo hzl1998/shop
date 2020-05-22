@@ -134,4 +134,53 @@ public class GoodsController {
            return ResultFactory.buildFailResult("出现异常");
        }
     }
+
+    @PutMapping("/goods/update")
+    public Result updateGood(@RequestBody Goods goods){
+        if(goods.getGoods_id() == null || goods.getGoods_id().equals("")){
+            return ResultFactory.buildFailResult("商品id不能为空");
+        }
+        if(goods.getGoods_name() == null || goods.getGoods_name().equals("")){
+            return ResultFactory.buildFailResult("商品名称不能为空");
+        }
+        if(goods.getGoods_price() == null || goods.getGoods_price().equals("")){
+            return ResultFactory.buildFailResult("商品价格不能为空");
+        }
+        if(goods.getGoods_number() == null || goods.getGoods_number().equals("")){
+            return ResultFactory.buildFailResult("商品数量不能为空");
+        }
+        if(goods.getGoods_weight() == null || goods.getGoods_weight().equals("")){
+            return ResultFactory.buildFailResult("商品重量不能为空");
+        }
+        if(goods.getCat_id() == null || goods.getCat_id().equals("")){
+            return ResultFactory.buildFailResult("商品分类id不能为空");
+        }
+        String[] cats_id = goods.getCat_id().split(",");
+        goods.setCat_id(cats_id[2]);
+        goods.setCat_one_id(cats_id[0]);
+        goods.setCat_two_id(cats_id[1]);
+        goods.setCat_three_id(cats_id[2]);
+        goods.setUpd_time(System.currentTimeMillis()/1000);
+        try {
+            int isok = goodsService.updateGood(goods);
+            if(isok > 0){
+                if(goods.getPics().length > 0){
+                    int isok3 = goodsService.delGoodPics(goods.getGoods_id());
+                    int isok1 = goodsService.addGoodPics(goods.getPics(),goods.getGoods_id());
+                }
+                if(goods.getAttrs().length > 0){
+                    int isok4 = goodsService.delGoodAttr(goods.getGoods_id());
+                    int isok2 = goodsService.addGoodAttr(goods.getAttrs(),goods.getGoods_id());
+                }
+                return ResultFactory.buildSuccessResult(null,"修改成功");
+            } else {
+                return ResultFactory.buildFailResult("修改失败");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("出现异常");
+        }
+
+    }
 }

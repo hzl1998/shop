@@ -24,4 +24,10 @@ public interface GoodsMapper {
     Goods getGoodById(Integer goods_id);
 
     List<GoodsPics> getGoodPicsById(Integer goods_id);
+
+    int updateGood(Goods goods);
+
+    int delGoodPics(Integer goods_id);
+
+    int delGoodAttr(Integer goods_id);
 }

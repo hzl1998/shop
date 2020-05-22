@@ -60,4 +60,19 @@
     <select id="getGoodPicsById" resultType="com.hzl.entity.GoodsPics">
         select pics_mid as pic from sp_goods_pics where goods_id = #{goods_id}
     </select>
+
+    <update id="updateGood" parameterType="com.hzl.entity.Goods">
+        update sp_goods set goods_name = #{goods_name},goods_price = #{goods_price},
+        goods_number = #{goods_number},goods_weight = #{goods_weight},cat_id = #{cat_id}
+        ,goods_introduce = #{goods_introduce},upd_time = #{upd_time},cat_one_id = #{cat_one_id},
+        cat_two_id = #{cat_two_id},cat_three_id = #{cat_three_id} where goods_id = #{goods_id}
+    </update>
+
+    <delete id="delGoodPics">
+        delete from sp_goods_pics where goods_id = #{goods_id}
+    </delete>
+
+    <delete id="delGoodAttr">
+        delete from sp_goods_attr where goods_id = #{goods_id}
+    </delete>
 </mapper>

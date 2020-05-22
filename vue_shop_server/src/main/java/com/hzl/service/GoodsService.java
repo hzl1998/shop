@@ -44,4 +44,16 @@ public class GoodsService {
     public List<GoodsPics> getGoodPicsById(Integer goods_id) {
         return goodsMapper.getGoodPicsById(goods_id);
     }
+
+    public int updateGood(Goods goods) {
+        return goodsMapper.updateGood(goods);
+    }
+
+    public int delGoodPics(Integer goods_id) {
+        return goodsMapper.delGoodPics(goods_id);
+    }
+
+    public int delGoodAttr(Integer goods_id) {
+        return goodsMapper.delGoodAttr(goods_id);
+    }
 }
