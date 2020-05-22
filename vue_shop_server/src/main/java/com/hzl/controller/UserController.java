@@ -10,6 +10,7 @@ import com.hzl.utils.DateUtils;
 import com.hzl.utils.MD5;
 import com.hzl.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -23,6 +24,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('/users')")
     public Result users(String username,Integer page,Integer rows){
         if (page == null) {
             page = 1;
@@ -61,6 +63,7 @@ public class UserController {
     }
 
     @PutMapping("/users/status")
+    @PreAuthorize("hasAuthority('/users/status')")
     public Result usersStatus(String userId,String enabled){
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
@@ -85,6 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/users/addUser")
+    @PreAuthorize("hasAuthority('/users/addUser')")
     public Result addUser(@RequestBody UserDto userDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         if(userDto.getUsername() == null || userDto.getUsername().equals("")){
             return ResultFactory.buildFailResult("用户名不能为空");
@@ -123,6 +127,7 @@ public class UserController {
     }
 
     @GetMapping("/users/getUserById")
+    @PreAuthorize("hasAuthority('/users/getUserById')")
     public Result getUserById(String id){
         if (id == null || id.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
@@ -141,6 +146,7 @@ public class UserController {
     }
 
     @PutMapping("/users/updateUserById")
+    @PreAuthorize("hasAuthority('/users/updateUserById')")
     public Result updateUserById(@RequestBody UserDto userDto){
         if(userDto.getId() == null || userDto.getId().equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
@@ -167,6 +173,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/delUserById")
+    @PreAuthorize("hasAuthority('/users/delUserById')")
     public Result delUserById(String id){
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");

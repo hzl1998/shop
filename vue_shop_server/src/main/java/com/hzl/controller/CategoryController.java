@@ -7,6 +7,7 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping("/goods/categories")
+    @PreAuthorize("hasAuthority('/goods/categories')")
     public Result categories(Integer page,Integer rows) {
         if (page == null) {
             page = 1;
@@ -65,6 +67,7 @@ public class CategoryController {
     }
 
     @PostMapping("/goods/addCategory")
+    @PreAuthorize("hasAuthority('/goods/addCategory')")
     public Result addCategory(@RequestBody Category category) {
         if(category.getCat_name() == null || category.getCat_name().equals("")){
             return ResultFactory.buildFailResult("分类名称不能为空");
@@ -90,6 +93,7 @@ public class CategoryController {
     }
 
     @GetMapping("/goods/getCategoryById")
+    @PreAuthorize("hasAuthority('/goods/getCategoryById')")
     public Result getCategoryById(Integer id) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
@@ -104,12 +108,13 @@ public class CategoryController {
     }
 
     @PutMapping("/goods/updateCategoryById")
+    @PreAuthorize("hasAuthority('/goods/updateCategoryById')")
     public Result updateCategoryById(Integer id,String cat_name) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
         }
         if(cat_name == null || cat_name.equals("")){
-            return ResultFactory.buildFailResult("分配名称不能为空");
+            return ResultFactory.buildFailResult("分类名称不能为空");
         }
         try {
             int isok = categoryService.updateCategoryById(id,cat_name);
@@ -125,6 +130,7 @@ public class CategoryController {
     }
 
     @PutMapping("/goods/delCategoryById")
+    @PreAuthorize("hasAuthority('/goods/delCategoryById')")
     public Result delCategoryById(Integer id) {
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");

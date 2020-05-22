@@ -9,6 +9,7 @@ import com.hzl.service.RoleService;
 import com.hzl.utils.DateUtils;
 import com.hzl.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class RoleController {
     PermissionService permissionService;
 
     @GetMapping("/roles")
+    @PreAuthorize("hasAuthority('/roles')")
     public Result roles() {
         try{
             List<Role> roleList = roleService.getRoles();
@@ -37,6 +39,7 @@ public class RoleController {
     }
 
     @PostMapping("/roles/addRole")
+    @PreAuthorize("hasAuthority('/roles/addRole')")
     public Result addRole(@RequestBody Role role) {
         role.setId(UUIDUtil.createUUID());
         role.setCreate_time(DateUtils.getUTCTime());
@@ -55,6 +58,7 @@ public class RoleController {
     }
 
     @GetMapping("/roles/getRoleById")
+    @PreAuthorize("hasAuthority('/roles/getRoleById')")
     public Result getRoleById(String id){
         if (id == null || id.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
@@ -74,6 +78,7 @@ public class RoleController {
     }
 
     @PutMapping("/roles/updateRoleById")
+    @PreAuthorize("hasAuthority('/roles/updateRoleById')")
     public Result updateRoleById(@RequestBody Role role){
         if (role.getId() == null || role.getId().equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
@@ -97,6 +102,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/roles/delRoleById")
+    @PreAuthorize("hasAuthority('/roles/delRoleById')")
     public Result delRoleById(String id){
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");
@@ -118,6 +124,7 @@ public class RoleController {
     }
 
     @PostMapping("/roles/addRu")
+    @PreAuthorize("hasAuthority('/rights/addRu')")
     public Result addRp(String roleId,String userId) {
         if(roleId == null || roleId.equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");

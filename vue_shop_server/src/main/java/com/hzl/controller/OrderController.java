@@ -7,6 +7,7 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/orders")
+    @PreAuthorize("hasAuthority('/orders')")
     public Result getOrderList(Integer page, Integer rows, String order_number){
         if (page == null) {
             page = 1;
@@ -55,6 +57,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/update")
+    @PreAuthorize("hasAuthority('/orders/update')")
     public Result updOrder(String consignee_addr,Integer order_id){
         if(order_id == null || order_id.equals("")){
             return ResultFactory.buildFailResult("订单id不能为空");

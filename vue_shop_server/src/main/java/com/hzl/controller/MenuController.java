@@ -6,6 +6,7 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("/menus")
+    @PreAuthorize("hasAuthority('/menus')")
     public Result menus(String userId) {
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
@@ -58,6 +60,7 @@ public class MenuController {
     }
 
     @PostMapping("/addRm")
+    @PreAuthorize("hasAuthority('/addRm')")
     public Result addRm(@RequestBody Rm rm) {
         if(rm.getRoleId() == null || rm.getRoleId().equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");

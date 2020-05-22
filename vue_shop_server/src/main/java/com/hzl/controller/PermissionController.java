@@ -7,6 +7,7 @@ import com.hzl.service.MenuService;
 import com.hzl.service.PermissionService;
 import com.hzl.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PermissionController {
     RoleService roleService;
 
     @GetMapping("/rights")
+    @PreAuthorize("hasAuthority('/rights')")
     public Result rights(Integer page,Integer rows) {
         if (page == null) {
             page = 1;
@@ -60,6 +62,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/rights/delPermission")
+    @PreAuthorize("hasAuthority('/rights/delPermission')")
     public Result delPermission(String roleId,String rightId) {
         if (roleId == null || roleId.equals("")) {
             return ResultFactory.buildFailResult("角色id不能为空");
@@ -130,6 +133,7 @@ public class PermissionController {
     }
 
     @PostMapping("/rights/addRp")
+    @PreAuthorize("hasAuthority('/rights/addRp')")
     public Result addRp(@RequestBody Rp rp) {
         if(rp.getRoleId() == null || rp.getRoleId().equals("")){
             return ResultFactory.buildFailResult("角色id不能为空");

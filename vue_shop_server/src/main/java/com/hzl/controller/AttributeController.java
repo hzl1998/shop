@@ -7,6 +7,7 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class AttributeController {
     AttributeService attributeService;
 
     @GetMapping("/goods/attributes")
+    @PreAuthorize("hasAuthority('/goods/attributes')")
     public Result getAttributesBySel(Integer id,String sel){
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("参数id不能为空");
@@ -35,6 +37,7 @@ public class AttributeController {
     }
 
     @PostMapping("/goods/addAttributes")
+    @PreAuthorize("hasAuthority('/goods/addAttributes')")
     public Result addAttributes(@RequestBody Attribute attribute){
         if(attribute.getCat_id() == null || attribute.getCat_id().equals("")){
             return ResultFactory.buildFailResult("分类id不能为空");
@@ -66,6 +69,7 @@ public class AttributeController {
     }
 
     @GetMapping("/goods/getAttributesById")
+    @PreAuthorize("hasAuthority('/goods/getAttributesById')")
     public Result getAttributesById(Integer id){
         if(id == null || id.equals("")){
             return ResultFactory.buildFailResult("参数id不能为空");
@@ -80,6 +84,7 @@ public class AttributeController {
     }
 
     @PutMapping("/goods/updateAttribute")
+    @PreAuthorize("hasAuthority('/goods/updateAttribute')")
     public Result updateAttribute(@RequestBody Attribute attribute){
         if(attribute.getAttr_id() == null || attribute.getAttr_id().equals("")){
             return ResultFactory.buildFailResult("参数id不能为空");
@@ -105,6 +110,7 @@ public class AttributeController {
     }
 
     @DeleteMapping("/goods/delAttribute")
+    @PreAuthorize("hasAuthority('/goods/delAttribute')")
     public Result delAttribute(Integer attr_id,Integer cat_id){
         if(attr_id == null || attr_id.equals("")){
             return ResultFactory.buildFailResult("参数id不能为空");
@@ -127,6 +133,7 @@ public class AttributeController {
     }
 
     @PutMapping("/goods/updateVals")
+    @PreAuthorize("hasAuthority('/goods/updateAttribute')")
     public Result updateVals(@RequestBody Attribute attribute){
         if(attribute.getAttr_id() == null || attribute.getAttr_id().equals("")){
             return ResultFactory.buildFailResult("参数id不能为空");

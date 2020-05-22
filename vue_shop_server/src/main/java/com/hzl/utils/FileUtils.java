@@ -57,7 +57,7 @@ public class FileUtils {
             //保存文件
             file.transferTo(dest);
             String tmp_path = "images/"+realPath;
-            String url = "http://localhost:8082/images/"+realPath;
+            String url = "http://localhost:8081/images/"+realPath;
             Map map = new HashMap();
             map.put("tmp_path",tmp_path);
             map.put("url",url);
@@ -70,18 +70,6 @@ public class FileUtils {
 
     }
 
-    public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
-        // 生成新的文件名
-        String realPath = getFileName(fileName);
-        File targetFile = new File(realPath);
-        if(!targetFile.exists()){
-            targetFile.mkdirs();
-        }
-        FileOutputStream out = new FileOutputStream(filePath+fileName);
-        out.write(file);
-        out.flush();
-        out.close();
-    }
 
 
 }

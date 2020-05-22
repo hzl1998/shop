@@ -8,6 +8,7 @@ import com.hzl.result.Result;
 import com.hzl.result.ResultFactory;
 import com.hzl.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class GoodsController {
     GoodsService goodsService;
 
     @GetMapping("/goods")
+    @PreAuthorize("hasAuthority('/goods')")
     public Result getGoodsList(Integer page,Integer rows,String goods_name){
         if (page == null) {
             page = 1;
@@ -55,6 +57,7 @@ public class GoodsController {
     }
 
     @PutMapping("/goods/delGood")
+    @PreAuthorize("hasAuthority('/goods/delGood')")
     public Result delGood(Integer goods_id){
        if(goods_id == null || goods_id.equals("")){
            return ResultFactory.buildFailResult("商品id不能为空");
@@ -74,6 +77,7 @@ public class GoodsController {
     }
 
     @PostMapping("/goods/add")
+    @PreAuthorize("hasAuthority('/goods/add')")
     public Result addGood(@RequestBody Goods goods){
         if(goods.getGoods_name() == null || goods.getGoods_name().equals("")){
             return ResultFactory.buildFailResult("商品名称不能为空");
@@ -118,6 +122,7 @@ public class GoodsController {
     }
 
     @GetMapping("/goods/getGoodById")
+    @PreAuthorize("hasAuthority('/goods/getGoodById')")
     public Result getGoodById(Integer goods_id){
        if(goods_id == null || goods_id.equals("")){
            return ResultFactory.buildFailResult("商品id不能为空");
@@ -136,6 +141,7 @@ public class GoodsController {
     }
 
     @PutMapping("/goods/update")
+    @PreAuthorize("hasAuthority('/goods/update')")
     public Result updateGood(@RequestBody Goods goods){
         if(goods.getGoods_id() == null || goods.getGoods_id().equals("")){
             return ResultFactory.buildFailResult("商品id不能为空");
