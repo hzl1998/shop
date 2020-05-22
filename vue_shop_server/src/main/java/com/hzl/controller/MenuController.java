@@ -20,7 +20,6 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("/menus")
-    @PreAuthorize("hasAuthority('/menus')")
     public Result menus(String userId) {
         if(userId == null || userId.equals("")){
             return ResultFactory.buildFailResult("用户id不能为空");
