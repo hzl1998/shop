@@ -51,7 +51,12 @@
             ></el-button>
 
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(scope.row)"></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-setting"
+                size="mini"
+                @click="setRole(scope.row)"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -116,19 +121,25 @@
     </el-dialog>
 
     <!-- 分配角色的对话框 -->
-    <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible" width="50%" @close="setRoleDialogClosed">
+    <el-dialog
+      title="分配角色"
+      :visible.sync="setRoleDialogVisible"
+      width="50%"
+      @close="setRoleDialogClosed"
+    >
       <div>
         <p>当前的用户： {{userInfo.username}}</p>
         <p>当前的角色： {{userInfo.role_name}}</p>
-        <p>分配新角色：
+        <p>
+          分配新角色：
           <el-select v-model="selectedRoleId" placeholder="请选择">
-    <el-option
-      v-for="item in roleList"
-      :key="item.id"
-      :label="item.role_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.role_name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -199,9 +210,9 @@ export default {
         phone: [{ required: true, validator: checkPhone, trigger: "blur" }]
       },
       setRoleDialogVisible: false,
-      userInfo:{},
+      userInfo: {},
       roleList: [],
-      selectedRoleId: ''
+      selectedRoleId: ""
     };
   },
   created() {
@@ -220,6 +231,9 @@ export default {
           this.rows
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取用户列表失败！");
           }
@@ -252,6 +266,9 @@ export default {
           "users/status?userId=" + userinfo.id + "&enabled=" + userinfo.enabled
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             userinfo.enabled = !userinfo.enabled;
             return this.$message.error("更新用户状态失败！");
@@ -285,6 +302,9 @@ export default {
           dataType: "json"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("添加用户失败！");
             }
@@ -305,6 +325,9 @@ export default {
         url: "users/getUserById?id=" + id
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("查询用户信息失败！");
           }
@@ -334,6 +357,9 @@ export default {
           dataType: "json"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             console.log(resp.data);
             if (resp.data.code !== 200) {
               return this.$message.error("更新用户信息失败！");
@@ -359,6 +385,9 @@ export default {
             url: "users/delUserById?id=" + id
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("删除用户失败！");
               }
@@ -377,45 +406,55 @@ export default {
         });
     },
     setRole(user) {
-      this.userInfo = user
+      this.userInfo = user;
       this.$http({
-            method: "GET",
-            url: "roles/getAllRoleName"
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("获取角色列表失败！");
-              }
-              this.roleList = resp.data.data
-            })
-            .catch(error => {
-              console.log(error);
-            });
-      this.setRoleDialogVisible = true
+        method: "GET",
+        url: "roles/getAllRoleName"
+      })
+        .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
+          if (resp.data.code !== 200) {
+            return this.$message.error("获取角色列表失败！");
+          }
+          this.roleList = resp.data.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      this.setRoleDialogVisible = true;
     },
     saveRoleInfo() {
-      if(!this.selectedRoleId) {
-        return this.$message.error("请选择要分配的角色！")
+      if (!this.selectedRoleId) {
+        return this.$message.error("请选择要分配的角色！");
       }
       this.$http({
-            method: "POST",
-            url: "roles/addRu?roleId="+this.selectedRoleId+"&userId="+this.userInfo.id
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("更新角色失败！");
-              }
-              this.$message.success("更新角色成功！")
-              this.getUserList()
-              this.setRoleDialogVisible = false
-            })
-            .catch(error => {
-              console.log(error);
-            });
+        method: "POST",
+        url:
+          "roles/addRu?roleId=" +
+          this.selectedRoleId +
+          "&userId=" +
+          this.userInfo.id
+      })
+        .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
+          if (resp.data.code !== 200) {
+            return this.$message.error("更新角色失败！");
+          }
+          this.$message.success("更新角色成功！");
+          this.getUserList();
+          this.setRoleDialogVisible = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     setRoleDialogClosed() {
-      this.selectedRoleId = ''
-      this.userInfo = {}
+      this.selectedRoleId = "";
+      this.userInfo = {};
     }
   }
 };

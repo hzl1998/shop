@@ -1,5 +1,5 @@
 <template>
-    <div style="padding: 20px" v-if="isok === true">
+    <div style="padding: 20px">
         <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>数据统计</el-breadcrumb-item>
@@ -17,11 +17,10 @@ import echarts from 'echarts'
 export default {
     data(){
         return{
-            isok: false
+
         }
     },
     created(){
-        this.getReports()
     },
     //此时，页面上的元素，已经被渲染完毕了
     mounted(){
@@ -52,24 +51,7 @@ export default {
         myChart.setOption(option);
     },
     methods:{
-        getReports(){
-            this.$http({
-        method: "GET",
-        url: "/reports/all"
-      })
-        .then(resp => {
-        if (resp.data.code === 403) {
-            return this.$message.error("无权访问！");
-          }
-          if (resp.data.code !== 200) {
-            return this.$message.error("未知错误！");
-          }
-          this.isok = true
-        })
-        .catch(error => {
-          console.log(error);
-        });
-        }
+        
     }
 }
 </script>

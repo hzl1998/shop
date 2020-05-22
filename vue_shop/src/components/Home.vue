@@ -82,10 +82,6 @@ export default {
         url: "menus?userId=" + window.sessionStorage.getItem("userId")
       })
         .then(resp => {
-          console.log(resp.data)
-          if (resp.data.code === 403) {
-            return this.$message.error("无权访问！");
-          }
           if (resp.data.code !== 200) {
             return this.$message.error(resp.data.msg);
           }

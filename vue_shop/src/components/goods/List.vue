@@ -24,14 +24,22 @@
         <el-table-column label="商品价格(元)" prop="goods_price" width="95px"></el-table-column>
         <el-table-column label="商品重量" prop="goods_weight" width="70px"></el-table-column>
         <el-table-column label="创建时间" prop="add_time" width="140px">
-          <template slot-scope="scope">
-            {{scope.row.add_time | dateFormat}}
-          </template>
+          <template slot-scope="scope">{{scope.row.add_time | dateFormat}}</template>
         </el-table-column>
         <el-table-column label="操作" width="130px">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="goUpdatepage(scope.row.goods_id)"></el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.goods_id)"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="goUpdatepage(scope.row.goods_id)"
+            ></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="removeById(scope.row.goods_id)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -53,29 +61,39 @@
 export default {
   data() {
     return {
-      page:1,
-      rows:10,
-      goodList:[],
-      total:0,
-      goods_name:''
+      page: 1,
+      rows: 10,
+      goodList: [],
+      total: 0,
+      goods_name: ""
     };
   },
-  created(){
-    this.getGoodsList()
+  created() {
+    this.getGoodsList();
   },
-  methods:{
+  methods: {
     getGoodsList() {
       this.$http({
         method: "GET",
-        url: "goods" + "?page=" + this.page + "&rows=" + this.rows + "&goods_name="+this.goods_name
+        url:
+          "goods" +
+          "?page=" +
+          this.page +
+          "&rows=" +
+          this.rows +
+          "&goods_name=" +
+          this.goods_name
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品列表失败！");
           }
-          console.log(resp.data.data)
-          this.goodList = resp.data.data.resultList
-          this.total = resp.data.data.totalResult
+          console.log(resp.data.data);
+          this.goodList = resp.data.data.resultList;
+          this.total = resp.data.data.totalResult;
         })
         .catch(error => {
           console.log(error);
@@ -91,11 +109,11 @@ export default {
       this.page = newPage;
       this.getGoodsList();
     },
-    searchGoods(){
-      this.page = 1
-      this.getGoodsList()
+    searchGoods() {
+      this.page = 1;
+      this.getGoodsList();
     },
-    removeById(id){
+    removeById(id) {
       this.$confirm("此操作将永久删除该商品, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -107,6 +125,9 @@ export default {
             url: "goods/delGood?goods_id=" + id
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("删除商品失败！");
               }
@@ -125,10 +146,10 @@ export default {
         });
     },
     goAddpage() {
-      this.$router.push('/goods/add')
+      this.$router.push("/goods/add");
     },
     goUpdatepage(id) {
-      this.$router.push('/goods/add/'+id)
+      this.$router.push("/goods/add/" + id);
     }
   }
 };

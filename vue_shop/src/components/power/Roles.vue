@@ -252,6 +252,9 @@ export default {
         url: "roles"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取角色列表失败！");
           }
@@ -274,6 +277,9 @@ export default {
               "rights/delPermission?roleId=" + role.id + "&rightId=" + rightId
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("删除权限失败！");
               }
@@ -301,6 +307,9 @@ export default {
         url: "rights/selectRights"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取权限数据失败！");
           }
@@ -322,6 +331,9 @@ export default {
         url: "getMenusByRoleId?roleId=" + this.roleId
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.data != null) {
             resp.data.data.forEach(item => {
               item.children.forEach(item1 => {
@@ -331,9 +343,9 @@ export default {
               });
             });
             //mKeys改变之后没有重新渲染选中的数据，所以用this.$refs.mtreeRef.setCheckedKeys()来改变选中状态，但此时又会有另一个问题,当弹框没有渲染的时候,由于tree控件dom没有加载,setCheckedKeys是不存在的,会报错,所以我们需要使用this.$nextTick(callback)方法,该方法会在dom加载完毕之后,执行回调函数
-          this.$nextTick(() => {
-            this.$refs.mtreeRef.setCheckedKeys(this.mKeys);
-          });
+            this.$nextTick(() => {
+              this.$refs.mtreeRef.setCheckedKeys(this.mKeys);
+            });
           }
           console.log(this.mKeys);
           this.setMenuDialogVisible = true;
@@ -348,6 +360,9 @@ export default {
         url: "allMenus"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取全部菜单数据失败！");
           }
@@ -396,6 +411,9 @@ export default {
         dataType: "json"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("分配权限失败！");
           }
@@ -424,6 +442,9 @@ export default {
         }
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("分配菜单失败！");
           }
@@ -450,6 +471,9 @@ export default {
           dataType: "json"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("添加角色失败！");
             }
@@ -470,6 +494,9 @@ export default {
         url: "roles/getRoleById?id=" + id
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("查询角色信息失败！");
           }
@@ -499,6 +526,9 @@ export default {
           dataType: "json"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             console.log(resp.data);
             if (resp.data.code !== 200) {
               return this.$message.error("更新角色信息失败！");
@@ -524,6 +554,9 @@ export default {
             url: "roles/delRoleById?id=" + id
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("删除角色失败！");
               }

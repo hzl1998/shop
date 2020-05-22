@@ -194,6 +194,9 @@ export default {
         url: "goods/getAllCategories"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品分类失败！");
           }
@@ -210,6 +213,9 @@ export default {
         url: "goods/getGoodById?goods_id=" + id
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品信息失败！");
           }
@@ -257,6 +263,9 @@ export default {
           url: "goods/attributes?id=" + this.cateId + "&sel=many"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("获取动态参数列表失败！");
             }
@@ -276,6 +285,9 @@ export default {
           url: "goods/attributes?id=" + this.cateId + "&sel=only"
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("获取静态属性失败！");
             }
@@ -370,6 +382,9 @@ export default {
             }
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("修改商品失败！");
               }
@@ -395,6 +410,9 @@ export default {
             }
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("添加商品失败！");
               }

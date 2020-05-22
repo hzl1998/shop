@@ -54,6 +54,9 @@ export default {
         url: "rights" + "?page=" + this.page + "&rows=" + this.rows
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取权限列表失败！");
           }

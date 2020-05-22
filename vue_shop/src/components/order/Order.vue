@@ -73,12 +73,9 @@
         <el-button type="primary" @click="updAddress">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-  title="物流进度"
-  :visible.sync="progressVisible"
-  width="50%">
-  <span>这是一段信息</span>
-</el-dialog>
+    <el-dialog title="物流进度" :visible.sync="progressVisible" width="50%">
+      <span>这是一段信息</span>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,8 +105,8 @@ export default {
       },
       cityData,
       order_id: 0,
-      address:"",
-      progressVisible:false
+      address: "",
+      progressVisible: false
     };
   },
   created() {
@@ -129,6 +126,9 @@ export default {
           this.order_number
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取订单列表失败！");
           }
@@ -162,7 +162,7 @@ export default {
       this.$refs.addressFormRef.resetFields();
     },
     updAddress() {
-      this.addressForm.address1 = this.addressForm.address1.join(",")
+      this.addressForm.address1 = this.addressForm.address1.join(",");
       this.$http({
         method: "PUT",
         url:
@@ -174,6 +174,9 @@ export default {
           this.addressForm.address2
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("修改地址失败！");
           }
@@ -186,7 +189,7 @@ export default {
         });
     },
     showProgressBox() {
-      this.progressVisible = true
+      this.progressVisible = true;
     }
   }
 };

@@ -32,7 +32,12 @@
           <el-table :data="manyTableData" border stripe>
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable @close="handleClose(i,scope.row)">{{item}}</el-tag>
+                <el-tag
+                  v-for="(item, i) in scope.row.attr_vals"
+                  :key="i"
+                  closable
+                  @close="handleClose(i,scope.row)"
+                >{{item}}</el-tag>
                 <el-input
                   class="input-new-tag"
                   v-if="scope.row.inputVisible"
@@ -42,7 +47,12 @@
                   @keyup.enter.native="handleInputConfirm(scope.row)"
                   @blur="handleInputConfirm(scope.row)"
                 ></el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput(scope.row)"
+                >+ New Tag</el-button>
               </template>
             </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
@@ -75,7 +85,12 @@
           <el-table :data="onlyTableData" border stripe>
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable @close="handleClose(i,scope.row)">{{item}}</el-tag>
+                <el-tag
+                  v-for="(item, i) in scope.row.attr_vals"
+                  :key="i"
+                  closable
+                  @close="handleClose(i,scope.row)"
+                >{{item}}</el-tag>
                 <el-input
                   class="input-new-tag"
                   v-if="scope.row.inputVisible"
@@ -85,7 +100,12 @@
                   @keyup.enter.native="handleInputConfirm(scope.row)"
                   @blur="handleInputConfirm(scope.row)"
                 ></el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput(scope.row)"
+                >+ New Tag</el-button>
               </template>
             </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
@@ -194,6 +214,9 @@ export default {
         url: "goods/getAllCategories"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品分类失败！");
           }
@@ -214,8 +237,8 @@ export default {
     getParamsData() {
       if (this.selectedCateKeys.length !== 3) {
         this.selectedCateKeys = [];
-        this.manyTableData = []
-        this.onlyTableData = []
+        this.manyTableData = [];
+        this.onlyTableData = [];
         return;
       }
 
@@ -226,13 +249,16 @@ export default {
         url: "goods/attributes?id=" + this.cateId + "&sel=" + this.activeName
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取参数列表失败！");
           }
           resp.data.data.forEach(item => {
             item.attr_vals = item.attr_vals ? item.attr_vals.split(" ") : [];
-            item.inputVisible = false
-            item.inputValue = ''
+            item.inputVisible = false;
+            item.inputValue = "";
           });
           console.log(resp.data.data);
           if (this.activeName === "many") {
@@ -261,6 +287,9 @@ export default {
           }
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("添加参数失败！");
             }
@@ -279,6 +308,9 @@ export default {
         url: "goods/getAttributesById?id=" + attr_id
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取参数信息失败！");
           }
@@ -307,6 +339,9 @@ export default {
           }
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("修改参数失败！");
             }
@@ -328,9 +363,13 @@ export default {
         .then(resp => {
           this.$http({
             method: "DELETE",
-            url: "goods/delAttribute?attr_id=" + attr_id + "&cat_id=" + this.cateId
+            url:
+              "goods/delAttribute?attr_id=" + attr_id + "&cat_id=" + this.cateId
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code !== 200) {
                 return this.$message.error("删除参数失败！");
               }
@@ -350,48 +389,51 @@ export default {
     },
     //文本框失去焦点或摁下了Enter都会触发
     handleInputConfirm(row) {
-        if(row.inputValue.trim().length === 0){
-            row.inputValue = ''
-            row.inputVisible = false
-            return
-        }
-        row.attr_vals.push(row.inputValue.trim())
-        row.inputValue = ''
-        row.inputVisible = false
-        this.saveAttrVals(row)
+      if (row.inputValue.trim().length === 0) {
+        row.inputValue = "";
+        row.inputVisible = false;
+        return;
+      }
+      row.attr_vals.push(row.inputValue.trim());
+      row.inputValue = "";
+      row.inputVisible = false;
+      this.saveAttrVals(row);
     },
     showInput(row) {
-        row.inputVisible = true
-        //$nextTick方法的作用，当页面上的元素被重新渲染之后，才会执行回调函数中的代码
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
+      row.inputVisible = true;
+      //$nextTick方法的作用，当页面上的元素被重新渲染之后，才会执行回调函数中的代码
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
     },
-    handleClose(i,row){
-        row.attr_vals.splice(i,1)
-        this.saveAttrVals(row)
+    handleClose(i, row) {
+      row.attr_vals.splice(i, 1);
+      this.saveAttrVals(row);
     },
     saveAttrVals(row) {
-        this.$http({
-            method: "PUT",
-            url: "goods/updateVals",
-            data:{
-                cat_id:this.cateId,
-                attr_id:row.attr_id,
-                attr_name: row.attr_name,
-                attr_sel: row.attr_sel,
-                attr_vals:row.attr_vals.join(' ')
-            }
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("修改参数项失败！");
-              }
-              this.$message.success("修改参数项成功！");
-            })
-            .catch(error => {
-              console.log(error);
-            });
+      this.$http({
+        method: "PUT",
+        url: "goods/updateVals",
+        data: {
+          cat_id: this.cateId,
+          attr_id: row.attr_id,
+          attr_name: row.attr_name,
+          attr_sel: row.attr_sel,
+          attr_vals: row.attr_vals.join(" ")
+        }
+      })
+        .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
+          if (resp.data.code !== 200) {
+            return this.$message.error("修改参数项失败！");
+          }
+          this.$message.success("修改参数项成功！");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   computed: {
@@ -426,6 +468,6 @@ export default {
   margin: 10px;
 }
 .input-new-tag {
-    width: 120px;
+  width: 120px;
 }
 </style>

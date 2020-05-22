@@ -14,7 +14,7 @@
         background-position: center;
         background-repeat: no-repeat;
         text-align: center;
-        font-size: 36px;
+        font-size: 40px;
         color: #FFF0F5;
     }
 </style>

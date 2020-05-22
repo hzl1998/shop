@@ -36,7 +36,12 @@
         </template>
         <!-- 操作 -->
         <template slot="opt" slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editCategroy(scope.row.cat_id)">编辑</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="mini"
+            @click="editCategroy(scope.row.cat_id)"
+          >编辑</el-button>
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -165,10 +170,10 @@ export default {
       selectedKeys: [],
       editCateDialogVisible: false,
       editCateForm: {
-        cat_name:"",
-        cat_id:0
+        cat_name: "",
+        cat_id: 0
       },
-      editCateFormRules:{
+      editCateFormRules: {
         cat_name: [
           { required: true, message: "请输入分类名称", trigger: "blur" }
         ]
@@ -185,6 +190,9 @@ export default {
         url: "goods/categories" + "?page=" + this.page + "&rows=" + this.rows
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取商品分类失败！");
           }
@@ -215,6 +223,9 @@ export default {
         url: "goods/getCategories"
       })
         .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
           if (resp.data.code !== 200) {
             return this.$message.error("获取父级分类数据失败！");
           }
@@ -255,6 +266,9 @@ export default {
           }
         })
           .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
             if (resp.data.code !== 200) {
               return this.$message.error("添加分类失败！");
             }
@@ -274,7 +288,7 @@ export default {
       this.addCateForm.cat_pid = 0;
     },
     delCate(id) {
-        console.log(id)
+      console.log(id);
       this.$confirm("此操作将永久删除该分类, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -286,6 +300,9 @@ export default {
             url: "goods/delCategoryById?id=" + id
           })
             .then(resp => {
+              if (resp.data.code === 403) {
+                return this.$message.error("无权访问！");
+              }
               if (resp.data.code === 402) {
                 return this.$message.error(
                   "删除分类失败,当前分类存在下级分类！"
@@ -310,42 +327,51 @@ export default {
         });
     },
     editCategroy(id) {
-      this.editCateForm.cat_id = id
+      this.editCateForm.cat_id = id;
       this.$http({
-            method: "GET",
-            url: "goods/getCategoryById?id=" + id
-          })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("获取分类失败！");
-              }
-              this.editCateForm = resp.data.data
-              this.editCateDialogVisible = true;
-            })
-            .catch(error => {
-              console.log(error);
-            });
+        method: "GET",
+        url: "goods/getCategoryById?id=" + id
+      })
+        .then(resp => {
+          if (resp.data.code === 403) {
+            return this.$message.error("无权访问！");
+          }
+          if (resp.data.code !== 200) {
+            return this.$message.error("获取分类失败！");
+          }
+          this.editCateForm = resp.data.data;
+          this.editCateDialogVisible = true;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     editCate() {
       this.$refs.editCateFormRef.validate(valid => {
         if (!valid) return;
         this.$http({
-            method: "PUT",
-            url: "goods/updateCategoryById?id=" + this.editCateForm.cat_id
-            +"&cat_name="+this.editCateForm.cat_name
+          method: "PUT",
+          url:
+            "goods/updateCategoryById?id=" +
+            this.editCateForm.cat_id +
+            "&cat_name=" +
+            this.editCateForm.cat_name
+        })
+          .then(resp => {
+            if (resp.data.code === 403) {
+              return this.$message.error("无权访问！");
+            }
+            if (resp.data.code !== 200) {
+              return this.$message.error("修改失败！");
+            }
+            this.$message.success("修改成功！");
+            this.getCateList();
+            this.editCateDialogVisible = false;
           })
-            .then(resp => {
-              if (resp.data.code !== 200) {
-                return this.$message.error("修改失败！");
-              }
-              this.$message.success("修改成功！")
-              this.getCateList()
-              this.editCateDialogVisible = false;
-            })
-            .catch(error => {
-              console.log(error);
-            });
-      })
+          .catch(error => {
+            console.log(error);
+          });
+      });
     },
     editCateDialogClosed() {
       this.$refs.editCateFormRef.resetFields();
