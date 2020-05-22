@@ -168,22 +168,22 @@ export default {
       previewVisible: false,
       id: this.$route.params.id,
       fileList: [],
-      title:'',
-      tit:'',
-      btn:''
+      title: "",
+      tit: "",
+      btn: ""
     };
   },
   created() {
     console.log(this.id);
     if (this.id) {
-      this.title = '编辑商品信息'
-      this.tit = '编辑商品'
-      this.btn = '修改商品'
+      this.title = "编辑商品信息";
+      this.tit = "编辑商品";
+      this.btn = "修改商品";
       this.getGood(this.id);
     } else {
-      this.title = '添加商品信息'
-      this.tit = '添加商品'
-      this.btn = '添加商品'
+      this.title = "添加商品信息";
+      this.tit = "添加商品";
+      this.btn = "添加商品";
     }
     this.getCateList();
   },
@@ -219,8 +219,8 @@ export default {
           this.addForm.goods_weight = resp.data.data.goods_weight;
           this.addForm.pics = resp.data.data.pics;
           this.addForm.goods_introduce = resp.data.data.goods_introduce;
-          resp.data.data.pics.forEach((item,i) => {
-            const picInfo = { name: (i+1), url: item.pic };
+          resp.data.data.pics.forEach((item, i) => {
+            const picInfo = { name: i + 1, url: item.pic };
             this.fileList.push(picInfo);
           });
           console.log(this.fileList);
@@ -301,21 +301,21 @@ export default {
     handleRemove(file, fileList) {
       console.log(file);
       if (this.id) {
-         //获取将要删除的图片的临时路径
-      const filePath = file.url;
-      //从pics数组中，找到这个图片对应的索引值
-      const i = this.addForm.pics.findIndex(x => x.pic === filePath);
-      //从数组中移除
-      this.addForm.pics.splice(i, 1);
-      console.log(this.addForm);
+        //获取将要删除的图片的临时路径
+        const filePath = file.url;
+        //从pics数组中，找到这个图片对应的索引值
+        const i = this.addForm.pics.findIndex(x => x.pic === filePath);
+        //从数组中移除
+        this.addForm.pics.splice(i, 1);
+        console.log(this.addForm);
       } else {
         //获取将要删除的图片的临时路径
-      const filePath = file.response.data.url;
-      //从pics数组中，找到这个图片对应的索引值
-      const i = this.addForm.pics.findIndex(x => x.pic === filePath);
-      //从数组中移除
-      this.addForm.pics.splice(i, 1);
-      console.log(this.addForm);
+        const filePath = file.response.data.url;
+        //从pics数组中，找到这个图片对应的索引值
+        const i = this.addForm.pics.findIndex(x => x.pic === filePath);
+        //从数组中移除
+        this.addForm.pics.splice(i, 1);
+        console.log(this.addForm);
       }
     },
     //监听图片上传成功
@@ -353,30 +353,58 @@ export default {
         form.attrs = this.addForm.attrs;
         console.log(form);
 
-        this.$http({
-          method: "POST",
-          url: "goods/add",
-          data: {
-            goods_name: form.goods_name,
-            goods_price: form.goods_price,
-            goods_number: form.goods_number,
-            goods_weight: form.goods_weight,
-            cat_id: form.goods_cat,
-            goods_introduce: form.goods_introduce,
-            pics: form.pics,
-            attrs: form.attrs
-          }
-        })
-          .then(resp => {
-            if (resp.data.code !== 200) {
-              return this.$message.error("添加商品失败！");
+        if (this.id) {
+          this.$http({
+            method: "PUT",
+            url: "goods/update",
+            data: {
+              goods_id: this.id,
+              goods_name: form.goods_name,
+              goods_price: form.goods_price,
+              goods_number: form.goods_number,
+              goods_weight: form.goods_weight,
+              cat_id: form.goods_cat,
+              goods_introduce: form.goods_introduce,
+              pics: form.pics,
+              attrs: form.attrs
             }
-            this.$message.success("添加商品成功！");
-            this.$router.push("/list");
           })
-          .catch(error => {
-            console.log(error);
-          });
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("修改商品失败！");
+              }
+              this.$message.success("修改商品成功！");
+              this.$router.push("/list");
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          this.$http({
+            method: "POST",
+            url: "goods/add",
+            data: {
+              goods_name: form.goods_name,
+              goods_price: form.goods_price,
+              goods_number: form.goods_number,
+              goods_weight: form.goods_weight,
+              cat_id: form.goods_cat,
+              goods_introduce: form.goods_introduce,
+              pics: form.pics,
+              attrs: form.attrs
+            }
+          })
+            .then(resp => {
+              if (resp.data.code !== 200) {
+                return this.$message.error("添加商品失败！");
+              }
+              this.$message.success("添加商品成功！");
+              this.$router.push("/list");
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
       });
     }
   },
