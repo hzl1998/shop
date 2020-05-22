@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzl.mapper.OrderMapper">
+    <select id="getOrderList" resultType="com.hzl.entity.Order">
+        select * from sp_order
+        <where>
+            <if test="order_number != null and order_number != ''">
+                trim(replace(order_number,' ','')) LIKE CONCAT('%',trim(replace(#{order_number},' ','')),'%' )
+            </if>
+        </where>
+        order by create_time desc limit #{page},#{rows}
+    </select>
+
+    <select id="getOrderListCount" resultType="int">
+        select count(1) from sp_order
+        <where>
+            <if test="order_number != null and order_number != ''">
+                trim(replace(order_number,' ','')) LIKE CONCAT('%',trim(replace(#{order_number},' ','')),'%' )
+            </if>
+        </where>
+    </select>
+
+    <update id="updOrder">
+        update sp_order set consignee_addr = #{consignee_addr} where order_id = #{order_id}
+    </update>
+</mapper>
