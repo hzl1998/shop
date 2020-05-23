@@ -20,7 +20,7 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 
 import axios from 'axios'
 //配置请求的根路径
-axios.defaults.baseURL = 'http://localhost:8081/shop/'
+axios.defaults.baseURL = 'http://106.52.234.15:8081/shop/'
 axios.interceptors.request.use(config => {
   //console.log(config)
   startLoading();
