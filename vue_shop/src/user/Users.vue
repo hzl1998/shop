@@ -34,7 +34,9 @@
             <el-switch v-model="scope.row.enabled" @change="userStateChanged(scope.row)" v-else></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="create_time" :formatter="dateForma"></el-table-column>
+        <el-table-column label="创建时间" prop="create_time">
+          <template slot-scope="scope">{{scope.row.create_time | dateFormat}}</template>
+        </el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
             <el-button
@@ -151,7 +153,6 @@
 </template>
 
 <script>
-import moment from "moment"; //导入文件
 export default {
   data() {
     // 手机号验证
@@ -243,10 +244,6 @@ export default {
         .catch(error => {
           console.log(error);
         });
-    },
-    //时间格式化转换
-    dateForma(row, column, data) {
-      return moment(data).format("YYYY-MM-DD HH:mm:ss");
     },
     //监听pagesize改变的事件
     handleSizeChange(nowSize) {

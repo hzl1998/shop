@@ -10,7 +10,7 @@
         height: 100%;
         margin: 0;
         padding-top: 60px;
-        background-image: url("../assets/welcome.jpg");
+        background-image: url("http://106.52.234.15:8081/images/welcome.jpg");
         background-position: center;
         background-repeat: no-repeat;
         text-align: center;
