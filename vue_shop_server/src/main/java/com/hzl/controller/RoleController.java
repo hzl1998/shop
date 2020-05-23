@@ -42,7 +42,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('/roles/addRole')")
     public Result addRole(@RequestBody Role role) {
         role.setId(UUIDUtil.createUUID());
-        role.setCreate_time(DateUtils.getUTCTime());
+        role.setCreate_time(System.currentTimeMillis()/1000);
         try{
             int isok = roleService.addRole(role);
             if (isok > 0){
@@ -86,7 +86,7 @@ public class RoleController {
         if (role.getRole_name() == null || role.getRole_name().equals("")){
             return ResultFactory.buildFailResult("角色名称不能为空");
         }
-        role.setUpdate_time(DateUtils.getUTCTime());
+        role.setUpdate_time(System.currentTimeMillis()/1000);
         try{
             int isok = roleService.updateRole(role);
             if(isok > 0){

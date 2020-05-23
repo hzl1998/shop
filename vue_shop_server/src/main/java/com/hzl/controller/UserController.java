@@ -72,7 +72,7 @@ public class UserController {
             return ResultFactory.buildFailResult("用户状态不能为空");
         }
         // UTC时间
-        long time = DateUtils.getUTCTime();
+        long time = System.currentTimeMillis()/1000;
         try{
             int isok = userService.updateUserEnabled(userId,enabled,time);
             if(isok > 0){
@@ -105,7 +105,7 @@ public class UserController {
         //UUID
         userDto.setId(UUIDUtil.createUUID());
         // UTC时间
-        userDto.setCreate_time(DateUtils.getUTCTime());
+        userDto.setCreate_time(System.currentTimeMillis()/1000);
         //加密盐
         String salt = UUIDUtil.createUUID();
         userDto.setSalt(salt);
