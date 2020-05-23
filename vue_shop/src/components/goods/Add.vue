@@ -160,7 +160,7 @@ export default {
       cateList: [],
       manyTableData: [],
       onlyTableData: [],
-      uploadURL: "http://localhost:8081/shop/fileUpload",
+      uploadURL: "http://106.52.234.15:8081/shop/fileUpload",
       headerObj: {
         Authorization: window.sessionStorage.getItem("token")
       },
