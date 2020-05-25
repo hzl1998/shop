@@ -13,7 +13,7 @@ public class Category {
     private Integer cat_pid;
     private Integer cat_level;
     private Integer cat_deleted;
-    private Integer cat_icon;
+    private String cat_icon;
     private Integer cat_src;
     private List<Category> children;
 }
