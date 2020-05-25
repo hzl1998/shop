@@ -75,7 +75,7 @@
         c2.cat_id
         FROM sp_category c1
         INNER JOIN `sp_category` c2 ON c1.cat_id = c2.cat_pid
-        where c1.cat_id = #{id} and c1.cat_deleted = 0
+        where c1.cat_id = #{id} and c2.cat_deleted = 0
     </select>
 
     <update id="delCategoryById">
